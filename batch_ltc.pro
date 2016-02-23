@@ -10,7 +10,7 @@ pro batch_ltc
   
   ; 23-Feb-2016 - IGH
 
-  ; Do 10sec average of GOES (2sec *5) and with additional signle goes plot
+  ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
   plot_ns_sun_lc, obsname='201409',gav=5,/goes
   plot_ns_sun_lc, obsname='201411',gav=5,/goes
   plot_ns_sun_lc, obsname='201412',gav=5,/goes
