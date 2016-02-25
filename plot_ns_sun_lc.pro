@@ -415,7 +415,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     ;; mask = 14 chu123
 
     ; Change the KKM mask setup into something a bit easier to plot
-    newmask=intarr(n_elements(chumask))
+    ; Make deafult value out of range of real values
+    newmask=intarr(n_elements(chumask))-5
     id1=where(chumask eq 1,nid1)
     if (nid1 gt 0) then newmask[id1]=1
     id2=where(chumask eq 4,nid2)
