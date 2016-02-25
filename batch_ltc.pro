@@ -20,15 +20,15 @@ pro batch_ltc
   plot_ns_sun_lc, obsname='201509_02',gav=5,/goes
   plot_ns_sun_lc, obsname='201602',gav=5,/goes
 
-  ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel
-  plot_ns_sun_lc, obsname='201409',gav=5,/gesnlog
-  plot_ns_sun_lc, obsname='201411',gav=5,/gesnlog
-  plot_ns_sun_lc, obsname='201412',gav=5,/gesnlog
-  plot_ns_sun_lc, obsname='201504',gav=5,/gesnlog
+  ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
+  plot_ns_sun_lc, obsname='201409',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc, obsname='201411',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc, obsname='201412',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc, obsname='201504',gav=5,/gesnlog,/chudo
   ;  plot_ns_sun_lc, obsname='201509',gav=5,/gesnlog
-  plot_ns_sun_lc, obsname='201509_01',gav=5,/gesnlog
-  plot_ns_sun_lc, obsname='201509_02',gav=5,/gesnlog
-  plot_ns_sun_lc, obsname='201602',gav=5,/gesnlog
+  plot_ns_sun_lc, obsname='201509_01',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc, obsname='201509_02',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc, obsname='201602',gav=5,/gesnlog,/chudo
 
   stop
 end

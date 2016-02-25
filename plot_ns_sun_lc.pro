@@ -1,4 +1,5 @@
-pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindir=maindir,nsdir=nsdir,gesnlog=gesnlog
+pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
+  maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo
 
   ; Script to generate overview time profiles of NuSTAR livetime, GOES and RHESSI flux
   ; The data it uses is either *.dat files in the dat_files directory or if those do not
@@ -16,21 +17,23 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
   ; maindir       - Main directory of where the NuSTAR data is kept (default for IGH system but only need if no *.dat files)
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
   ; gesnlog       - Plot the GOES light curve with ylog=0 in default NuSTAR, GOES, RHESSI plot
+  ; chudo         - Do an extra plot with NuSTAR Livetime, CHU, GOES and RHESSI (default no)
 
   ; example of usage
-  ; Do 10sec average of GOES (2sec *5) and with additional signle goes plot
+  ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
   ; plot_ns_sun_lc, obsname='201409',gav=5,/goes
 
-  ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel
-  ; plot_ns_sun_lc, obsname='201509_01',gav=5,/gesnlog
+  ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
+  ; plot_ns_sun_lc, obsname='201509_01',gav=5,/gesnlog,/chudo
 
   ; 04-Aug-2015 IGH - Script to plot the lightcurves for the nustar obs tims
   ; 01-Sep-2015 IGH - Added in the times of the Sep 2015 observations
-  ; 23-Feb-2015 IGH - Added in the times of the Feb 2016 observations
+  ; 23-Feb-2016 IGH - Added in the times of the Feb 2016 observations
+  ; 24-Feb-2016 IGH - Added in option to include panel with the CHU state
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201509';'201411'
+  if (n_elements(obsname) ne 1) then obsname='201411';'201411'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -44,6 +47,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ; only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+
     gyrl=[20,80]
   endif
   if (obsname eq '201411') then begin
@@ -57,6 +64,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     ; make sure just the original 200* directories
     hkf=hkf[where(strpos(hkf,'bg2/200') ge 0)]
 
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    chuf=chuf[where(strpos(chuf,'bg2/200') ge 0)]
+
     gyrl=[3,7]
   endif
   if (obsname eq '201412') then begin
@@ -66,6 +77,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ; only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[6,7.5]
   endif
   if (obsname eq '201504') then begin
@@ -77,6 +90,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
     ; make sure just the original 2011* directories
     hkf=hkf[where(strpos(hkf,'bg/2011') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    chuf=chuf[where(strpos(chuf,'bg/2011') ge 0)]
+
     gyrl=[2.8,3.8]
   endif
 
@@ -89,6 +106,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[1.7,3.0]
   endif
   ;-------------------------------------------
@@ -101,6 +120,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[1.7,3.0]
   endif
 
@@ -112,9 +133,11 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[1.7,3.0]
   endif
-  
+
   ;-------------------------------------------
 
   if (obsname eq '201602') then begin
@@ -125,11 +148,13 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[2.2,4.5]
   endif
 
   norbs=n_elements(torbs[0,*])
-  
+
   ;-------------------------------------------
   ;-------------------------------------------
   ; If no GOES *.dat file then make one
@@ -229,8 +254,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     if (file_test(hkfile) eq 0) then begin
       for ii=0, nhk-1 do begin
         hka = mrdfits(hkf[ii], 1, hkahdr)
-        if (ii eq 0) then htime=anytim(hka.time+anytim('01-Jan-2010'),/yoh,/trunc) else $
-          htime=[htime,anytim(hka.time+anytim('01-Jan-2010'),/yoh,/trunc)]
+        if (ii eq 0) then htime=anytim(hka.time+anytim('01-Jan-2010'),/yoh) else $
+          htime=[htime,anytim(hka.time+anytim('01-Jan-2010'),/yoh)]
         if (ii eq 0) then hlive=hka.livetime else hlive=[hlive,hka.livetime]
       endfor
       ids=sort(anytim(htime))
@@ -240,6 +265,43 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
     endif else begin
       restore,file=hkfile
     endelse
+  endif
+
+  ;-------------------------------------------
+  ; Get the NuSTAR CHU if *.dat is not there and you want it plotted
+  if keyword_set(chudo) then begin
+    nch=n_elements(chuf)
+    if (nch gt 0) then begin
+      chufile='dat_files/ns_chu_ltc_'+obsname+'.dat'
+      if (file_test(chufile) eq 0) then begin
+        for ii=0, nch-1 do begin
+
+          for chunum= 1, 3 do begin
+            chu = mrdfits(chuf[ii], chunum)
+            maxres = 20 ;; [arcsec] maximum solution residual
+            qind=1 ; From KKM code...
+            if chunum eq 1 then begin
+              mask = (chu.valid EQ 1 AND $          ;; Valid solution from CHU
+                chu.residual LT maxres AND $  ;; CHU solution has low residuals
+                chu.starsfail LT chu.objects AND $ ;; Tracking enough objects
+                chu.(qind)(3) NE 1)*chunum^2       ;; Not the "default" solution
+            endif else begin
+              mask += (chu.valid EQ 1 AND $            ;; Valid solution from CHU
+                chu.residual LT maxres AND $    ;; CHU solution has low residuals
+                chu.starsfail LT chu.objects AND $ ;; Tracking enough objects
+                chu.(qind)(3) NE 1)*chunum^2       ;; Not the "default" solution
+            endelse
+          endfor
+
+          if (ii eq 0) then chutime=anytim(chu.time+anytim('01-Jan-2010'),/yoh) else $
+            chutime=[chutime,anytim(chu.time+anytim('01-Jan-2010'),/yoh)]
+          if (ii eq 0) then chumask=mask else chumask=[chumask,mask]
+        endfor
+        save,file=chufile,chutime,chumask
+      endif else begin
+        restore,file=chufile
+      endelse
+    endif
   endif
 
   ;-------------------------------------------
@@ -324,5 +386,120 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,maindi
 
   device,/close
   set_plot, mydevice
+
+  ;-------------------------------------------
+  ; Make a plot of NuSTAR livetime, CHU state, GOES and RHESSI fluxes
+  if keyword_Set(chudo) then begin
+    
+    !p.multi=[0,4,1]
+    if keyword_set(gesnlog) then figname='figs/ns_ltc_chu_goesnl_hsi_'+obsname+'.eps' else $
+      figname='figs/ns_ltc_chu_goes_hsi_'+obsname+'.eps'
+    set_plot,'ps'
+    device, /encapsulated, /color, /isolatin1,/inches, $
+      bits=8, xsize=5, ysize=6,file=figname
+    !p.charsize=1.5
+    !p.thick=4
+    utplot,timer,[1,1],/ylog,yrange=[1e-3,2],ytitle='NuSTAR Livetime',ytickf='exp1',$
+      position=[0.12,0.70,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata
+
+    if (nhk gt 0) then outplot,htime,hlive,thick=3,color=3
+    xyouts, 12.5e3,11e3,'FPMA',chars=0.7,/device,orien=90,color=3
+
+    ; Set up the y labelling
+    ;; mask = 1, chu1 only
+    ;; mask = 4, chu2 only
+    ;; mask = 9, chu3 only
+    ;; mask = 5, chu12
+    ;; mask = 10 chu13
+    ;; mask = 13 chu23
+    ;; mask = 14 chu123
+
+    ; Change the KKM mask setup into something a bit easier to plot
+    newmask=intarr(n_elements(chumask))
+    id1=where(chumask eq 1,nid1)
+    if (nid1 gt 0) then newmask[id1]=1
+    id2=where(chumask eq 4,nid2)
+    if (nid2 gt 0) then newmask[id2]=2
+    id12=where(chumask eq 5,nid12)
+    if (nid12 gt 0) then newmask[id12]=3
+    id3=where(chumask eq 9,nid3)
+    if (nid3 gt 0) then newmask[id3]=4
+    id13=where(chumask eq 10,nid13)
+    if (nid13 gt 0) then newmask[id13]=5
+    id23=where(chumask eq 13,nid23)
+    if (nid23 gt 0) then newmask[id23]=6
+    id123=where(chumask eq 14,nid123)
+    if (nid123 gt 0) then newmask[id123]=7
+
+    ylab=[' ','1','2','12','3','13','23','123',' ']
+    utplot,chutime,newmask,psym=1,yrange=[0,8],ytitle='NuSTAR CHUs',yticks=8,yminor=1,ytickname=ylab,$
+      timer=timer,position=[0.12,0.49,0.95,0.69],symsize=0.5,xtit='',xtickf='(a1)',thick=2
+
+    ; Want ylog=0 for the GOES panel?
+    if Keyword_set(gesnlog) then begin
+
+      utplot,gtime,glow,ytitle='!3GOES [x10!u-7!N W m!U-2!N]',$
+        /nodata,yrange=gyrl,timer=timer,position=[0.12,0.28,0.95,0.48],xtit='',xtickf='(a1)'
+      outplot,gtime,glow*1d7,color=150,thick=4
+
+      norbs=n_elements(torbs[0,*])
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+        outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
+        gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]))
+        outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
+      endfor
+
+      xyouts, 12.5e3,4.5e3,'1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+    endif else begin
+      utplot,gtime,glow,ytitle='!3GOES [W m!U-2!N]',$
+        /ylog,/nodata,yrange=gyr,timer=timer,position=[0.12,0.28,0.95,0.48],xtit='',xtickf='(a1)'
+      outplot,gtime,glow,color=150,thick=4
+      outplot,gtime,ghigh,color=150,thick=4
+
+      norbs=n_elements(torbs[0,*])
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyr,lines=2,color=0,thick=2
+        outplot,[torbs[1,i],torbs[1,i]],gyr,lines=2,color=0,thick=2
+
+        gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]))
+        outplot,gtime[gd1],glow[gd1],color=1,thick=4
+        outplot,gtime[gd1],ghigh[gd1],color=2,thick=4
+      endfor
+
+      evt_grid,replicate(timer[0],4),labpos=1.2*[1e-8,1e-7,1e-6,1e-5],labels=['A','B','C','M'],$
+        /data,labsize=0.7,/labonly,/noarrow,align=0,labcolor=150
+      for i=0, 4 do outplot,[gtime[0],gtime[n_elements(gtime)-1]],10d^(-8+i)*[1,1],color=150,lines=1,thick=2
+
+      xyouts, 12.5e3,5e3,'1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+      xyouts, 12.5e3,6e3,'0.5-4 '+string(197b),chars=0.7,/device,orien=90,color=2
+
+    endelse
+
+    dct=[4,5]
+
+    tube_line_colors
+    ymax=1.3*max(crd.countrate[0:1,*])
+    ryr=[2,ymax]
+    utplot, rtime, crd.countrate[0,*],$
+      ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+      ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
+    outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
+    outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
+
+    yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
+
+    xyouts, 12.5e3,1e3,'3-6 keV',chars=0.7,/device,orien=90,color=dct[0]
+    xyouts, 12.5e3,2.5e3,'6-12 keV',chars=0.7,/device,orien=90,color=dct[1]
+
+    for i=0, norbs-1 do begin
+      outplot,[torbs[0,i],torbs[0,i]],ryr,lines=2,color=0,thick=2
+      outplot,[torbs[1,i],torbs[1,i]],ryr,lines=2,color=0,thick=2
+    endfor
+
+    device,/close
+    set_plot, mydevice
+
+  endif
 
 end
