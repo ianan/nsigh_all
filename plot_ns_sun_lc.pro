@@ -30,10 +30,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 01-Sep-2015 IGH - Added in the times of the Sep 2015 observations
   ; 23-Feb-2016 IGH - Added in the times of the Feb 2016 observations
   ; 24-Feb-2016 IGH - Added in option to include panel with the CHU state
-
+  ; 17-May-2016 IGH - Added in Apr 2016 data and ignoring RHESSI for it (as annealing)
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201411';'201411'
+  if (n_elements(obsname) ne 1) then obsname='201604'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -153,6 +153,21 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[2.2,4.5]
   endif
 
+  ;-------------------------------------------
+
+  if (obsname eq '201604') then begin
+    torbs=[['22-Apr-2016 '+['17:10','18:12']],['22-Apr-2016 '+['18:47','19:49']],$
+      ['22-Apr-2016 '+['20:23','21:25']],['22-Apr-2016 '+['22:00','23:02']]]
+    timer=['22-Apr-2016 16:50',' 22-Apr-2016 23:10']
+    nsdir='obs7/'
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.6,1.1]
+  endif
+
   norbs=n_elements(torbs[0,*])
 
   ;-------------------------------------------
@@ -234,18 +249,20 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   ;-------------------------------------------
   ; Get the RHESSI data if *.dat file not there
+  ; RHESSI is annealing during 201604 pointing so don't look for data
   rfile='dat_files/rhessi_ltc_'+obsname+'.dat'
-  if (file_test(rfile) eq 0) then begin
-    obj = hsi_obs_summary()
-    timef=anytim([anytim(timer[0])-30*60.,anytim(timer[1])+30*60.],/yoh,/trunc)
-    obj ->set,obs_time_interval=[timef]
-    crd = obj -> getdata(/corrected)
-    rtime = anytim(obj -> getaxis(/ut),/yoh,/trunc)
-    save,file=rfile,rtime,crd
-  endif else begin
-    restore,file=rfile
-  endelse
-
+  if (obsname ne '201604') then begin
+    if (file_test(rfile) eq 0) then begin
+      obj = hsi_obs_summary()
+      timef=anytim([anytim(timer[0])-30*60.,anytim(timer[1])+30*60.],/yoh,/trunc)
+      obj ->set,obs_time_interval=[timef]
+      crd = obj -> getdata(/corrected)
+      rtime = anytim(obj -> getaxis(/ut),/yoh,/trunc)
+      save,file=rfile,rtime,crd
+    endif else begin
+      restore,file=rfile
+    endelse
+  endif
   ;-------------------------------------------
   ; Get the NuSTAR livetime if *.dat is not there
   nhk=n_elements(hkf)
@@ -366,19 +383,27 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   dct=[4,5]
 
   tube_line_colors
-  ymax=1.3*max(crd.countrate[0:1,*])
-  ryr=[2,ymax]
-  utplot, rtime, crd.countrate[0,*],$
-    ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
-    ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
-  outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
-  outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
+  ; Need a different plot if Apr-2016 as no RHESSI data
+  if (obsname ne '201604') then begin
+    ymax=1.3*max(crd.countrate[0:1,*])
+    ryr=[2,ymax]
+    utplot, rtime, crd.countrate[0,*],$
+      ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+      ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
+    outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
+    outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
+  endif else begin
+    ymax=200.
+    ryr=[2,ymax]
+    utplot, timer, [1,1],$
+      ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+      ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
+    xyouts, 2e3,1.5e3,'No RHESSI - Annealing',chars=1.0,/device,color=10
+  endelse
 
   yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
-
   xyouts, 12.5e3,1e3,'3-6 keV',chars=0.7,/device,orien=90,color=dct[0]
   xyouts, 12.5e3,2.5e3,'6-12 keV',chars=0.7,/device,orien=90,color=dct[1]
-
   for i=0, norbs-1 do begin
     outplot,[torbs[0,i],torbs[0,i]],ryr,lines=2,color=0,thick=2
     outplot,[torbs[1,i],torbs[1,i]],ryr,lines=2,color=0,thick=2
@@ -390,7 +415,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ;-------------------------------------------
   ; Make a plot of NuSTAR livetime, CHU state, GOES and RHESSI fluxes
   if keyword_Set(chudo) then begin
-    
+
     !p.multi=[0,4,1]
     if keyword_set(gesnlog) then figname='figs/ns_ltc_chu_goesnl_hsi_'+obsname+'.eps' else $
       figname='figs/ns_ltc_chu_goes_hsi_'+obsname+'.eps'
@@ -480,19 +505,27 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     dct=[4,5]
 
     tube_line_colors
-    ymax=1.3*max(crd.countrate[0:1,*])
-    ryr=[2,ymax]
-    utplot, rtime, crd.countrate[0,*],$
-      ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
-      ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
-    outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
-    outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
+    ; Need a different plot if Apr-2016 as no RHESSI data
+    if (obsname ne '201604') then begin
+      ymax=1.3*max(crd.countrate[0:1,*])
+      ryr=[2,ymax]
+      utplot, rtime, crd.countrate[0,*],$
+        ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+        ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
+      outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
+      outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
+    endif else begin
+      ymax=200.
+      ryr=[2,ymax]
+      utplot, timer, [1,1],$
+        ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+        ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
+      xyouts, 2e3,1.5e3,'No RHESSI - Annealing',chars=1.0,/device,color=10
+    endelse
 
     yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
-
     xyouts, 12.5e3,1e3,'3-6 keV',chars=0.7,/device,orien=90,color=dct[0]
     xyouts, 12.5e3,2.5e3,'6-12 keV',chars=0.7,/device,orien=90,color=dct[1]
-
     for i=0, norbs-1 do begin
       outplot,[torbs[0,i],torbs[0,i]],ryr,lines=2,color=0,thick=2
       outplot,[torbs[1,i],torbs[1,i]],ryr,lines=2,color=0,thick=2
