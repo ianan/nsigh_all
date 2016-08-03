@@ -31,6 +31,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 23-Feb-2016 IGH - Added in the times of the Feb 2016 observations
   ; 24-Feb-2016 IGH - Added in option to include panel with the CHU state
   ; 17-May-2016 IGH - Added in Apr 2016 data and ignoring RHESSI for it (as annealing)
+  ; 03-Aug-2016 IGH - Added in Jul 2016 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201604'
@@ -168,8 +169,23 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[0.6,1.1]
   endif
 
-  norbs=n_elements(torbs[0,*])
+  ;-------------------------------------------
 
+  if (obsname eq '201607') then begin
+    torbs=[['26-Jul-2016 '+['19:22:10','20:24:20']],['26-Jul-2016 '+['20:58:50','22:01:00']],$
+      ['26-Jul-2016 '+['22:35:30','23:37:50']],['27-Jul-2016 '+['00:12:10','01:14:30']]]
+    timer=['26-Jul-2016 19:00',' 27-Jul-2016 01:30']
+    nsdir='obs8/'
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.6,1.1]
+  endif
+  
+  ;-------------------------------------------
+  norbs=n_elements(torbs[0,*])
   ;-------------------------------------------
   ;-------------------------------------------
   ; If no GOES *.dat file then make one
@@ -349,8 +365,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     for i=0, norbs-1 do begin
       outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
       outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
-      gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]))
-      outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
+      gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]),ngd1)
+      if (ngd1 gt 1) then outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
     endfor
 
     xyouts, 12.5e3,5e3,'1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
@@ -472,8 +488,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       for i=0, norbs-1 do begin
         outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
         outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
-        gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]))
-        outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
+        gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
       endfor
 
       xyouts, 12.5e3,4.5e3,'1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
