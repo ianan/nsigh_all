@@ -31,7 +31,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 23-Feb-2016 IGH - Added in the times of the Feb 2016 observations
   ; 24-Feb-2016 IGH - Added in option to include panel with the CHU state
   ; 17-May-2016 IGH - Added in Apr 2016 data and ignoring RHESSI for it (as annealing)
-  ; 03-Aug-2016 IGH - Added in Jul 2016 data
+  ; 03-Aug-2016 IGH - Added in Jul 2016 data and added data gap times (greying out in plots) for Jul2016 and Sep2015
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201604'
@@ -104,6 +104,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['02-Sep-2015 '+['08:48','09:50']],['02-Sep-2015 '+['10:25','11:26']]]
     timer=['01-Sep-2015 02:00',' 02-Sep-2015 12:00']
     nsdir='obs5/lg_convert/'
+    
+    dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
+      ['01-Sep-2015 '+['04:33:31','04:45:40']]]
+    
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -118,6 +122,9 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['01-Sep-2015 '+['10:14','11:15']]]
     timer=['01-Sep-2015 02:00',' 01-Sep-2015 12:00']
     nsdir='obs5/lg_convert/'
+    dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
+      ['01-Sep-2015 '+['04:33:31','04:45:40']]]
+    
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -176,6 +183,11 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['26-Jul-2016 '+['22:35:30','23:37:50']],['27-Jul-2016 '+['00:12:10','01:14:30']]]
     timer=['26-Jul-2016 19:00',' 27-Jul-2016 01:30']
     nsdir='obs8/'
+    
+    dgtims=[['26-Jul-2016 '+['21:14:01','21:19:31']],$
+      ['26-Jul-2016 '+['21:55:33','22:40:00']],$
+      ['26-Jul-2016 '+['22:40:00','22:52:42']]]
+    
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -186,6 +198,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   
   ;-------------------------------------------
   norbs=n_elements(torbs[0,*])
+  ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
   ;-------------------------------------------
   ;-------------------------------------------
   ; If no GOES *.dat file then make one
@@ -242,7 +255,6 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     outplot,gtime,glow,color=150,thick=6
     outplot,gtime,ghigh,color=150,thick=6
 
-    norbs=n_elements(torbs[0,*])
     for i=0, norbs-1 do begin
       outplot,[torbs[0,i],torbs[0,i]],gyr,lines=0,color=0,thick=3
       outplot,[torbs[1,i],torbs[1,i]],gyr,lines=0,color=0,thick=3
@@ -251,6 +263,12 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       outplot,gtime[gd1],glow[gd1],color=1,thick=6
       outplot,gtime[gd1],ghigh[gd1],color=2,thick=6
       ;      outplot,torbs[*,i],0.2*gyr[1]*[1,1],lines=0,thick=10
+    endfor
+    
+    for i=0, ngaps-1 do begin
+      hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
+      if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1],color=200,thick=6
+       if (nhgd1 gt 1) then outplot,gtime[hgd1],ghigh[hgd1],color=200,thick=6
     endfor
 
     evt_grid,replicate(gtime[0],5),labpos=1.2*[1e-8,1e-7,1e-6,1e-5,1e-4],labels=['A','B','C','M','X'],$
@@ -351,8 +369,13 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     position=[0.12,0.69,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata
 
   if (nhk gt 0) then outplot,htime,hlive,thick=3,color=3
-  xyouts, 12.5e3,9e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
+  for i=0, ngaps-1 do begin
+    hgd1=where(anytim(htime) ge anytim(dgtims[0,i]) and anytim(htime) le anytim(dgtims[1,i]),nhgd1)
+    if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
+  endfor
+
+  xyouts, 12.5e3,9e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
   ; Want ylog=0 for the GOES panel?
   if Keyword_set(gesnlog) then begin
@@ -361,12 +384,16 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       /nodata,yrange=gyrl,timer=timer,position=[0.12,0.38,0.95,0.68],xtit='',xtickf='(a1)'
     outplot,gtime,glow*1d7,color=150,thick=4
 
-    norbs=n_elements(torbs[0,*])
     for i=0, norbs-1 do begin
       outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
       outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
       gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]),ngd1)
       if (ngd1 gt 1) then outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
+    endfor
+    
+    for i=0, ngaps-1 do begin
+      hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
+      if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1]*1d7,color=200,thick=4
     endfor
 
     xyouts, 12.5e3,5e3,'1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
@@ -377,7 +404,6 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     outplot,gtime,glow,color=150,thick=4
     outplot,gtime,ghigh,color=150,thick=4
 
-    norbs=n_elements(torbs[0,*])
     for i=0, norbs-1 do begin
       outplot,[torbs[0,i],torbs[0,i]],gyr,lines=2,color=0,thick=2
       outplot,[torbs[1,i],torbs[1,i]],gyr,lines=2,color=0,thick=2
@@ -385,6 +411,12 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]))
       outplot,gtime[gd1],glow[gd1],color=1,thick=4
       outplot,gtime[gd1],ghigh[gd1],color=2,thick=4
+    endfor
+    
+    for i=0, ngaps-1 do begin
+      hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
+      if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1],color=200,thick=4
+      if (nhgd1 gt 1) then outplot,gtime[hgd1],ghigh[hgd1],color=200,thick=4
     endfor
 
     evt_grid,replicate(timer[0],4),labpos=1.2*[1e-8,1e-7,1e-6,1e-5],labels=['A','B','C','M'],$
@@ -444,6 +476,12 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       position=[0.12,0.70,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata
 
     if (nhk gt 0) then outplot,htime,hlive,thick=3,color=3
+    
+    for i=0, ngaps-1 do begin
+      hgd1=where(anytim(htime) ge anytim(dgtims[0,i]) and anytim(htime) le anytim(dgtims[1,i]),nhgd1)
+      if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
+    endfor
+    
     xyouts, 12.5e3,11e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
     ; Set up the y labelling
@@ -477,6 +515,11 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     utplot,chutime,newmask,psym=1,yrange=[0,8],ytitle='NuSTAR CHUs',yticks=8,yminor=1,ytickname=ylab,$
       timer=timer,position=[0.12,0.49,0.95,0.69],symsize=0.5,xtit='',xtickf='(a1)',thick=2
 
+    for i=0, ngaps-1 do begin
+      cgd1=where(anytim(chutime) ge anytim(dgtims[0,i]) and anytim(chutime) le anytim(dgtims[1,i]),ncgd1)
+      if (ncgd1 gt 1) then outplot,chutime[cgd1],newmask[cgd1],color=200,thick=2,symsize=0.5,psym=1
+    endfor
+
     ; Want ylog=0 for the GOES panel?
     if Keyword_set(gesnlog) then begin
 
@@ -484,12 +527,16 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         /nodata,yrange=gyrl,timer=timer,position=[0.12,0.28,0.95,0.48],xtit='',xtickf='(a1)'
       outplot,gtime,glow*1d7,color=150,thick=4
 
-      norbs=n_elements(torbs[0,*])
       for i=0, norbs-1 do begin
         outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
         outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
         gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]),ngd1)
         if (ngd1 gt 1) then outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
+      endfor
+      
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1]*1d7,color=200,thick=4
       endfor
 
       xyouts, 12.5e3,4.5e3,'1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
@@ -499,7 +546,6 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       outplot,gtime,glow,color=150,thick=4
       outplot,gtime,ghigh,color=150,thick=4
 
-      norbs=n_elements(torbs[0,*])
       for i=0, norbs-1 do begin
         outplot,[torbs[0,i],torbs[0,i]],gyr,lines=2,color=0,thick=2
         outplot,[torbs[1,i],torbs[1,i]],gyr,lines=2,color=0,thick=2
@@ -507,6 +553,12 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]))
         outplot,gtime[gd1],glow[gd1],color=1,thick=4
         outplot,gtime[gd1],ghigh[gd1],color=2,thick=4
+      endfor
+      
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1],color=200,thick=4
+        if (nhgd1 gt 1) then outplot,gtime[hgd1],ghigh[hgd1],color=200,thick=4
       endfor
 
       evt_grid,replicate(timer[0],4),labpos=1.2*[1e-8,1e-7,1e-6,1e-5],labels=['A','B','C','M'],$
