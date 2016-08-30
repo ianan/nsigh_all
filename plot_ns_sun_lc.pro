@@ -103,7 +103,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['01-Sep-2015 '+['10:14','11:15']],['02-Sep-2015 '+['02:21','03:23']],['02-Sep-2015 '+['03:58','04:59']],$
       ['02-Sep-2015 '+['08:48','09:50']],['02-Sep-2015 '+['10:25','11:26']]]
     timer=['01-Sep-2015 02:00',' 02-Sep-2015 12:00']
-    nsdir='obs5/lg_convert/'
+    nsdir='obs5/'
     
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
@@ -121,7 +121,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     torbs=[['01-Sep-2015 '+['02:10','03:12']],['01-Sep-2015 '+['03:47','04:48']],['01-Sep-2015 '+['08:37','09:39']],$
       ['01-Sep-2015 '+['10:14','11:15']]]
     timer=['01-Sep-2015 02:00',' 01-Sep-2015 12:00']
-    nsdir='obs5/lg_convert/'
+    nsdir='obs5/'
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
     
@@ -137,7 +137,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     torbs=[['02-Sep-2015 '+['02:21','03:23']],['02-Sep-2015 '+['03:58','04:59']],$
       ['02-Sep-2015 '+['08:48','09:50']],['02-Sep-2015 '+['10:25','11:26']]]
     timer=['02-Sep-2015 02:00',' 02-Sep-2015 12:00']
-    nsdir='obs5/lg_convert/'
+    nsdir='obs5/'
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -152,7 +152,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     torbs=[['19-Feb-2016 '+['18:54','19:56']],['19-Feb-2016 '+['20:31','21:32']],['19-Feb-2016 '+['22:07','23:09']],$
       ['19-Feb-2016 23:44','20-Feb-2016 00:16']]
     timer=['19-Feb-2016 18:30',' 20-Feb-2016 01:00']
-    nsdir='obs6/heasarc/'
+    nsdir='obs6/'
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
