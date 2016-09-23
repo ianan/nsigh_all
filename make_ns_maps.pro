@@ -3,8 +3,8 @@ pro make_ns_maps, obsname=obsname,maindir=maindir,nsdir=nsdir
   ; Code to make an map of the NuSTAR emission >2.5keV for each of the NuSTAR data files.
   ; The map is over all CHUs but only grade 0
   ; Also output a nice summary csv of each observation
-  ; 
-  ; Work in progress version - only a the most recent observations 
+  ;
+  ; Work in progress version - only a the most recent observations
   ;
   ; Options
   ; obsname       - Which NuSTAR observations (default ='201409')
@@ -131,19 +131,36 @@ pro make_ns_maps, obsname=obsname,maindir=maindir,nsdir=nsdir
       loadct,39,/silent
       plot_map,mapa,/log,/limb,grid_spacing=25,title=mapa.id
 
-
       xcs[i]=newxc
       ycs[i]=newyc
       durs[i]=livetime
       ontime[i]=dur
       lvtp[i]=lvt*100.
-      
+
+;      ; save out the total map
+;      if (i eq 0) then begin
+;        ims_tot=ims/livetime
+;        tstart=t1
+;      endif else begin
+;        ims_tot=ims_tot+ims/livetime
+;        tend=t2
+;      endelse
+
     endif
 
     ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   endfor
-  
+
+  ; this has been replaced by make_ns_maps_comb.pro
+  ;  ;Output the total map
+  ;  maptot=make_map(ims_tot,dx=pxs,dy=pxs,xc=xc,yc=yc,$
+  ;    time=tstart,id='FPMA '+tstart+' to '+$
+  ;    anytim(tend,/yoh,/trunc,/time),$
+  ;    xyshift=[0,0],l0=l0,b0=ang[1],rsun=ang[2])
+  ;
+  ;  map2fits,maptot,maindir+nsdir+'maps_'+(strsplit(nsdir,'/',/extract))[0]+'_FPMA.fits'
+
   ; Write out a nice summary file
   hdr=['NS ID','Start Time','End Time','On Time [s]','Duration [s]','Livetime [%]','X [S/C]','Y [S/C]']
   write_csv, 'info_files/'+(strsplit(nsdir,'/',/extract))[0]+'_info_FPMA.csv',ns_ids,t1s,t2s,ontime,durs,lvtp,xcs,ycs,header=hdr
