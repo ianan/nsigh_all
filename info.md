@@ -8,7 +8,7 @@ This is a rough guide to getting the NuSTAR data and then getting it into a form
 
 For this to work you are going to need some (if not all) of the following installed:
 
-* [HEASoft with the NuSTAR and Xpec packages](http://heasarc.nasa.gov/lheasoft/download.html)
+* [HEASoft with the NuSTAR and XSPEC packages](http://heasarc.nasa.gov/lheasoft/download.html)
 * The latest [NuSTAR Calibration Files] (http://heasarc.nasa.gov/docs/heasarc/caldb/nustar/)
 * [IDL with SSWIDL](http://www.lmsal.com/solarsoft/ssw_setup.html) or some form of scientific python [(NuSTAR solar scripts)](https://github.com/NuSTAR/nustar_pysolar)
 
