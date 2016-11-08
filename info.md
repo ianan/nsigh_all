@@ -2,7 +2,7 @@
 
 This is a rough guide to getting the NuSTAR data and then getting it into a format for solar work.
 
-07-Nov-2016
+Started - Nov-2016
 
 ### Requirements
 
