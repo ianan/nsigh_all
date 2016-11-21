@@ -26,7 +26,7 @@ pro heasarc_ns_sc,obs_id=obs_id
 
   if (n_elements(obs_id) ne 1) then obs_id=2
 
-  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422']
+  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726']
 
   ephem_file = dobs[obs_id]+'_ephem.txt'
 
@@ -50,5 +50,4 @@ pro heasarc_ns_sc,obs_id=obs_id
   nofiles=reform(nofiles)
   for i=1,n_elements(nofiles)-1 do print,'No files: '+ nofiles[i]
 
-  stop
 end
