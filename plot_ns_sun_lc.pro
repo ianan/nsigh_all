@@ -4,9 +4,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; Script to generate overview time profiles of NuSTAR livetime, GOES and RHESSI flux
   ; The data it uses is either *.dat files in the dat_files directory or if those do not
   ; exist the code with generate these from a *local* copy of the NuSTAR data and *online*
-  ; for GOES & RHESSI (might need a search_network,/enabled for the latter).
+  ; for GOES & RHESSI (might need a search_network, /enabled for the latter).
   ;
-  ; In reality the *.dat files should be there and you don't need the original NuSTAR data (or setup maindir, nsdir etc)
+  ; In reality the *.dat files should be there and you don't need the original NuSTAR data 
+  ; (or setup maindir, nsdir etc)
 
   ; Options
   ; obsname       - Which NuSTAR observations (default ='201409')
@@ -32,6 +33,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 24-Feb-2016 IGH - Added in option to include panel with the CHU state
   ; 17-May-2016 IGH - Added in Apr 2016 data and ignoring RHESSI for it (as annealing)
   ; 03-Aug-2016 IGH - Added in Jul 2016 data and added data gap times (greying out in plots) for Jul2016 and Sep2015
+  ; 21-Mar-2017 IGH - Added in Mar 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201604'
@@ -104,7 +106,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['02-Sep-2015 '+['08:48','09:50']],['02-Sep-2015 '+['10:25','11:26']]]
     timer=['01-Sep-2015 02:00',' 02-Sep-2015 12:00']
     nsdir='obs5/'
-    
+    ;times of gaps during daylight
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
     
@@ -122,6 +124,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['01-Sep-2015 '+['10:14','11:15']]]
     timer=['01-Sep-2015 02:00',' 01-Sep-2015 12:00']
     nsdir='obs5/'
+    ;times of gaps during daylight
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
     
@@ -183,10 +186,28 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['26-Jul-2016 '+['22:35:30','23:37:50']],['27-Jul-2016 '+['00:12:10','01:14:30']]]
     timer=['26-Jul-2016 19:00',' 27-Jul-2016 01:30']
     nsdir='obs8/'
-    
+
+    ;times of gaps during daylight
     dgtims=[['26-Jul-2016 '+['21:14:01','21:19:31']],$
       ['26-Jul-2016 '+['21:55:33','22:40:00']],$
       ['26-Jul-2016 '+['22:40:00','22:52:42']]]
+    
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.6,1.1]
+  endif
+
+   ;-------------------------------------------
+
+  if (obsname eq '201703') then begin
+    torbs=[['21-Mar-2017 '+['12:08:30','13:09:50']],['21-Mar-2017 '+['13:45:20','14:46:30']],$
+      ['21-Mar-2017 '+['15:22:00','16:23:10']],['21-Mar-2017 '+['16:58:40','17:59:50']],$
+      ['21-Mar-2017 '+['18:35:20','19:36:30']]]
+    timer=['21-Mar-2017 11:30',' 21-Mar-2017 20:00']
+    nsdir='obs9/'
     
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
