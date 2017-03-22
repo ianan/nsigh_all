@@ -22,7 +22,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 22-Mar-2017 IGH -  Updated with Mar 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=7
+  if (n_elements(obs_id) ne 1) then obs_id=8
   dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321']
 
   obsname=dobs[obs_id]
@@ -111,11 +111,9 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     ; First is mosaic
     ; Default of 1 is all the mosaic tiles
     gd_ids=intarr(n_elements(evtaf))+1
-    ; then for each disk centre pointing
-    gd_ids[where(ns_ids eq 'nu20211001001')]=2
-    gd_ids[where(ns_ids eq 'nu20211002001')]=3
-    gd_ids[where(ns_ids eq 'nu20211003001')]=4
-    gd_ids[where(ns_ids eq 'nu20211004001')]=5
+    ; then for the disk centre pointing
+    gd_ids[where(ns_ids eq 'nu20211001001' or ns_ids eq 'nu20211002001' or $
+      ns_ids eq 'nu20211003001' or ns_ids eq 'nu20211004001')]=2
   endif
 
   ; How many combined maps do we need to make?
@@ -171,6 +169,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
         if (i eq 0) then begin
           ims_tot=ims/effexp
           tstart=t1
+          tend=t2
         endif else begin
           ims_tot=ims_tot+ims/effexp
           tend=t2
@@ -178,6 +177,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
 
       endif
     endfor
+    
     ang = pb0r(tstart,/arcsec,l0=l0)
     ;Output the total map
     maptot=make_map(ims_tot,dx=pix_size,dy=pix_size,xc=xc,yc=yc,$
@@ -185,7 +185,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
       anytim(tend,/yoh,/trunc,/time),$
       xyshift=[0,0],l0=l0,b0=ang[1],rsun=ang[2])
 
-    map2fits,maptot,maindir+nsdir+'/maps_'+nsdir+'_'+string(1000+m,format='(i4)')+'_'+fpid+'.fits'
+   map2fits,maptot,maindir+nsdir+'/maps_'+nsdir+'_'+string(1000+m,format='(i4)')+'_'+fpid+'.fits'
 
 
   endfor
