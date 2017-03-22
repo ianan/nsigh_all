@@ -24,7 +24,8 @@ pro batch_ltc
   plot_ns_sun_lc, obsname='201602',gav=5,/goes
   plot_ns_sun_lc, obsname='201604',gav=5,/goes
   plot_ns_sun_lc, obsname='201607',gav=5,/goes
-  plot_ns_sun_lc, obsname='201703',gav=5,/goes,do_nustar=0
+  plot_ns_sun_lc, obsname='201703',gav=5,/goes
+;  plot_ns_sun_lc, obsname='201703',gav=5,/goes,do_nustar=0
 
   ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
   plot_ns_sun_lc, obsname='201409',gav=5,/gesnlog,/chudo
@@ -37,8 +38,8 @@ pro batch_ltc
   plot_ns_sun_lc, obsname='201602',gav=5,/gesnlog,/chudo
   plot_ns_sun_lc, obsname='201604',gav=5,/gesnlog,/chudo
   plot_ns_sun_lc, obsname='201607',gav=5,/gesnlog,/chudo
-  plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,do_nustar=0
-  ;    plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,/chudo,do_nustar=0
+;  plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,do_nustar=0
+  plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,/chudo
 
 
   stop

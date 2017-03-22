@@ -38,7 +38,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201703'
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/
+  if (n_elements(do_nustar) ne 1) then do_nustar=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ; Which obs are we dealing with ?
@@ -208,7 +209,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['21-Mar-2017 '+['15:22:00','16:23:10']],['21-Mar-2017 '+['16:58:40','17:59:50']],$
       ['21-Mar-2017 '+['18:35:20','19:36:30']]]
     timer=['21-Mar-2017 11:30',' 21-Mar-2017 20:00']
-    nsdir='obs9/'
+    nsdir='ns_20170321/'
     
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
@@ -216,6 +217,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[0.35,0.75]
+    
   endif
   
   ;-------------------------------------------
@@ -322,7 +324,6 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   
   if keyword_set(do_nustar) then begin
 
-  
   ;-------------------------------------------
   ; Get the NuSTAR livetime if *.dat is not there
   nhk=n_elements(hkf)

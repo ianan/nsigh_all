@@ -15,7 +15,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 22-Mar-2017 IGH - Added in Mar 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=4
+  if (n_elements(obs_id) ne 1) then obs_id=8
   dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321']
 
   obsname=dobs[obs_id]
@@ -51,7 +51,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     b[1]=255
     tvlct,r,g,b
 
-    dnl=1e-3
+    dnl=1e-4
     dmx=1e1
     plim=1500
     xr=[-1,1]*plim

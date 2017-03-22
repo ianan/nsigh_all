@@ -109,9 +109,13 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   
   if (obs_id eq 8) then begin
     ; First is mosaic
- 
-    ; then 4 orbits at disk centre
-
+    ; Default of 1 is all the mosaic tiles
+    gd_ids=intarr(n_elements(evtaf))+1
+    ; then for each disk centre pointing
+    gd_ids[where(ns_ids eq 'nu20211001001')]=2
+    gd_ids[where(ns_ids eq 'nu20211002001')]=3
+    gd_ids[where(ns_ids eq 'nu20211003001')]=4
+    gd_ids[where(ns_ids eq 'nu20211004001')]=5
   endif
 
   ; How many combined maps do we need to make?

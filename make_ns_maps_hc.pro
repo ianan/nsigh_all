@@ -17,7 +17,7 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 22-Mar-2017   IGH   Updated with Mar 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=4
+  if (n_elements(obs_id) ne 1) then obs_id=8
   dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321']
 
   obsname=dobs[obs_id]
