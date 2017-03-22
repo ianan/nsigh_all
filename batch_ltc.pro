@@ -11,6 +11,7 @@ pro batch_ltc
   ; 23-Feb-2016 - IGH
   ; 17-May-2016 - IGH   Added in Apr 2016 data
   ; 03-Aug-2016 - IGH   Added in Jul 2016 data
+  ; 22-Mar-2016 - IGH   Added in Mar 2017 data
 
   ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
   plot_ns_sun_lc, obsname='201409',gav=5,/goes
@@ -23,6 +24,7 @@ pro batch_ltc
   plot_ns_sun_lc, obsname='201602',gav=5,/goes
   plot_ns_sun_lc, obsname='201604',gav=5,/goes
   plot_ns_sun_lc, obsname='201607',gav=5,/goes
+  plot_ns_sun_lc, obsname='201703',gav=5,/goes,do_nustar=0
 
   ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
   plot_ns_sun_lc, obsname='201409',gav=5,/gesnlog,/chudo
@@ -35,6 +37,9 @@ pro batch_ltc
   plot_ns_sun_lc, obsname='201602',gav=5,/gesnlog,/chudo
   plot_ns_sun_lc, obsname='201604',gav=5,/gesnlog,/chudo
   plot_ns_sun_lc, obsname='201607',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,do_nustar=0
+  ;    plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,/chudo,do_nustar=0
+
 
   stop
 end

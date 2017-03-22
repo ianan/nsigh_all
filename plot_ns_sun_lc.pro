@@ -1,5 +1,5 @@
 pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
-  maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo
+  maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo,do_nustar=do_nustar
 
   ; Script to generate overview time profiles of NuSTAR livetime, GOES and RHESSI flux
   ; The data it uses is either *.dat files in the dat_files directory or if those do not
@@ -19,6 +19,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
   ; gesnlog       - Plot the GOES light curve with ylog=0 in default NuSTAR, GOES, RHESSI plot
   ; chudo         - Do an extra plot with NuSTAR Livetime, CHU, GOES and RHESSI (default no)
+  ; do_nustar     - Process the NuSTAR data (default yes) - useful for just after an obs with no_nustar=0 to get GOES/RHESSI etc 
 
   ; example of usage
   ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
@@ -33,10 +34,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 24-Feb-2016 IGH - Added in option to include panel with the CHU state
   ; 17-May-2016 IGH - Added in Apr 2016 data and ignoring RHESSI for it (as annealing)
   ; 03-Aug-2016 IGH - Added in Jul 2016 data and added data gap times (greying out in plots) for Jul2016 and Sep2015
-  ; 21-Mar-2017 IGH - Added in Mar 2017 data
+  ; 21-Mar-2017 IGH - Added in Mar 2017 data and option to plot without NuSTAR data available
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201604'
+  if (n_elements(obsname) ne 1) then obsname='201703'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,7 +215,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.6,1.1]
+    gyrl=[0.35,0.75]
   endif
   
   ;-------------------------------------------
@@ -318,6 +319,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       restore,file=rfile
     endelse
   endif
+  
+  if keyword_set(do_nustar) then begin
+
+  
   ;-------------------------------------------
   ; Get the NuSTAR livetime if *.dat is not there
   nhk=n_elements(hkf)
@@ -375,6 +380,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       endelse
     endif
   endif
+  
+    endif else begin
+      nhk=0
+    endelse
 
   ;-------------------------------------------
   ; Make a plot of NuSTAR livetime, GOES and RHESSI fluxes
@@ -467,7 +476,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     utplot, timer, [1,1],$
       ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
       ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
-    xyouts, 2e3,1.5e3,'No RHESSI - Annealing',chars=1.0,/device,color=10
+    xyouts, 2e3,1.5e3,'No RHESSI',chars=1.0,/device,color=10
   endelse
 
   yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
@@ -609,7 +618,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       utplot, timer, [1,1],$
         ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
         ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
-      xyouts, 2e3,1.5e3,'No RHESSI - Annealing',chars=1.0,/device,color=10
+      xyouts, 2e3,1.5e3,'No RHESSI',chars=1.0,/device,color=10
     endelse
 
     yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
