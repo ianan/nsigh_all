@@ -20,10 +20,11 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 23-Sep-2016 IGH - Added more info about what code is doing
   ; 18-Nov-2016 IGH - Includes more data (from HEASARC) and changes location of output files
   ; 22-Mar-2017 IGH -  Updated with Mar 2017 data
+  ; 25-Sep-2017 IGH - Updated with Aug 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=8
-  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321']
+  if (n_elements(obs_id) ne 1) then obs_id=9
+  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321','20170821']
 
   obsname=dobs[obs_id]
   nsdir='ns_'+obsname
@@ -114,6 +115,11 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     ; then for the disk centre pointing
     gd_ids[where(ns_ids eq 'nu20211001001' or ns_ids eq 'nu20211002001' or $
       ns_ids eq 'nu20211003001' or ns_ids eq 'nu20211004001')]=2
+  endif
+  
+  if (obs_id eq 9) then begin
+    ; OK to combine all
+    gd_ids=intarr(n_elements(evtaf))+1
   endif
 
   ; How many combined maps do we need to make?

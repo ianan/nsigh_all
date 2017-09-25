@@ -6,7 +6,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; exist the code with generate these from a *local* copy of the NuSTAR data and *online*
   ; for GOES & RHESSI (might need a search_network, /enabled for the latter).
   ;
-  ; In reality the *.dat files should be there and you don't need the original NuSTAR data 
+  ; In reality the *.dat files should be there and you don't need the original NuSTAR data
   ; (or setup maindir, nsdir etc)
 
   ; Options
@@ -19,7 +19,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
   ; gesnlog       - Plot the GOES light curve with ylog=0 in default NuSTAR, GOES, RHESSI plot
   ; chudo         - Do an extra plot with NuSTAR Livetime, CHU, GOES and RHESSI (default no)
-  ; do_nustar     - Process the NuSTAR data (default yes) - useful for just after an obs with no_nustar=0 to get GOES/RHESSI etc 
+  ; do_nustar     - Process the NuSTAR data (default yes) - useful for just after an obs with no_nustar=0 to get GOES/RHESSI etc
 
   ; example of usage
   ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
@@ -35,6 +35,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 17-May-2016 IGH - Added in Apr 2016 data and ignoring RHESSI for it (as annealing)
   ; 03-Aug-2016 IGH - Added in Jul 2016 data and added data gap times (greying out in plots) for Jul2016 and Sep2015
   ; 21-Mar-2017 IGH - Added in Mar 2017 data and option to plot without NuSTAR data available
+  ; 25-Sep-2017 IGH - Added in Aug 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201703'
@@ -111,7 +112,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     ;times of gaps during daylight
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
-    
+
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -129,7 +130,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     ;times of gaps during daylight
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
-    
+
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -193,7 +194,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     dgtims=[['26-Jul-2016 '+['21:14:01','21:19:31']],$
       ['26-Jul-2016 '+['21:55:33','22:40:00']],$
       ['26-Jul-2016 '+['22:40:00','22:52:42']]]
-    
+
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
@@ -202,7 +203,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[0.6,1.1]
   endif
 
-   ;-------------------------------------------
+  ;-------------------------------------------
 
   if (obsname eq '201703') then begin
     torbs=[['21-Mar-2017 '+['12:08:30','13:09:50']],['21-Mar-2017 '+['13:45:20','14:46:30']],$
@@ -210,16 +211,30 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['21-Mar-2017 '+['18:35:20','19:36:30']]]
     timer=['21-Mar-2017 11:30',' 21-Mar-2017 20:00']
     nsdir='ns_20170321/'
-    
+
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[0.35,0.75]
-    
+
   endif
-  
+
+  if (obsname eq '201708') then begin
+    torbs=[['21-Aug-2017 '+['18:50:00','19:50:00']]]
+    timer=['21-Aug-2017 18:45',' 21-Aug-2017 19:55']
+    nsdir='ns_20170821/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[1.5,5.5]
+
+  endif
+
   ;-------------------------------------------
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
@@ -288,11 +303,11 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       outplot,gtime[gd1],ghigh[gd1],color=2,thick=6
       ;      outplot,torbs[*,i],0.2*gyr[1]*[1,1],lines=0,thick=10
     endfor
-    
+
     for i=0, ngaps-1 do begin
       hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
       if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1],color=200,thick=6
-       if (nhgd1 gt 1) then outplot,gtime[hgd1],ghigh[hgd1],color=200,thick=6
+      if (nhgd1 gt 1) then outplot,gtime[hgd1],ghigh[hgd1],color=200,thick=6
     endfor
 
     evt_grid,replicate(gtime[0],5),labpos=1.2*[1e-8,1e-7,1e-6,1e-5,1e-4],labels=['A','B','C','M','X'],$
@@ -321,70 +336,70 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       restore,file=rfile
     endelse
   endif
-  
+
   if keyword_set(do_nustar) then begin
 
-  ;-------------------------------------------
-  ; Get the NuSTAR livetime if *.dat is not there
-  nhk=n_elements(hkf)
-  if (nhk gt 0) then begin
-    hkfile='dat_files/ns_hk_ltc_'+obsname+'.dat'
-    if (file_test(hkfile) eq 0) then begin
-      for ii=0, nhk-1 do begin
-        hka = mrdfits(hkf[ii], 1, hkahdr)
-        if (ii eq 0) then htime=anytim(hka.time+anytim('01-Jan-2010'),/yoh) else $
-          htime=[htime,anytim(hka.time+anytim('01-Jan-2010'),/yoh)]
-        if (ii eq 0) then hlive=hka.livetime else hlive=[hlive,hka.livetime]
-      endfor
-      ids=sort(anytim(htime))
-      htime=htime[ids]
-      hlive=hlive[ids]
-      save,file=hkfile,htime,hlive
-    endif else begin
-      restore,file=hkfile
-    endelse
-  endif
-
-  ;-------------------------------------------
-  ; Get the NuSTAR CHU if *.dat is not there and you want it plotted
-  if keyword_set(chudo) then begin
-    nch=n_elements(chuf)
-    if (nch gt 0) then begin
-      chufile='dat_files/ns_chu_ltc_'+obsname+'.dat'
-      if (file_test(chufile) eq 0) then begin
-        for ii=0, nch-1 do begin
-
-          for chunum= 1, 3 do begin
-            chu = mrdfits(chuf[ii], chunum)
-            maxres = 20 ;; [arcsec] maximum solution residual
-            qind=1 ; From KKM code...
-            if chunum eq 1 then begin
-              mask = (chu.valid EQ 1 AND $          ;; Valid solution from CHU
-                chu.residual LT maxres AND $  ;; CHU solution has low residuals
-                chu.starsfail LT chu.objects AND $ ;; Tracking enough objects
-                chu.(qind)(3) NE 1)*chunum^2       ;; Not the "default" solution
-            endif else begin
-              mask += (chu.valid EQ 1 AND $            ;; Valid solution from CHU
-                chu.residual LT maxres AND $    ;; CHU solution has low residuals
-                chu.starsfail LT chu.objects AND $ ;; Tracking enough objects
-                chu.(qind)(3) NE 1)*chunum^2       ;; Not the "default" solution
-            endelse
-          endfor
-
-          if (ii eq 0) then chutime=anytim(chu.time+anytim('01-Jan-2010'),/yoh) else $
-            chutime=[chutime,anytim(chu.time+anytim('01-Jan-2010'),/yoh)]
-          if (ii eq 0) then chumask=mask else chumask=[chumask,mask]
+    ;-------------------------------------------
+    ; Get the NuSTAR livetime if *.dat is not there
+    nhk=n_elements(hkf)
+    if (nhk gt 0) then begin
+      hkfile='dat_files/ns_hk_ltc_'+obsname+'.dat'
+      if (file_test(hkfile) eq 0) then begin
+        for ii=0, nhk-1 do begin
+          hka = mrdfits(hkf[ii], 1, hkahdr)
+          if (ii eq 0) then htime=anytim(hka.time+anytim('01-Jan-2010'),/yoh) else $
+            htime=[htime,anytim(hka.time+anytim('01-Jan-2010'),/yoh)]
+          if (ii eq 0) then hlive=hka.livetime else hlive=[hlive,hka.livetime]
         endfor
-        save,file=chufile,chutime,chumask
+        ids=sort(anytim(htime))
+        htime=htime[ids]
+        hlive=hlive[ids]
+        save,file=hkfile,htime,hlive
       endif else begin
-        restore,file=chufile
+        restore,file=hkfile
       endelse
     endif
-  endif
-  
-    endif else begin
-      nhk=0
-    endelse
+
+    ;-------------------------------------------
+    ; Get the NuSTAR CHU if *.dat is not there and you want it plotted
+    if keyword_set(chudo) then begin
+      nch=n_elements(chuf)
+      if (nch gt 0) then begin
+        chufile='dat_files/ns_chu_ltc_'+obsname+'.dat'
+        if (file_test(chufile) eq 0) then begin
+          for ii=0, nch-1 do begin
+
+            for chunum= 1, 3 do begin
+              chu = mrdfits(chuf[ii], chunum)
+              maxres = 20 ;; [arcsec] maximum solution residual
+              qind=1 ; From KKM code...
+              if chunum eq 1 then begin
+                mask = (chu.valid EQ 1 AND $          ;; Valid solution from CHU
+                  chu.residual LT maxres AND $  ;; CHU solution has low residuals
+                  chu.starsfail LT chu.objects AND $ ;; Tracking enough objects
+                  chu.(qind)(3) NE 1)*chunum^2       ;; Not the "default" solution
+              endif else begin
+                mask += (chu.valid EQ 1 AND $            ;; Valid solution from CHU
+                  chu.residual LT maxres AND $    ;; CHU solution has low residuals
+                  chu.starsfail LT chu.objects AND $ ;; Tracking enough objects
+                  chu.(qind)(3) NE 1)*chunum^2       ;; Not the "default" solution
+              endelse
+            endfor
+
+            if (ii eq 0) then chutime=anytim(chu.time+anytim('01-Jan-2010'),/yoh) else $
+              chutime=[chutime,anytim(chu.time+anytim('01-Jan-2010'),/yoh)]
+            if (ii eq 0) then chumask=mask else chumask=[chumask,mask]
+          endfor
+          save,file=chufile,chutime,chumask
+        endif else begin
+          restore,file=chufile
+        endelse
+      endif
+    endif
+
+  endif else begin
+    nhk=0
+  endelse
 
   ;-------------------------------------------
   ; Make a plot of NuSTAR livetime, GOES and RHESSI fluxes
@@ -421,7 +436,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]),ngd1)
       if (ngd1 gt 1) then outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
     endfor
-    
+
     for i=0, ngaps-1 do begin
       hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
       if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1]*1d7,color=200,thick=4
@@ -443,7 +458,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       outplot,gtime[gd1],glow[gd1],color=1,thick=4
       outplot,gtime[gd1],ghigh[gd1],color=2,thick=4
     endfor
-    
+
     for i=0, ngaps-1 do begin
       hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
       if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1],color=200,thick=4
@@ -507,12 +522,12 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       position=[0.12,0.70,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata
 
     if (nhk gt 0) then outplot,htime,hlive,thick=3,color=3
-    
+
     for i=0, ngaps-1 do begin
       hgd1=where(anytim(htime) ge anytim(dgtims[0,i]) and anytim(htime) le anytim(dgtims[1,i]),nhgd1)
       if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
     endfor
-    
+
     xyouts, 12.5e3,11e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
     ; Set up the y labelling
@@ -564,7 +579,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         gd1=where(anytim(gtime) ge anytim(torbs[0,i]) and anytim(gtime) le anytim(torbs[1,i]),ngd1)
         if (ngd1 gt 1) then outplot,gtime[gd1],glow[gd1]*1d7,color=1,thick=4
       endfor
-      
+
       for i=0, ngaps-1 do begin
         hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
         if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1]*1d7,color=200,thick=4
@@ -585,7 +600,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         outplot,gtime[gd1],glow[gd1],color=1,thick=4
         outplot,gtime[gd1],ghigh[gd1],color=2,thick=4
       endfor
-      
+
       for i=0, ngaps-1 do begin
         hgd1=where(anytim(gtime) ge anytim(dgtims[0,i]) and anytim(gtime) le anytim(dgtims[1,i]),nhgd1)
         if (nhgd1 gt 1) then outplot,gtime[hgd1],glow[hgd1],color=200,thick=4
