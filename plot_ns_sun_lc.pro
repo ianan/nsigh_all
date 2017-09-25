@@ -38,7 +38,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 25-Sep-2017 IGH - Added in Aug 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201703'
+  if (n_elements(obsname) ne 1) then obsname='201708'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -126,7 +126,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     torbs=[['01-Sep-2015 '+['02:10','03:12']],['01-Sep-2015 '+['03:47','04:48']],['01-Sep-2015 '+['08:37','09:39']],$
       ['01-Sep-2015 '+['10:14','11:15']]]
     timer=['01-Sep-2015 02:00',' 01-Sep-2015 12:00']
-    nsdir='obs5/'
+    nsdir='ns_20150901';'obs5/'
     ;times of gaps during daylight
     dgtims=[['01-Sep-2015 '+['03:47:54','03:54:47']],$
       ['01-Sep-2015 '+['04:33:31','04:45:40']]]
