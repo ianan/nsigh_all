@@ -21,11 +21,14 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 18-Nov-2016 IGH - Includes more data (from HEASARC) and changes location of output files
   ; 22-Mar-2017 IGH -  Updated with Mar 2017 data
   ; 25-Sep-2017 IGH - Updated with Aug 2017 data
+  ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=9
-  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321','20170821']
-
+  if (n_elements(obs_id) ne 1) then obs_id=10
+  dobs=['20140910','20141101','20141211',$
+    '20150429','20150901',$
+    '20160219','20160422','20160726',$
+    '20170321','20170821','20170911']
   obsname=dobs[obs_id]
   nsdir='ns_'+obsname
 
@@ -120,6 +123,18 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   if (obs_id eq 9) then begin
     ; OK to combine all
     gd_ids=intarr(n_elements(evtaf))+1
+  endif
+  
+  if (obs_id eq 10) then begin
+    ; don't have any of the bad or slew data in the dir so no 0
+    ; 11th by default are 1
+    gd_ids=intarr(n_elements(evtaf))+1
+    ; 12th will be 2
+    gd_ids[where(ns_ids eq 'nu80310228001' or ns_ids eq 'nu80310229001' or ns_ids eq 'nu80310230001' $ 
+      or ns_ids eq 'nu80310231001' or ns_ids eq 'nu80310232001' )]=2
+    ; 13th will be 3
+    gd_ids[where(ns_ids eq 'nu80310241001' or ns_ids eq 'nu80310242001' or ns_ids eq 'nu80310243001' $ 
+      or ns_ids eq 'nu80310244001' or ns_ids eq 'nu80310245001' or ns_ids eq 'nu80310246001' )]=3
   endif
 
   ; How many combined maps do we need to make?

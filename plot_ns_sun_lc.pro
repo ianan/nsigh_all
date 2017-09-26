@@ -27,6 +27,9 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
   ; plot_ns_sun_lc, obsname='201509_01',gav=5,/gesnlog,/chudo
+  
+  ; Note that for muliple day campaigns (Sep 2015, Sep 2017) the default is to do it per day instead of whole campaign
+  ; so obsname='201509_01' or obsname='201709_11'
 
   ; 04-Aug-2015 IGH - Script to plot the lightcurves for the nustar obs tims
   ; 01-Sep-2015 IGH - Added in the times of the Sep 2015 observations
@@ -36,9 +39,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 03-Aug-2016 IGH - Added in Jul 2016 data and added data gap times (greying out in plots) for Jul2016 and Sep2015
   ; 21-Mar-2017 IGH - Added in Mar 2017 data and option to plot without NuSTAR data available
   ; 25-Sep-2017 IGH - Added in Aug 2017 data
+  ; 26-Sep-2017 IGH - Added in Sep 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201708'
+  if (n_elements(obsname) ne 1) then obsname='201709_11'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -232,6 +236,53 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[1.5,5.5]
+
+  endif
+  
+  if (obsname eq '201709_11') then begin
+    torbs=[['11-Sep-2017 '+['15:55:50','16:55:30']],['11-Sep-2017 '+['17:32:30','18:32:10']],$
+      ['11-Sep-2017 '+['19:09:15','20:08:50']],['11-Sep-2017 '+['20:45:50','21:36:20']]]
+    timer=['11-Sep-2017 15:45',' 11-Sep-2017 21:45']
+    nsdir='ns_20170911/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[1.5,3.5]
+
+  endif
+  
+  if (obsname eq '201709_12') then begin
+    torbs=[['12-Sep-2017 '+['19:19:20','20:18:55']],['12-Sep-2017 '+['20:56:00','21:46:20']],$
+      ['12-Sep-2017 '+['22:32:40','23:28:30']],['13-Sep-2017 '+['00:09:23','01:08:55']],$
+      ['13-Sep-2017 '+['01:46:00','02:45:40']]]
+    timer=['12-Sep-2017 19:10',' 13-Sep-2017 02:55']
+    nsdir='ns_20170911/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.5,1.5]
+
+  endif
+  
+  if (obsname eq '201709_13') then begin
+    torbs=[['13-Sep-2017 '+['16:16:10','17:15:40']],['13-Sep-2017 '+['17:52:45','18:52:20']],$
+      ['13-Sep-2017 '+['19:29:25','20:29:00']],['13-Sep-2017 '+['21:06:05','21:56:40']],$
+      ['13-Sep-2017 '+['22:42:45','23:39:00']],['14-Sep-2017 '+['00:19:25','01:15:00']]]
+    timer=['13-Sep-2017 16:10',' 14-Sep-2017 01:20']
+    nsdir='ns_20170911/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.3,1.1]
 
   endif
 

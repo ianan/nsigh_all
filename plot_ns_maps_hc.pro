@@ -14,17 +14,21 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 18-Nov-2016 IGH - Includes more data (from HEASARC) and changes location of output files
   ; 22-Mar-2017 IGH - Added in Mar 2017 data
   ; 25-Sep-2017 IGH - Updated with Aug 2017 data
+  ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=9
-  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321','20170821']
-
+  if (n_elements(obs_id) ne 1) then obs_id=10
+  dobs=['20140910','20141101','20141211',$
+    '20150429','20150901',$
+    '20160219','20160422','20160726',$
+    '20170321','20170821','20170911']
+    
   obsname=dobs[obs_id]
   nsdir='ns_'+obsname
 
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/
   
-  ; control color scaling on final maps
+  ; control color scaling on final maps by obsid
   if (obs_id eq 8) then begin
     dnl=1e-4
     dmx=1e1
@@ -39,14 +43,17 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ;--------------------------------------------
 
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
-
+  
   nf=n_elements(ffa)
   sr=2
   for i=0, nf-1 do begin
     fits2map,ffa[i],mm
     mms=mm
     mms.data=gauss_smooth(mms.data,sr)
-
+    
+    ; modify the scaling on the fly?
+    if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
+   
     @post_outset
     !p.multi=0
 

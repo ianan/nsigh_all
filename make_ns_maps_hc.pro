@@ -15,11 +15,15 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 29-Aug-2016 IGH - Created
   ; 18-Nov-2016 IGH - Includes more data (from HEASARC) and changes location of output files
   ; 22-Mar-2017 IGH - Updated with Mar 2017 data
-  ; 25-Sep-2017 IGH - Updated with Aug 2017 data
+  ; 25-Sep-2017 IGH - Updated with Aug 2017 data  
+  ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=9
-  dobs=['20140910','20141101','20141211','20150429','20150901','20160219','20160422','20160726','20170321','20170821']
+  if (n_elements(obs_id) ne 1) then obs_id=10
+  dobs=['20140910','20141101','20141211',$
+    '20150429','20150901',$
+    '20160219','20160422','20160726',$
+    '20170321','20170821','20170911']
 
   obsname=dobs[obs_id]
   nsdir='ns_'+obsname
