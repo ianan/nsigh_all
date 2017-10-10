@@ -40,6 +40,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 21-Mar-2017 IGH - Added in Mar 2017 data and option to plot without NuSTAR data available
   ; 25-Sep-2017 IGH - Added in Aug 2017 data
   ; 26-Sep-2017 IGH - Added in Sep 2017 data
+  ; 09-Oct-2017 IGH - Added in Oct 2017 times
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201709_11'
@@ -287,6 +288,24 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   endif
 
   ;-------------------------------------------
+  if (obsname eq '201710') then begin
+    torbs=[['10-Oct-2017 '+['01:27:00','02:27:00']],['10-Oct-2017 '+['03:04:00','04:04:00']],$
+      ['10-Oct-2017 '+['04:41:00','05:41:00']]]
+    timer=['10-Oct-2017 01:10:00',' 10-Oct-2017 06:00']
+    nsdir='ns_20171010/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.3,1.1]
+
+  endif
+
+  ;-------------------------------------------
+  
+  
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
   ;-------------------------------------------
