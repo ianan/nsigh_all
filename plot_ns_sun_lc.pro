@@ -40,10 +40,10 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 21-Mar-2017 IGH - Added in Mar 2017 data and option to plot without NuSTAR data available
   ; 25-Sep-2017 IGH - Added in Aug 2017 data
   ; 26-Sep-2017 IGH - Added in Sep 2017 data
-  ; 09-Oct-2017 IGH - Added in Oct 2017 times
+  ; 18-Oct-2017 IGH - Added in Oct 2017 times
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201709_11'
+  if (n_elements(obsname) ne 1) then obsname='201710'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 

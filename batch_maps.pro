@@ -4,6 +4,7 @@ pro batch_maps
   ;
   ; 25-Sep-2017 IGH Updated to include the Aug 2017 data
   ; 26-Sep-2017 IGH Updated to include the Sep 2017 data
+  ; 18-Oct-2017 IGH Added in Oct 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ;  nf=10
@@ -14,7 +15,7 @@ pro batch_maps
   ;  for i=0,nf-1 do make_ns_maps_comb_hc,obs_id=i,fpm='B'
   ;  for i=0,nf-1 do plot_ns_maps_hc,obs_id=i
 
-  i=10
+  i=11
   make_ns_maps_hc,obs_id=i
   make_ns_maps_comb_hc,obs_id=i,fpm='A'
   make_ns_maps_comb_hc,obs_id=i,fpm='B'

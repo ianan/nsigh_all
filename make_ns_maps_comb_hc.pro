@@ -22,13 +22,15 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 22-Mar-2017 IGH -  Updated with Mar 2017 data
   ; 25-Sep-2017 IGH - Updated with Aug 2017 data
   ; 26-Sep-2017 IGH - Updated with Sep 2017 data
+  ; 18-Oct-2017 IGH - Updated with Oct 2017 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=10
+  if (n_elements(obs_id) ne 1) then obs_id=11
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
-    '20170321','20170821','20170911']
+    '20170321','20170821','20170911',$
+    '20171010']
   obsname=dobs[obs_id]
   nsdir='ns_'+obsname
 
@@ -135,6 +137,11 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     ; 13th will be 3
     gd_ids[where(ns_ids eq 'nu80310241001' or ns_ids eq 'nu80310242001' or ns_ids eq 'nu80310243001' $ 
       or ns_ids eq 'nu80310244001' or ns_ids eq 'nu80310245001' or ns_ids eq 'nu80310246001' )]=3
+  endif
+  
+  if (obs_id eq 11) then begin
+    ; OK to combine all
+    gd_ids=intarr(n_elements(evtaf))+1
   endif
 
   ; How many combined maps do we need to make?
