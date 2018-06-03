@@ -41,10 +41,11 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 25-Sep-2017 IGH - Added in Aug 2017 data
   ; 26-Sep-2017 IGH - Added in Sep 2017 data
   ; 18-Oct-2017 IGH - Added in Oct 2017 times
-  ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ; 03-Jun-2017 IGH Added in May 2018 data
+  ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201710'
-  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/
+  if (n_elements(obsname) ne 1) then obsname='201805'
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -304,6 +305,28 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   endif
 
   ;-------------------------------------------
+  ;-------------------------------------------
+  if (obsname eq '201805') then begin
+    torbs=[['29-May-2018 '+['15:55:30','16:55:50']],$
+      ['29-May-2018 '+['17:32:30','18:33:30']],$
+      ['29-May-2018 '+['19:08:50','20:09:10']],$
+      ['29-May-2018 '+['20:45:30','21:49:00']],$
+      ['29-May-2018 '+['22:22:20','23:22:00']]]
+    timer=['29-May-2018 15:30:00',' 29-May-2018 23:30:00']
+    nsdir='obs13/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,1.1]
+
+  endif
+
+
+  ;-------------------------------------------
+
   
   
   norbs=n_elements(torbs[0,*])
@@ -392,9 +415,9 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   ;-------------------------------------------
   ; Get the RHESSI data if *.dat file not there
-  ; RHESSI is annealing during 201604 pointing so don't look for data
+  ; RHESSI is annealing during 201604 and 201805 pointing so don't look for data
   rfile='dat_files/rhessi_ltc_'+obsname+'.dat'
-  if (obsname ne '201604') then begin
+  if (obsname ne '201604' or obsname ne '201805') then begin
     if (file_test(rfile) eq 0) then begin
       obj = hsi_obs_summary()
       timef=anytim([anytim(timer[0])-30*60.,anytim(timer[1])+30*60.],/yoh,/trunc)
@@ -547,22 +570,22 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   dct=[4,5]
 
   tube_line_colors
-  ; Need a different plot if Apr-2016 as no RHESSI data
-  if (obsname ne '201604') then begin
-    ymax=1.3*max(crd.countrate[0:1,*])
-    ryr=[2,ymax]
-    utplot, rtime, crd.countrate[0,*],$
-      ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
-      ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
-    outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
-    outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
-  endif else begin
+  ; Need a different plot if Apr-2016 and May-2018 as no RHESSI data
+  if (obsname eq '201604' or obsname eq '201805') then begin
     ymax=200.
     ryr=[2,ymax]
     utplot, timer, [1,1],$
       ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
       ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
     xyouts, 2e3,1.5e3,'No RHESSI',chars=1.0,/device,color=10
+  endif else begin
+    ymax=1.3*max(crd.countrate[0:1,*])
+    ryr=[2,ymax]
+    utplot, rtime, crd.countrate[0,*],$
+      ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+      ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.37]
+    outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
+    outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2 
   endelse
 
   yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
@@ -689,8 +712,15 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     dct=[4,5]
 
     tube_line_colors
-    ; Need a different plot if Apr-2016 as no RHESSI data
-    if (obsname ne '201604') then begin
+    ; Need a different plot if Apr-2016 and May-2018 as no RHESSI data
+    if (obsname eq '201604' or obsname eq '201805') then begin
+      ymax=200.
+      ryr=[2,ymax]
+      utplot, timer, [1,1],$
+        ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
+        ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
+      xyouts, 2e3,1.5e3,'No RHESSI',chars=1.0,/device,color=10
+    endif else begin
       ymax=1.3*max(crd.countrate[0:1,*])
       ryr=[2,ymax]
       utplot, rtime, crd.countrate[0,*],$
@@ -698,13 +728,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
       outplot,rtime, crd.countrate[0,*],color=dct[0],psym=10,thick=2
       outplot,rtime, crd.countrate[1,*],color=dct[1],psym=10,thick=2
-    endif else begin
-      ymax=200.
-      ryr=[2,ymax]
-      utplot, timer, [1,1],$
-        ytitle=' RHESSI [s!U-1!N det!U-1!N]',/ylog,yrange=ryr,$
-        ytickf='exp1',timer=timer,psym=10,/nodata,position=[0.12,0.07,0.95,0.27]
-      xyouts, 2e3,1.5e3,'No RHESSI',chars=1.0,/device,color=10
+      
     endelse
 
     yrls=10d^(alog10(ryr[1])-[0.1,0.2,0.3,0.4,0.5]*(alog10(ryr[1])-alog10(ryr[0])))
