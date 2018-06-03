@@ -41,7 +41,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 25-Sep-2017 IGH - Added in Aug 2017 data
   ; 26-Sep-2017 IGH - Added in Sep 2017 data
   ; 18-Oct-2017 IGH - Added in Oct 2017 times
-  ; 03-Jun-2017 IGH Added in May 2018 data
+  ; 03-Jun-2018 IGH - Added in May 2018 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201805'
@@ -324,10 +324,7 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   endif
 
-
   ;-------------------------------------------
-
-  
   
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])

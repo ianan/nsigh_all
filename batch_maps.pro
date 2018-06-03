@@ -5,7 +5,7 @@ pro batch_maps
   ; 25-Sep-2017 IGH Updated to include the Aug 2017 data
   ; 26-Sep-2017 IGH Updated to include the Sep 2017 data
   ; 18-Oct-2017 IGH Added in Oct 2017 data
-  ; 03-Jun-2017 IGH Added in May 2018 data
+  ; 03-Jun-2018 IGH Added in May 2018 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ;  nf=10

@@ -23,18 +23,21 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 25-Sep-2017 IGH - Updated with Aug 2017 data
   ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ; 18-Oct-2017 IGH - Updated with Oct 2017 data
-  ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ; 03-Jun-2018 IGH - Updated wtih May 2018 data
+  ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  clearplot
 
-  if (n_elements(obs_id) ne 1) then obs_id=11
+  if (n_elements(obs_id) ne 1) then obs_id=12
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-    '20171010']
-  obsname=dobs[obs_id]
-  nsdir='ns_'+obsname
+   '20171010','20180529']
 
-  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/
+  obsname=dobs[obs_id]
+  if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
+
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
   
   if (n_elements(fpm) ne 1) then fpm='A'
   
@@ -143,6 +146,13 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     ; OK to combine all
     gd_ids=intarr(n_elements(evtaf))+1
   endif
+  
+  if (obs_id eq 12) then begin
+    ; Default of 1 is target region
+    gd_ids=intarr(n_elements(evtaf))+1
+    ; then for brief look at limb region
+    gd_ids[where(ns_ids eq 'nu80410206001')]=2
+  endif
 
   ; How many combined maps do we need to make?
   nmaps=n_elements(uniq(gd_ids[where(gd_ids ge 1)]))
@@ -213,7 +223,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
       anytim(tend,/yoh,/trunc,/time),$
       xyshift=[0,0],l0=l0,b0=ang[1],rsun=ang[2])
 
-   map2fits,maptot,maindir+nsdir+'/maps_'+nsdir+'_'+string(1000+m,format='(i4)')+'_'+fpid+'.fits'
+   map2fits,maptot,maindir+nsdir+'/maps_ns_'+obsname+'_'+string(1000+m,format='(i4)')+'_'+fpid+'.fits'
 
 
   endfor

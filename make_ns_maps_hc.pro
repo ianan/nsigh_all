@@ -18,19 +18,20 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 25-Sep-2017 IGH - Updated with Aug 2017 data  
   ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ; 18-Oct-2017 IGH - Updated with Oct 2017 data
-  ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  if (n_elements(obs_id) ne 1) then obs_id=11
+  ; 03-Jun-2018 IGH - Updated wtih May 2018 data
+  ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  clearplot
+  if (n_elements(obs_id) ne 1) then obs_id=12
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-    '20171010']
+    '20171010','20180529']
 
   obsname=dobs[obs_id]
-  nsdir='ns_'+obsname
+  if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
 
-  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
 
   ; What is the minimum energy we want for the image?
   min_eng=2.5
@@ -56,7 +57,7 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     stemp=stemp[n_elements(stemp)-1]
     ns_ids[i]=strmid(stemp,0,strpos(stemp,'_cl_sunpos')-3)
   endfor
-
+  
   ;----------------------------------------
   ; Load in the data
   for i=0, nf-1 do begin
@@ -161,7 +162,7 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
 
   ; Write out a nice summary file
   hdr=['NS ID/Inst','Start Time','End Time','On Time [s]','Eff Exp [s]','Livetime [%]','XC [S/C]','YC [S/C]']
-  write_csv, 'info_files/'+nsdir+'_info.csv',$
+  write_csv, 'info_files/ns_'+obsname+'_info.csv',$
     nsfs[sid],t1s[sid],t2s[sid],ontimes[sid],effexps[sid],lvtp[sid],xcs[sid],ycs[sid],header=hdr
 
 end
