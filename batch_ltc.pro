@@ -15,7 +15,8 @@ pro batch_ltc
   ; 25-Sep-2017 - IGH   Added in Aug 2017 data
   ; 26-Sep-2017 - IGH   Added in Sep 2017 data
   ; 18-Oct-2017 - IGH   Added in Oct 2017 data
-  ; 03-Jun-2017 IGH Added in May 2018 data
+  ; 03-Jun-2018 - IGH   Added in May 2018 data
+  ; 10-Sep-2018 - IGH   Added in Sep 2018 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
   ;  ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
@@ -35,7 +36,12 @@ pro batch_ltc
   ;  plot_ns_sun_lc, obsname='201709_12',gav=5,/goes
   ;  plot_ns_sun_lc, obsname='201709_13',gav=5,/goes
   ;  plot_ns_sun_lc, obsname='201710',gav=5,/goes
-  plot_ns_sun_lc, obsname='201805',gav=5,/goes
+  plot_ns_sun_lc_rnm, obsname='201805',gav=5,/goes
+  plot_ns_sun_lc_rnm, obsname='201809_07',gav=5,/goes
+  plot_ns_sun_lc_rnm, obsname='201809_09',gav=5,/goes
+  plot_ns_sun_lc_rnm, obsname='201809_10',gav=5,/goes
+
+  ;
   ;
   ;  ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
   ;  plot_ns_sun_lc, obsname='201409',gav=5,/gesnlog,/chudo
@@ -54,7 +60,13 @@ pro batch_ltc
   ;  plot_ns_sun_lc, obsname='201709_12',gav=5,/gesnlog,/chudo
   ;  plot_ns_sun_lc, obsname='201709_13',gav=5,/gesnlog,/chudo
   ;  plot_ns_sun_lc, obsname='201710',gav=5,/gesnlog,/chudo
-  plot_ns_sun_lc, obsname='201805',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc_rnm, obsname='201805',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc_rnm, obsname='201809_07',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc_rnm, obsname='201809_09',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc_rnm, obsname='201809_10',gav=5,/gesnlog,/chudo
+
+
+
 
 
   stop
