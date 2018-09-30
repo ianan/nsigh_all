@@ -20,6 +20,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
   ;                     Removed auto scaling to 1e-4 and 1e-1
+  ; 30-Sep-2018 IGH - Increased gaussian sr for Sep 2018 QS data            
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
 
@@ -47,8 +48,8 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   endelse
 
   if (obs_id eq 14) then begin
-    dnl=1e-5
-    dmx=1e-2
+    dnl=1e-4
+    dmx=3e-3
   endif
 
   ; What is the minimum energy we want for the image?
@@ -58,7 +59,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
 
   nf=n_elements(ffa)
-  sr=2
+  if (obs_id eq 14) then sr=6 else sr=2
   for i=0, nf-1 do begin
     fits2map,ffa[i],mm
     mms=mm
@@ -100,7 +101,8 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
 
     plot_map_cb_igh,alog10([dnl,dmx]),position=[0.15,0.96,0.85,0.98],color=0,chars=0.8,$
       cb_title='NuSTAR [log!D10!N count s!U-1!N]',bottom=1,format='(f4.1)'
-
+    
+    if (obs_id eq 14) then xyouts,100,100,'gsr'+string(sr,format='(i1)'),/device,chars=0.5
     device,/close
     set_plot, mydevice
 
