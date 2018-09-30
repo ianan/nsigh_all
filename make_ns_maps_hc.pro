@@ -20,18 +20,20 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 18-Oct-2017 IGH - Updated with Oct 2017 data
   ; 03-Jun-2018 IGH - Updated with May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
+  ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=13
+  if (n_elements(obs_id) ne 1) then obs_id=14
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-    '20171010','20180529','20180907']
+    '20171010','20180529','20180907','20180928']
 
   obsname=dobs[obs_id]
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
+  if (obsname eq '20180928') then nsdir='obs15/quicklook' ;else nsdir='ns_'+obsname
 
 
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
@@ -153,7 +155,6 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   endfor
-
 
   ; Make sure final list is chronological and given A then B for each pointing time.
   ida=where(fpids eq 'FPMA')

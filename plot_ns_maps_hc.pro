@@ -18,24 +18,27 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 18-Oct-2017 IGH - Updated with Oct 2017 data
   ; 03-Jun-2018 IGH - Updated wtih May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
+  ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
+  ;                     Removed auto scaling to 1e-4 and 1e-1
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
 
-  if (n_elements(obs_id) ne 1) then obs_id=13
+  if (n_elements(obs_id) ne 1) then obs_id=14
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-   '20171010','20180529','20180907']
+    '20171010','20180529','20180907','20180928']
 
   obsname=dobs[obs_id]
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
+  if (obsname eq '20180928') then nsdir='obs15/quicklook' ;else nsdir='ns_'+obsname
 
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
-  
+
   ; control color scaling on final maps by obsid
-  if (obs_id eq 8) then begin
+  if (obs_id eq 8 or obs_id eq 13 or obs_id eq 12 or obs_id eq 11 or obs_id eq 10) then begin
     dnl=1e-4
     dmx=1e1
   endif else begin
@@ -43,23 +46,27 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     dmx=1e1
   endelse
 
+  if (obs_id eq 14) then begin
+    dnl=1e-5
+    dmx=1e-2
+  endif
+
   ; What is the minimum energy we want for the image?
   min_eng=2.5
-
   ;--------------------------------------------
 
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
-  
+
   nf=n_elements(ffa)
   sr=2
   for i=0, nf-1 do begin
     fits2map,ffa[i],mm
     mms=mm
     mms.data=gauss_smooth(mms.data,sr)
-    
+
     ; modify the scaling on the fly?
-    if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
-   
+    ; if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
+
     @post_outset
     !p.multi=0
 

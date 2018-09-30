@@ -34,9 +34,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 11-Sep-2018 IGH   Started based on plot_ns_sun_lc.pro
   ;                   Removed RHESSI data get and plotting
   ;                   Added GOES 14, as well as GOES 15
+  ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201809_10'
+  if (n_elements(obsname) ne 1) then obsname='201809_28'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -103,6 +104,22 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['10-Sep-2018 '+['17:04:00','17:53:00']]]
     timer=['10-Sep-2018 13:30:00','10-Sep-2018 18:30:00']
     nsdir='obs14/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.02,0.5]
+
+  endif
+
+  ;-------------------------------------------
+  if (obsname eq '201809_28') then begin
+    torbs=[['28-Sep-2018 '+['18:25:00','19:24:00']],$
+      ['28-Sep-2018 '+['20:02:00','21:01:00']]]
+    timer=['28-Sep-2018 17:45:00','28-Sep-2018 21:30:00']
+    nsdir='obs15/quicklook/'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories

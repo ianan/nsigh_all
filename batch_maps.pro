@@ -7,6 +7,7 @@ pro batch_maps
   ; 18-Oct-2017 IGH Added in Oct 2017 data
   ; 03-Jun-2018 IGH Added in May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
+  ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ;  nf=10
@@ -23,7 +24,7 @@ pro batch_maps
   ;  make_ns_maps_comb_hc,obs_id=i,fpm='B'
   ;  plot_ns_maps_hc,obs_id=i
 
-  i=13
+  i=14
   make_ns_maps_hc,obs_id=i
   make_ns_maps_comb_hc,obs_id=i,fpm='A'
   make_ns_maps_comb_hc,obs_id=i,fpm='B'
