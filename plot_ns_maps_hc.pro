@@ -48,8 +48,8 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   endelse
 
   if (obs_id eq 14) then begin
-    dnl=1e-4
-    dmx=3e-3
+    dnl=1e-5
+    dmx=1e-2
   endif
 
   ; What is the minimum energy we want for the image?
@@ -59,7 +59,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
 
   nf=n_elements(ffa)
-  if (obs_id eq 14) then sr=6 else sr=2
+  if (obs_id eq 14) then sr=8 else sr=2
   for i=0, nf-1 do begin
     fits2map,ffa[i],mm
     mms=mm
