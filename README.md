@@ -1,3 +1,5 @@
+### For a nice webpage with quicklook plots summarising the NuSTAR solar observations, go to the [GitHub pages version of this repo.](http://ianan.github.io/nsigh_all/)
+
 # A rough how to guide
 
 This is a rough guide to getting the NuSTAR data and then getting it into a format for solar work. The code in this directory will help with producing summary plots from this data.
