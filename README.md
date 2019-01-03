@@ -4,7 +4,7 @@ This repo is mostly code/figures/data that gives an overview of the NuSTAR solar
 
 The files [batch_ltc.pro](https://github.com/ianan/nsigh_all/blob/master/batch_ltc.pro) and [batch_maps.pro](https://github.com/ianan/nsigh_all/blob/master/batch_maps.pro) give examples of using the code to make the plots/info files.
 
-For a nice webpage with quicklook plots summarising the NuSTAR solar observations, go to the [GitHub pages version of this repo.](http://ianan.github.io/nsigh_all/)
+For a nice webpage with plots summarising the NuSTAR solar observations, go to the [GitHub pages version of this repo.](http://ianan.github.io/nsigh_all/)
 
 ### Requirements
 
