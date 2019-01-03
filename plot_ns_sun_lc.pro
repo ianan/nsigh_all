@@ -1,12 +1,15 @@
 pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo,do_nustar=do_nustar
 
+  ; Note that this code is for NuSTAR observations pre-2018, whilst RHESSI still operated.
+  ; For 2018+ observations use plot_ns_sun_lc_rnm.pro
+
   ; Script to generate overview time profiles of NuSTAR livetime, GOES and RHESSI flux
   ; The data it uses is either *.dat files in the dat_files directory or if those do not
   ; exist the code with generate these from a *local* copy of the NuSTAR data and *online*
   ; for GOES & RHESSI (might need a search_network, /enabled for the latter).
   ;
-  ; In reality the *.dat files should be there and you don't need the original NuSTAR data
+  ; In reality the *.dat files should be there and you do not need the original NuSTAR data
   ; (or setup maindir, nsdir etc)
 
   ; Options
@@ -43,10 +46,11 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 18-Oct-2017 IGH - Added in Oct 2017 times
   ; 03-Jun-2018 IGH - Added in May 2018 data
   ; 10-Sep-2018 IGH - Added in Sep 2018 data
+  ; 03-Jan-2019 IGH - Removed 2018 data and redirected to plot_ns_sun_lc_rnm.pro
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201809'
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/
+  if (n_elements(obsname) ne 1) then obsname='201409'
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,77 +310,6 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   endif
 
   ;-------------------------------------------
-  ;-------------------------------------------
-  if (obsname eq '201805') then begin
-    torbs=[['29-May-2018 '+['15:55:30','16:55:50']],$
-      ['29-May-2018 '+['17:32:30','18:33:30']],$
-      ['29-May-2018 '+['19:08:50','20:09:10']],$
-      ['29-May-2018 '+['20:45:30','21:49:00']],$
-      ['29-May-2018 '+['22:22:20','23:22:00']]]
-    timer=['29-May-2018 15:30:00',' 29-May-2018 23:30:00']
-    nsdir='obs13/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.2,1.1]
-
-  endif
-  
-  ;-------------------------------------------
-  if (obsname eq '201809_07') then begin
-    torbs=[['07-Sep-2018 '+['14:57:00','15:57:00']],$
-      ['07-Sep-2018 '+['16:34:00','17:33:00']],$
-      ['07-Sep-2018 '+['18:11:00','19:03:00']]]
-    timer=['07-Sep-2018 14:30:00',' 07-Sep-2018 19:30:00']
-    nsdir='obs14/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.01,0.5]
-
-  endif
-  
-  ;-------------------------------------------
-  if (obsname eq '201809_09') then begin
-    torbs=[['09-Sep-2018 '+['08:50:00','09:49:00']],$
-      ['09-Sep-2018 '+['10:27:00','11:26:00']],$
-      ['09-Sep-2018 '+['12:04:00','13:03:00']]]
-    timer=['09-Sep-2018 08:00:00','09-Sep-2018 13:30:00']
-    nsdir='obs14/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.05,0.5]
-
-  endif
-  
-  ;-------------------------------------------
-  if (obsname eq '201809_10') then begin
-    torbs=[['10-Sep-2018 '+['13:50:30','14:49:00']],$
-      ['10-Sep-2018 '+['15:27:00','16:26:00']],$
-      ['10-Sep-2018 '+['17:04:00','17:53:00']]]
-    timer=['10-Sep-2018 13:30:00','10-Sep-2018 18:30:00']
-    nsdir='obs14/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.02,0.5]
-
-  endif
-
-  ;-------------------------------------------
   
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
@@ -464,9 +397,9 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   ;-------------------------------------------
   ; Get the RHESSI data if *.dat file not there
-  ; RHESSI is annealing during 201604 and 201805 pointing so don't look for data
+  ; RHESSI is annealing during 201604 pointing so do not look for data
   rfile='dat_files/rhessi_ltc_'+obsname+'.dat'
-  if (obsname ne '201604' or obsname ne '201805' or obsname ne '201809_07' or obsname ne '201809_10' or obsname ne '201809_11') then begin
+  if (obsname ne '201604') then begin
     if (file_test(rfile) eq 0) then begin
       obj = hsi_obs_summary()
       timef=anytim([anytim(timer[0])-30*60.,anytim(timer[1])+30*60.],/yoh,/trunc)
@@ -619,8 +552,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   dct=[4,5]
 
   tube_line_colors
-  ; Need a different plot if Apr-2016 and May-2018 as no RHESSI data
-  if (obsname eq '201604' or obsname eq '201805' or obsname ne '201809_07' or obsname ne '201809_10' or obsname ne '201809_11') then begin
+  ; Need a different plot if Apr-2016 as no RHESSI data
+  if (obsname eq '201604') then begin
     ymax=200.
     ryr=[2,ymax]
     utplot, timer, [1,1],$
@@ -761,8 +694,8 @@ pro plot_ns_sun_lc, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     dct=[4,5]
 
     tube_line_colors
-    ; Need a different plot if Apr-2016 and May-2018 as no RHESSI data
-  if (obsname eq '201604' or obsname eq '201805' or obsname ne '201809_07' or obsname ne '201809_10' or obsname ne '201809_11') then begin
+    ; Need a different plot if Apr-2016 as no RHESSI data
+    if (obsname eq '201604') then begin
       ymax=200.
       ryr=[2,ymax]
       utplot, timer, [1,1],$

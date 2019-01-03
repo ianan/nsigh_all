@@ -4,9 +4,11 @@ pro batch_ltc
   ; make a NuSTAR livetime, GOES, RHESSI 3 panel plot
   ; and (posisbly) a single GOES plot
 
-  ; Note - if the *.dat files for the date aren't in the working dir will
+  ; Note - if the *.dat files for the date are not in the working dir will
   ; need to point maindir to you nustar data
   ; and have executed search_network,/enabled to get the rhessi data
+
+  ; For 2018 onwards observations use plot_ns_sun_lc_rnm.pro, as shown below
 
   ; 23-Feb-2016 - IGH
   ; 17-May-2016 - IGH   Added in Apr 2016 data
@@ -18,6 +20,7 @@ pro batch_ltc
   ; 03-Jun-2018 - IGH   Added in May 2018 data
   ; 10-Sep-2018 - IGH   Added in Sep 2018 data
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
+  ; 03-Jan-2019 - IGH   Highlighted use of *_rnm code for 2018+
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
     plot_ns_sun_lc_rnm, obsname='201809_28',gav=5,/goes

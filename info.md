@@ -2,6 +2,8 @@
 
 This repo is mostly code/figures/data that gives an overview of the NuSTAR solar observations. So it is a rough guide to getting the NuSTAR data and then turning it into a useful format for solar work. For more details of how to use the data for solar analysis go to my [NuSTAR Solar Analysis Code repo](https://github.com/ianan/nustar_sac).
 
+The files [batch_ltc.pro](https://github.com/ianan/nsigh_all/blob/master/batch_ltc.pro) and [batch_maps.pro](https://github.com/ianan/nsigh_all/blob/master/batch_maps.pro) give examples of using the code to make the plots/info files.
+
 ### Requirements
 
 For this to work you are going to need some (if not all) of the following installed:

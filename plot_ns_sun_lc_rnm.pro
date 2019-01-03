@@ -6,7 +6,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; Script to generate overview time profiles of NuSTAR livetime, GOES and RHESSI flux
   ; The data it uses is either *.dat files in the dat_files directory or if those do not
   ; exist the code with generate these from a *local* copy of the NuSTAR data and *online* for GOES
-  ; In reality the *.dat files should be there and you don't need the original NuSTAR data
+  ; In reality the *.dat files should be there and you do not need the original NuSTAR data
   ; (or setup maindir, nsdir etc)
 
   ; Options
@@ -31,14 +31,14 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; Note that for muliple day campaigns (Sep 2015, Sep 2017) the default is to do it per day instead of whole campaign
   ; so obsname='201509_01' or obsname='201709_11'
 
-  ; 11-Sep-2018 IGH   Started based on plot_ns_sun_lc.pro
-  ;                   Removed RHESSI data get and plotting
-  ;                   Added GOES 14, as well as GOES 15
+  ; 11-Sep-2018 - IGH   Started based on plot_ns_sun_lc.pro
+  ;                     Removed RHESSI data get and plotting
+  ;                     Added GOES 14, as well as GOES 15
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201809_28'
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
