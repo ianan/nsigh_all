@@ -15,25 +15,29 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 29-Aug-2016 IGH - Created
   ; 18-Nov-2016 IGH - Includes more data (from HEASARC) and changes location of output files
   ; 22-Mar-2017 IGH - Updated with Mar 2017 data
-  ; 25-Sep-2017 IGH - Updated with Aug 2017 data  
+  ; 25-Sep-2017 IGH - Updated with Aug 2017 data
   ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ; 18-Oct-2017 IGH - Updated with Oct 2017 data
   ; 03-Jun-2018 IGH - Updated with May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
+  ; 12-Jan-2019 IGH - Updated with Jan 2019 data
+  ; 13-Jan-2019 IGH - Modified submap option for evt containing multiple pointings
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=14
+  if (n_elements(obs_id) ne 1) then obs_id=15
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-    '20171010','20180529','20180907','20180928']
+    '20171010','20180529','20180907','20180928',$
+    '20190112']
 
   obsname=dobs[obs_id]
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
   if (obsname eq '20180928') then nsdir='obs15/quicklook' ;else nsdir='ns_'+obsname
+  if (obsname eq '20190112') then nsdir='obs16/quicklook'
 
 
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
@@ -62,7 +66,7 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     stemp=stemp[n_elements(stemp)-1]
     ns_ids[i]=strmid(stemp,0,strpos(stemp,'_cl_sunpos')-3)
   endfor
-  
+
   ;----------------------------------------
   ; Load in the data
   for i=0, nf-1 do begin
@@ -110,18 +114,33 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
 
     ; Only save a map out of the data is there
     ids00=where(total(ims,1) gt 0,nids00)
+    subxy=[-250,250]
+
+    if (obs_id eq 15) then begin
+      if (ns_ids[i] eq 'nu90411100001' or ns_ids[i] eq 'nu90411200001') then subxy=[-900,900]
+    endif
+
+
     if (nids00 gt 2) then begin
       ; Just want the zoomed in region
       id0=median(where(total(ims,1) gt 0))
       id1=median(where(total(ims,2) gt 0))
 
-      subx=[-250,250]+id1
+      subx=subxy+id1
       if (subx[0] lt 0) then subx=[0,500]
       if (subx[1] gt npp-1) then subx=[npp-1-500,npp-1]
-      suby=[-250,250]+id0
+      suby=subxy+id0
       if (suby[0] lt 0) then suby=[0,500]
       if (suby[1] gt npp-1) then suby=[npp-1-500,npp-1]
       zims=ims[subx[0]:subx[1],suby[0]:suby[1]]
+
+;      if (obs_id eq 15) then begin
+;        if (ns_ids[i] eq 'nu90411100001' or ns_ids[i] eq 'nu90411200001') then begin
+;          ; Remove weird bright pixel in the obs15 mosaic
+;          ; Need to check what this is.....
+;          zims[*,300:350]=0
+;        endif
+;      endif
 
       pxs=pix_size
       x0=xc-npp*0.5*pxs+pxs*subx[0]

@@ -21,10 +21,17 @@ pro batch_ltc
   ; 10-Sep-2018 - IGH   Added in Sep 2018 data
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
   ; 03-Jan-2019 - IGH   Highlighted use of *_rnm code for 2018+
+  ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
-    plot_ns_sun_lc_rnm, obsname='201809_28',gav=5,/goes
-    plot_ns_sun_lc_rnm, obsname='201809_28',gav=5,/gesnlog,/chudo
+  ; As no GOES data online just do a single plot of livetime and CHU
+  plot_ns_sun_lc_rnm_ng,obsname='201901'
+
+  ; ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/goes
+  ;;    plot_ns_sun_lc_rnm, obsname='201901',gav=5,/gesnlog,/chudo
+
+  ;    plot_ns_sun_lc_rnm, obsname='201809_28',gav=5,/goes
+  ;    plot_ns_sun_lc_rnm, obsname='201809_28',gav=5,/gesnlog,/chudo
   ;
   ;  ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
   ;  plot_ns_sun_lc, obsname='201409',gav=5,/goes
@@ -43,11 +50,11 @@ pro batch_ltc
   ;  plot_ns_sun_lc, obsname='201709_12',gav=5,/goes
   ;  plot_ns_sun_lc, obsname='201709_13',gav=5,/goes
   ;  plot_ns_sun_lc, obsname='201710',gav=5,/goes
-;  plot_ns_sun_lc_rnm, obsname='201805',gav=5,/goes
-;  plot_ns_sun_lc_rnm, obsname='201809_07',gav=5,/goes
-;  plot_ns_sun_lc_rnm, obsname='201809_09',gav=5,/goes
-;  plot_ns_sun_lc_rnm, obsname='201809_10',gav=5,/goes
-  
+  ;  plot_ns_sun_lc_rnm, obsname='201805',gav=5,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201809_07',gav=5,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201809_09',gav=5,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201809_10',gav=5,/goes
+
 
   ;
   ;

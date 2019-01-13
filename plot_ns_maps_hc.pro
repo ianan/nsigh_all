@@ -20,22 +20,24 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
   ;                     Removed auto scaling to 1e-4 and 1e-1
-  ; 30-Sep-2018 IGH - Increased gaussian sr for Sep 2018 QS data            
+  ; 30-Sep-2018 IGH - Increased gaussian sr for Sep 2018 QS data
+  ; 12-Jan-2019 IGH - Updated with Jan 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
 
-  if (n_elements(obs_id) ne 1) then obs_id=14
+  if (n_elements(obs_id) ne 1) then obs_id=15
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-    '20171010','20180529','20180907','20180928']
+    '20171010','20180529','20180907','20180928',$
+    '20190112']
 
   obsname=dobs[obs_id]
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
   if (obsname eq '20180928') then nsdir='obs15/quicklook' ;else nsdir='ns_'+obsname
-
+  if (obsname eq '20190112') then nsdir='obs16/quicklook'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
 
   ; control color scaling on final maps by obsid
@@ -47,26 +49,24 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     dmx=1e1
   endelse
 
-  if (obs_id eq 14) then begin
+  if (obs_id eq 14 or obs_id eq 15) then begin
     dnl=1e-5
     dmx=1e-2
   endif
 
-  ; What is the minimum energy we want for the image?
-  min_eng=2.5
+  if (obs_id eq 15) then begin
+    dnl=1e-6
+    dmx=1e-2
+  endif
+
   ;--------------------------------------------
 
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
 
   nf=n_elements(ffa)
-  if (obs_id eq 14) then sr=8 else sr=2
+  if (obs_id eq 14) then sr=8
+  if (obs_id eq 15) then sr=6 else sr=2
   for i=0, nf-1 do begin
-    fits2map,ffa[i],mm
-    mms=mm
-    mms.data=gauss_smooth(mms.data,sr)
-
-    ; modify the scaling on the fly?
-    ; if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
 
     @post_outset
     !p.multi=0
@@ -82,10 +82,29 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     b[1]=255
     tvlct,r,g,b
 
-
     plim=1500
     xr=[-1,1]*plim
     yr=[-1,1]*plim
+
+    ; For obs15 change plotting slightly for the mosaic vs dwell
+    ; ID the mosaic ones
+    if (obs_id eq 15) then begin
+      if (strpos(ffa[i],'nu90411200001') ne -1 or strpos(ffa[i],'nu90411100001') ne -1) then begin
+        dnl=1e-7
+        dmx=1e-4
+;        stop
+;        sr=8
+      endif else begin
+        dnl=1e-6
+        dmx=1e-3
+      endelse
+    endif
+    fits2map,ffa[i],mm
+    mms=mm
+    mms.data=gauss_smooth(mms.data,sr)
+
+    ; modify the scaling on the fly?
+    ; if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
 
     ftemp=strsplit(ffa[i],'/',/extract)
     ftemp=ftemp[n_elements(ftemp)-1]
@@ -101,8 +120,8 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
 
     plot_map_cb_igh,alog10([dnl,dmx]),position=[0.15,0.96,0.85,0.98],color=0,chars=0.8,$
       cb_title='NuSTAR [log!D10!N count s!U-1!N]',bottom=1,format='(f4.1)'
-    
-    if (obs_id eq 14) then xyouts,100,100,'gsr'+string(sr,format='(i1)'),/device,chars=0.5
+
+    if (obs_id eq 14 or obs_id eq 15) then xyouts,100,100,'gsr'+string(sr,format='(i1)'),/device,chars=0.5
     device,/close
     set_plot, mydevice
 

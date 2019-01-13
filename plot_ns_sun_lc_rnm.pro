@@ -35,9 +35,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ;                     Removed RHESSI data get and plotting
   ;                     Added GOES 14, as well as GOES 15
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
+  ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201809_28'
+  if (n_elements(obsname) ne 1) then obsname='201901'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -127,6 +128,22 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[0.02,0.5]
+
+  endif
+  
+  ;-------------------------------------------
+  if (obsname eq '201901') then begin
+    torbs=[['12-Jan-2019 '+['16:25:00','17:45:00']],$
+      ['12-Jan-2019 '+['17:45:00','19:25:00']]]
+    timer=['12-Jan-2019 16:00:00',' 12-Jan-2019 20:00:00']
+    nsdir='obs14/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.01,0.5]
 
   endif
 

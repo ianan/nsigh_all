@@ -26,26 +26,29 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 03-Jun-2018 IGH - Updated wtih May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
+  ; 12-Jan-2019 IGH - Updated with Jan 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
 
-  if (n_elements(obs_id) ne 1) then obs_id=14
+  if (n_elements(obs_id) ne 1) then obs_id=15
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
-   '20171010','20180529','20180907','20180928']
+    '20171010','20180529','20180907','20180928',$
+    '20190112']
 
   obsname=dobs[obs_id]
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
   if (obsname eq '20180928') then nsdir='obs15/quicklook' ;else nsdir='ns_'+obsname
+  if (obsname eq '20190112') then nsdir='obs16/quicklook'
 
 
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
-  
+
   if (n_elements(fpm) ne 1) then fpm='A'
-  
+
   ; What is the minimum energy we want for the image?
   min_eng=2.5
 
@@ -73,8 +76,8 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     ; Default of 1 is NP then limb pointing
     gd_ids=intarr(n_elements(evtaf))+1
     ; then for second for the 4 limb ones
-  gd_ids[where(ns_ids eq 'nu20012001001' or ns_ids eq 'nu20012002001' or $
-    ns_ids eq 'nu20012003001' or ns_ids eq 'nu20012004002')]=2
+    gd_ids[where(ns_ids eq 'nu20012001001' or ns_ids eq 'nu20012002001' or $
+      ns_ids eq 'nu20012003001' or ns_ids eq 'nu20012004002')]=2
   endif
 
 
@@ -120,7 +123,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids=intarr(n_elements(evtaf))+1
     gd_ids[where(ns_ids eq 'nu20201002001')]=0
   endif
-  
+
   if (obs_id eq 8) then begin
     ; First is mosaic
     ; Default of 1 is all the mosaic tiles
@@ -129,36 +132,36 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(ns_ids eq 'nu20211001001' or ns_ids eq 'nu20211002001' or $
       ns_ids eq 'nu20211003001' or ns_ids eq 'nu20211004001')]=2
   endif
-  
+
   if (obs_id eq 9) then begin
     ; OK to combine all
     gd_ids=intarr(n_elements(evtaf))+1
   endif
-  
+
   if (obs_id eq 10) then begin
     ; don't have any of the bad or slew data in the dir so no 0
     ; 11th by default are 1
     gd_ids=intarr(n_elements(evtaf))+1
     ; 12th will be 2
-    gd_ids[where(ns_ids eq 'nu80310228001' or ns_ids eq 'nu80310229001' or ns_ids eq 'nu80310230001' $ 
+    gd_ids[where(ns_ids eq 'nu80310228001' or ns_ids eq 'nu80310229001' or ns_ids eq 'nu80310230001' $
       or ns_ids eq 'nu80310231001' or ns_ids eq 'nu80310232001' )]=2
     ; 13th will be 3
-    gd_ids[where(ns_ids eq 'nu80310241001' or ns_ids eq 'nu80310242001' or ns_ids eq 'nu80310243001' $ 
+    gd_ids[where(ns_ids eq 'nu80310241001' or ns_ids eq 'nu80310242001' or ns_ids eq 'nu80310243001' $
       or ns_ids eq 'nu80310244001' or ns_ids eq 'nu80310245001' or ns_ids eq 'nu80310246001' )]=3
   endif
-  
+
   if (obs_id eq 11) then begin
     ; OK to combine all
     gd_ids=intarr(n_elements(evtaf))+1
   endif
-  
+
   if (obs_id eq 12) then begin
     ; Default of 1 is target region
     gd_ids=intarr(n_elements(evtaf))+1
     ; then for brief look at limb region
     gd_ids[where(ns_ids eq 'nu80410206001')]=2
   endif
-  
+
   if (obs_id eq 13) then begin
     ; Default of 1 is the 7th
     gd_ids=intarr(n_elements(evtaf))+1
@@ -168,7 +171,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(ns_ids eq 'nu80415201001' or ns_ids eq 'nu80415202001' or ns_ids eq 'nu80415203001')]=3
 
   endif
-  
+
   if (obs_id eq 14) then begin
     ; Default of 1 is first mosaic
     gd_ids=intarr(n_elements(evtaf))+1
@@ -178,6 +181,19 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
 
   endif
   
+  if (obs_id eq 15) then begin
+    ; Default of 1 for first two orbits on target
+    gd_ids=intarr(n_elements(evtaf))+1
+    ; then for first mosaic do this
+    iidds=strmid(evtaf,strpos(evtaf[3],'nu9041')+7,6)
+    gd_ids[where(iidds eq 203001)]=2
+    gd_ids[where(iidds eq 100001)]=3
+    gd_ids[where(iidds eq 200001)]=4
+
+  endif
+  
+  ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
+
 
   ; How many combined maps do we need to make?
   nmaps=n_elements(uniq(gd_ids[where(gd_ids ge 1)]))
@@ -223,6 +239,15 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
       im_hist = histogram(pixinds, min = 0, max = npix*npix-1, binsize = 1)
       im = reform(im_hist, npix, npix)
       ims= im[(centerx-im_width):(centerx+im_width-1), (centery-im_width):(centery+im_width-1)]
+      
+      if (obs_id eq 15) then begin
+        if (m+1 eq 3 or m+1 eq 4) then begin
+          ; Remove weird bright pixel in the obs15 mosaic
+          ; Need to check what this is.....
+          ims[*,500:650]=0
+        endif
+      endif
+      
       npp=n_elements(ims[0,*])
 
       ; Only save a map out of the data is there
@@ -240,7 +265,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
 
       endif
     endfor
-    
+
     ang = pb0r(tstart,/arcsec,l0=l0)
     ;Output the total map
     maptot=make_map(ims_tot,dx=pix_size,dy=pix_size,xc=xc,yc=yc,$
@@ -248,7 +273,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
       anytim(tend,/yoh,/trunc,/time),$
       xyshift=[0,0],l0=l0,b0=ang[1],rsun=ang[2])
 
-   map2fits,maptot,maindir+nsdir+'/maps_ns_'+obsname+'_'+string(1000+m,format='(i4)')+'_'+fpid+'.fits'
+    map2fits,maptot,maindir+nsdir+'/maps_ns_'+obsname+'_'+string(1000+m,format='(i4)')+'_'+fpid+'.fits'
 
 
   endfor
