@@ -19,7 +19,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201901'
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/'
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
   ; Generate again the livetim and CHU files, even if they already exist
   if (n_elements(genagn) ne 1) then genagn=1
 
@@ -119,8 +119,10 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
       ['12-Jan-2019 '+['19:48:00','20:30:00']],$
       ['12-Jan-2019 '+['20:45:00','20:47:00']],$
       ['12-Jan-2019 '+['21:25:00','22:13:00']]]
-    timer=['12-Jan-2019 16:00:00',' 12-Jan-2019 22:30:00']
-    nsdir='obs16/'
+    timer=['12-Jan-2019 16:00:00',' 12-Jan-2019 22:45:00']
+    ;    nsdir='obs16/'
+    nsdir='ns_20190112/'
+
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
@@ -222,14 +224,14 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
       outplot,[torbs[1,i],torbs[1,i]],[0,8],lines=2,color=0,thick=2
       gd1=where(anytim(htime) ge anytim(torbs[0,i]) and anytim(htime) le anytim(torbs[1,i]))
       outplot,htime[gd1],hlive[gd1],thick=3,color=3
-      
+
     endfor
   endif
 
-;  for i=0, ngaps-1 do begin
-;    hgd1=where(anytim(htime) ge anytim(dgtims[0,i]) and anytim(htime) le anytim(dgtims[1,i]),nhgd1)
-;    if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
-;  endfor
+  ;  for i=0, ngaps-1 do begin
+  ;    hgd1=where(anytim(htime) ge anytim(dgtims[0,i]) and anytim(htime) le anytim(dgtims[1,i]),nhgd1)
+  ;    if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
+  ;  endfor
 
   xyouts, 12.5e3,7.5e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
@@ -260,10 +262,10 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     outplot,[torbs[1,i],torbs[1,i]],[0,8],lines=2,color=0,thick=2
   endfor
 
-;  for i=0, ngaps-1 do begin
-;    cgd1=where(anytim(chutime) ge anytim(dgtims[0,i]) and anytim(chutime) le anytim(dgtims[1,i]),ncgd1)
-;    if (ncgd1 gt 1) then outplot,chutime[cgd1],newmask[cgd1],color=200,thick=2,symsize=0.5,psym=1
-;  endfor
+  ;  for i=0, ngaps-1 do begin
+  ;    cgd1=where(anytim(chutime) ge anytim(dgtims[0,i]) and anytim(chutime) le anytim(dgtims[1,i]),ncgd1)
+  ;    if (ncgd1 gt 1) then outplot,chutime[cgd1],newmask[cgd1],color=200,thick=2,symsize=0.5,psym=1
+  ;  endfor
 
 
 

@@ -26,10 +26,9 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 03-Jun-2018 IGH - Updated wtih May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
-  ; 12-Jan-2019 IGH - Updated with Jan 2019 data
+  ; 06-Deb-2019 IGH - Updated for heasarc version of Jan data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-
   if (n_elements(obs_id) ne 1) then obs_id=15
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
@@ -39,15 +38,17 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     '20190112']
 
   obsname=dobs[obs_id]
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
+
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
   if (obsname eq '20180928') then nsdir='obs15/quicklook' ;else nsdir='ns_'+obsname
-  if (obsname eq '20190112') then nsdir='obs16/quicklook'
+  if (obsname eq '20190112') then begin
+    nsdir='ns_20190112';'obs16/quicklook'
+    maindir='~/data/heasarc_nustar/'
+  endif
 
-
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
-
-  if (n_elements(fpm) ne 1) then fpm='A'
+  if (n_elements(fpm) ne 1) then fpm='B'
 
   ; What is the minimum energy we want for the image?
   min_eng=2.5
@@ -185,11 +186,11 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     ; Default of 1 for first two orbits on target
     gd_ids=intarr(n_elements(evtaf))+1
     ; then for first mosaic do this
-    iidds=strmid(evtaf,strpos(evtaf[3],'nu9041')+7,6)
-    gd_ids[where(iidds eq 203001)]=2
-    gd_ids[where(iidds eq 100001)]=3
-    gd_ids[where(iidds eq 200001)]=4
-
+    iidds=strmid(evtaf,strpos(evtaf[3],'nu9041')+5,8)
+    gd_ids[where(iidds eq 01203001)]=2
+    gd_ids[where(iidds ge 11101001 and iidds le 11125001)]=3
+    gd_ids[where(iidds ge 11201001 and iidds le 11225001)]=4
+    
   endif
   
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
