@@ -58,7 +58,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   endif
 
   if (obs_id eq 15) then begin
-    dnl=1e-6
+    dnl=1e-5
     dmx=1e-2
   endif
 
@@ -68,7 +68,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
 
   nf=n_elements(ffa)
   if (obs_id eq 14) then sr=8
-  if (obs_id eq 15) then sr=6 else sr=2
+  if (obs_id eq 15) then sr=8;6 else sr=2
   for i=0, nf-1 do begin
 
     @post_outset
@@ -89,34 +89,34 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     xr=[-1,1]*plim
     yr=[-1,1]*plim
 
-    ; For obs15 change plotting slightly for the mosaic vs dwell
-    ; ID the mosaic ones
-    if (obs_id eq 15) then begin
-      if (strpos(ffa[i],'nu90401') ne -1) then begin
-        
-        dnl=1e-6
-        dmx=1e-3
-        ;        stop
-        ;        sr=8
-      endif else begin
-        dnl=1e-4
-        dmx=3e-3
-      endelse
-    endif
+    ;   ; For obs15 change plotting slightly for the mosaic vs dwell
+    ;    ; ID the mosaic ones
+    ;    if (obs_id eq 15) then begin
+    ;      if (strpos(ffa[i],'nu90401') ne -1) then begin
+    ;
+    ;        dnl=1e-6
+    ;        dmx=1e-3
+    ;        ;        stop
+    ;        ;        sr=8
+    ;      endif else begin
+    ;        dnl=1e-4
+    ;        dmx=3e-3
+    ;      endelse
+    ;    endif
     fits2map,ffa[i],mm
 
-    ;    mms=mm
-    ;    mms.data=gauss_smooth(mms.data,sr)
+    mms=mm
+    mms.data=gauss_smooth(mms.data,sr)
+    ;
+    ;    newx=n_elements(mm.data[*,0])/16.
+    ;    newy=n_elements(mm.data[0,*])/16.
+    ;    mms=rebin_map(mm,newx,newy)
 
-    newx=n_elements(mm.data[*,0])/4.
-    newy=n_elements(mm.data[0,*])/4.
-    mms=rebin_map(mm,newx,newy)
-    
-;    if (ffa[i] eq '/Users/iain/data/heasarc_nustar/ns_20190112/maps_20190112_194841_nu90411102001_FPMA.fits') then stop
+    ;    if (ffa[i] eq '/Users/iain/data/heasarc_nustar/ns_20190112/maps_20190112_194841_nu90411102001_FPMA.fits') then stop
     idbp=where(mms.data eq 0,nidbp)
     if (nidbp gt 0) then mms.data[idbp]=1e-12
-    
-    
+
+
     ; modify the scaling on the fly?
     ; if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
 
@@ -135,7 +135,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     plot_map_cb_igh,alog10([dnl,dmx]),position=[0.15,0.96,0.85,0.98],color=0,chars=0.8,$
       cb_title='NuSTAR [log!D10!N count s!U-1!N]',bottom=1,format='(f4.1)'
 
-;    if (obs_id eq 14 or obs_id eq 15) then xyouts,100,100,'gsr'+string(sr,format='(i1)'),/device,chars=0.5
+    if (obs_id eq 14 or obs_id eq 15) then xyouts,100,100,'gsr'+string(sr,format='(i1)'),/device,chars=0.5
     device,/close
     set_plot, mydevice
 
