@@ -23,16 +23,17 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
   ; 12-Jan-2019 IGH - Updated with Jan 2019 data
   ; 13-Jan-2019 IGH - Modified submap option for evt containing multiple pointings
-  ; 06-Deb-2019 IGH - Updated for heasarc version of Jan data
+  ; 06-Feb-2019 IGH - Updated for heasarc version of Jan data
+  ; 20-Apr-2019 IGH - Updated with Apr 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=15
+  if (n_elements(obs_id) ne 1) then obs_id=16
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
     '20171010','20180529','20180907','20180928',$
-    '20190112']
+    '20190112','20190412']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
@@ -44,6 +45,8 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     nsdir='ns_20190112';'obs16/quicklook'
     maindir='~/data/heasarc_nustar/'
   endif
+  if (obsname eq '20190412') then nsdir='obs17' ;else nsdir='ns_'+obsname
+
 
 
   ; What is the minimum energy we want for the image?

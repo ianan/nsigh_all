@@ -36,9 +36,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ;                     Added GOES 14, as well as GOES 15
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
+  ; 20-Apr-2019 - IGH   Added in Apr 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201901'
+  if (n_elements(obsname) ne 1) then obsname='201904'
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -144,6 +145,31 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[0.01,0.5]
+
+  endif
+  
+  ;-------------------------------------------
+  if (obsname eq '201904') then begin
+    torbs=[['12-Apr-2019 15:12:00','12-Apr-2019 16:12:00'],$
+      ['12-Apr-2019 16:49:00','12-Apr-2019 17:49:00'],$
+      ['12-Apr-2019 18:26:00','12-Apr-2019 19:26:00'],$
+      ['12-Apr-2019 20:02:00','12-Apr-2019 20:46:00'],$
+      ['12-Apr-2019 21:40:00','12-Apr-2019 22:30:00'],$
+      ['13-Apr-2019 02:30:00','13-Apr-2019 03:30:00'],$
+      ['13-Apr-2019 04:06:00','13-Apr-2019 05:06:00'],$
+      ['13-Apr-2019 05:42:00','13-Apr-2019 06:39:00'],$
+      ['13-Apr-2019 07:20:00','13-Apr-2019 08:20:00'],$
+      ['13-Apr-2019 08:56:00','13-Apr-2019 09:55:00'],$
+      ['13-Apr-2019 10:32:00','13-Apr-2019 11:32:00']]
+    timer=['12-Apr-2019 12:00:00','13-Apr-2019 14:00:00']
+    nsdir='obs17/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.01,2.5]
 
   endif
 

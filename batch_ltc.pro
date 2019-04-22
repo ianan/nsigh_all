@@ -22,10 +22,17 @@ pro batch_ltc
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
   ; 03-Jan-2019 - IGH   Highlighted use of *_rnm code for 2018+
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
+  ; 20-Apr-2019 - IGH   Added in Apr 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
   ; As no GOES data online just do a single plot of livetime and CHU
-  plot_ns_sun_lc_rnm_ng,obsname='201901'
+ ;  plot_ns_sun_lc_rnm_ng,obsname='201901'
+  
+  ; Back to a time with some activity and GOES
+  plot_ns_sun_lc_rnm, obsname='201904',gav=5,/goes
+  plot_ns_sun_lc_rnm, obsname='201904',gav=5,/gesnlog,/chudo
+
+;  plot_ns_sun_lc_rnm_ng,obsname='201904'
 
   ; ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/goes
   ;;    plot_ns_sun_lc_rnm, obsname='201901',gav=5,/gesnlog,/chudo

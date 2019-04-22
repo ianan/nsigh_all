@@ -18,8 +18,8 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201901'
-  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
+  if (n_elements(obsname) ne 1) then obsname='201904'
+  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';
   ; Generate again the livetim and CHU files, even if they already exist
   if (n_elements(genagn) ne 1) then genagn=1
 
@@ -132,7 +132,10 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     gyrl=[0.01,0.5]
 
   endif
-
+  
+  lv_yrange=[0.1,1.1]
+  lv_ylog=0
+  
   ;-------------------------------------------
 
   norbs=n_elements(torbs[0,*])
@@ -214,8 +217,8 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     bits=8, xsize=5, ysize=5,file=figname
   !p.charsize=1.0
   !p.thick=4
-  utplot,timer,[1,1],yrange=[0.1,1.1],ytitle='NuSTAR Livetime',$;ytickf='exp1',$
-    position=[0.14,0.55,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata
+  utplot,timer,[1,1],yrange=lv_yrange,ytitle='NuSTAR Livetime',$;ytickf='exp1',$
+    position=[0.14,0.55,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata,ylog=lv_ylog
 
   if (nhk gt 0) then begin
     outplot,htime,hlive,thick=3,color=150

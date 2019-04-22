@@ -19,23 +19,24 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 05-Sep-2016 IGH - Created
   ; 23-Sep-2016 IGH - Added more info about what code is doing
   ; 18-Nov-2016 IGH - Includes more data (from HEASARC) and changes location of output files
-  ; 22-Mar-2017 IGH -  Updated with Mar 2017 data
+  ; 22-Mar-2017 IGH - Updated with Mar 2017 data
   ; 25-Sep-2017 IGH - Updated with Aug 2017 data
   ; 26-Sep-2017 IGH - Updated with Sep 2017 data
   ; 18-Oct-2017 IGH - Updated with Oct 2017 data
   ; 03-Jun-2018 IGH - Updated wtih May 2018 data
   ; 10-Sep-2018 IGH - Updated with Sep 2018 data
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
-  ; 06-Deb-2019 IGH - Updated for heasarc version of Jan data
+  ; 06-Feb-2019 IGH - Updated for heasarc version of Jan data
+  ; 20-Apr-2019 IGH - Updated with Apr 2019 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=15
+  if (n_elements(obs_id) ne 1) then obs_id=16
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
     '20171010','20180529','20180907','20180928',$
-    '20190112']
+    '20190112','20190412']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
@@ -47,6 +48,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     nsdir='ns_20190112';'obs16/quicklook'
     maindir='~/data/heasarc_nustar/'
   endif
+  if (obsname eq '20190412') then nsdir='obs17'
 
   if (n_elements(fpm) ne 1) then fpm='B'
 
@@ -191,6 +193,16 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds ge 11101001 and iidds le 11125001)]=3
     gd_ids[where(iidds ge 11201001 and iidds le 11225001)]=4
     
+  endif
+  
+  if (obs_id eq 16) then begin
+    
+    ; Default of 1 for first day orbits
+    gd_ids=intarr(n_elements(evtaf))+1
+    ; then for second day have another one
+    iidds=strmid(evtaf,strpos(evtaf[3],'nu8041')+5,8)
+    gd_ids[where(iidds ge 16208001)]=2
+
   endif
   
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
