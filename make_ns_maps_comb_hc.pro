@@ -28,18 +28,19 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 29-Sep-2018 IGH - Updated with Sep 2018 data, QS 28th
   ; 06-Feb-2019 IGH - Updated for heasarc version of Jan data
   ; 20-Apr-2019 IGH - Updated with Apr 2019 data
+  ; 10-May-2019 IGH - Updated with Apr 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=16
+  if (n_elements(obs_id) ne 1) then obs_id=17
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
     '20171010','20180529','20180907','20180928',$
-    '20190112','20190412']
+    '20190112','20190412','20190425']
 
   obsname=dobs[obs_id]
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
 
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
@@ -183,7 +184,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds ge 200000)]=2
 
   endif
-  
+
   if (obs_id eq 15) then begin
     ; Default of 1 for first two orbits on target
     gd_ids=intarr(n_elements(evtaf))+1
@@ -192,11 +193,11 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds eq 01203001)]=2
     gd_ids[where(iidds ge 11101001 and iidds le 11125001)]=3
     gd_ids[where(iidds ge 11201001 and iidds le 11225001)]=4
-    
+
   endif
-  
+
   if (obs_id eq 16) then begin
-    
+
     ; Default of 1 for first day orbits
     gd_ids=intarr(n_elements(evtaf))+1
     ; then for second day have another one
@@ -204,7 +205,18 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds ge 16208001)]=2
 
   endif
-  
+
+  if (obs_id eq 17) then begin
+    ; Default of 1 is first mosaic
+    gd_ids=intarr(n_elements(evtaf))+1
+    ; then for second mosaic do this
+    iidds=strmid(evtaf,strpos(evtaf[0],'nu205111')+7,6)
+    gd_ids[where(iidds ge 2e5 and iidds lt 3e5)]=2
+    gd_ids[where(iidds ge 3e5 and iidds lt 4e5)]=3
+    gd_ids[where(iidds ge 4e5 and iidds lt 5e5)]=4
+
+  endif
+
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
 
 
@@ -252,7 +264,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
       im_hist = histogram(pixinds, min = 0, max = npix*npix-1, binsize = 1)
       im = reform(im_hist, npix, npix)
       ims= im[(centerx-im_width):(centerx+im_width-1), (centery-im_width):(centery+im_width-1)]
-      
+
       if (obs_id eq 15) then begin
         if (m+1 eq 3 or m+1 eq 4) then begin
           ; Remove weird bright pixel in the obs15 mosaic
@@ -260,7 +272,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
           ims[*,500:650]=0
         endif
       endif
-      
+
       npp=n_elements(ims[0,*])
 
       ; Only save a map out of the data is there

@@ -7,9 +7,9 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; Work in progress version - only a the most recent observations
   ;
   ; Options
-  ; obs_id       - Which NuSTAR observations (default =1)
-  ; maindir       - Main directory of where the NuSTAR data is kept (default for IGH system but only need if no *.dat files)
-  ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
+  ; obs_id     - Which NuSTAR observations (default =1)
+  ; maindir    - Main directory of where the NuSTAR data is kept (default for IGH system but only need if no *.dat files)
+  ; nsdir      - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
   ;
   ;
   ; 29-Aug-2016 IGH - Created
@@ -25,18 +25,19 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 13-Jan-2019 IGH - Modified submap option for evt containing multiple pointings
   ; 06-Feb-2019 IGH - Updated for heasarc version of Jan data
   ; 20-Apr-2019 IGH - Updated with Apr 2019 data
+  ; 10-May-2019 IGH - Updated with Apr 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=16
+  if (n_elements(obs_id) ne 1) then obs_id=17
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911',$
     '20171010','20180529','20180907','20180928',$
-    '20190112','20190412']
+    '20190112','20190412','20190425']
 
   obsname=dobs[obs_id]
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';~/data/heasarc_nustar/
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
 
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
@@ -46,8 +47,6 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     maindir='~/data/heasarc_nustar/'
   endif
   if (obsname eq '20190412') then nsdir='obs17' ;else nsdir='ns_'+obsname
-
-
 
   ; What is the minimum energy we want for the image?
   min_eng=2.5
@@ -141,13 +140,13 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
       if (suby[1] gt npp-1) then suby=[npp-1-500,npp-1]
       zims=ims[subx[0]:subx[1],suby[0]:suby[1]]
 
-;      if (obs_id eq 15) then begin
-;        if (ns_ids[i] eq 'nu90411100001' or ns_ids[i] eq 'nu90411200001') then begin
-;          ; Remove weird bright pixel in the obs15 mosaic
-;          ; Need to check what this is.....
-;          zims[*,300:350]=0
-;        endif
-;      endif
+      ;      if (obs_id eq 15) then begin
+      ;        if (ns_ids[i] eq 'nu90411100001' or ns_ids[i] eq 'nu90411200001') then begin
+      ;          ; Remove weird bright pixel in the obs15 mosaic
+      ;          ; Need to check what this is.....
+      ;          zims[*,300:350]=0
+      ;        endif
+      ;      endif
 
       pxs=pix_size
       x0=xc-npp*0.5*pxs+pxs*subx[0]

@@ -16,86 +16,16 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
 
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
+  ; 10-May-2019 - IGH   Added in APril 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201904'
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';
+  if (n_elements(obsname) ne 1) then obsname='20190425'
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
   ; Generate again the livetim and CHU files, even if they already exist
   if (n_elements(genagn) ne 1) then genagn=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  ;-------------------------------------------
-  ;-------------------------------------------
-  if (obsname eq '201805') then begin
-    torbs=[['29-May-2018 '+['15:55:30','16:55:50']],$
-      ['29-May-2018 '+['17:32:30','18:33:30']],$
-      ['29-May-2018 '+['19:08:50','20:09:10']],$
-      ['29-May-2018 '+['20:45:30','21:49:00']],$
-      ['29-May-2018 '+['22:22:20','23:22:00']]]
-    timer=['29-May-2018 15:30:00',' 29-May-2018 23:30:00']
-    nsdir='obs13/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.2,1.1]
-
-  endif
-
-  ;-------------------------------------------
-  if (obsname eq '201809_07') then begin
-    torbs=[['07-Sep-2018 '+['14:57:00','15:57:00']],$
-      ['07-Sep-2018 '+['16:34:00','17:33:00']],$
-      ['07-Sep-2018 '+['18:11:00','19:03:00']]]
-    timer=['07-Sep-2018 14:30:00',' 07-Sep-2018 19:30:00']
-    nsdir='obs14/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.01,0.5]
-
-  endif
-
-  ;-------------------------------------------
-  if (obsname eq '201809_09') then begin
-    torbs=[['09-Sep-2018 '+['08:50:00','09:49:00']],$
-      ['09-Sep-2018 '+['10:27:00','11:26:00']],$
-      ['09-Sep-2018 '+['12:04:00','13:03:00']]]
-    timer=['09-Sep-2018 08:00:00','09-Sep-2018 13:30:00']
-    nsdir='obs14/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.05,0.5]
-
-  endif
-
-  ;-------------------------------------------
-  if (obsname eq '201809_10') then begin
-    torbs=[['10-Sep-2018 '+['13:50:30','14:49:00']],$
-      ['10-Sep-2018 '+['15:27:00','16:26:00']],$
-      ['10-Sep-2018 '+['17:04:00','17:53:00']]]
-    timer=['10-Sep-2018 13:30:00','10-Sep-2018 18:30:00']
-    nsdir='obs14/'
-
-    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
-    ;    only want those in the hk directories
-    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
-    chuf=file_search(maindir+nsdir, '*chu123.fits')
-    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.02,0.5]
-
-  endif
-
+  ;----------------------------------------
   ;-------------------------------------------
   if (obsname eq '201809_28') then begin
     torbs=[['28-Sep-2018 '+['18:25:00','19:24:00']],$
@@ -120,22 +50,42 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
       ['12-Jan-2019 '+['20:45:00','20:47:00']],$
       ['12-Jan-2019 '+['21:25:00','22:13:00']]]
     timer=['12-Jan-2019 16:00:00',' 12-Jan-2019 22:45:00']
-    ;    nsdir='obs16/'
     nsdir='ns_20190112/'
-
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.01,0.5]
+    gyrl=[0.01,0.9]
 
   endif
+  ;-------------------------------------------
+  ;-------------------------------------------
+  if (obsname eq '20190425') then begin
+    torbs=[['25-Apr-2019 '+['22:11:00','23:10:00']],$
+      ['25-Apr-2019 23:48:00','26-Apr-2019 00:47:00'],$
+      ['26-Apr-2019 '+['01:25:00','02:24:00']],$
+      ['26-Apr-2019 '+['03:01:00','04:00:00']]]
+    timer=['25-Apr-2019 21:30:00',' 26-Apr-2019 04:30:00']
+    nsdir='ns_20190425/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+
+    ; GOES 15 changed on 18 Apr
+    gyrl=[0.1,0.9]
+
+  endif
+  ;-------------------------------------------
   
+
   lv_yrange=[0.1,1.1]
   lv_ylog=0
-  
+
   ;-------------------------------------------
 
   norbs=n_elements(torbs[0,*])
@@ -272,6 +222,6 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
 
 
 
-  stop
+;  stop
 
 end

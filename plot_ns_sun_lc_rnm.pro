@@ -37,10 +37,11 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 29-Sep-2018 - IGH   Added in Sep 2018 data, QS 28th
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ; 20-Apr-2019 - IGH   Added in Apr 2019 data
+  ; 10-May-2019 - IGH   Added in Apr 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201904'
-  if (n_elements(maindir) ne 1) then maindir='~/data/ns_data/';'~/data/heasarc_nustar/';'~/data/ns_data/'
+  if (n_elements(obsname) ne 1) then obsname='20190425'
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -133,18 +134,22 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   endif
   
   ;-------------------------------------------
+  ;-------------------------------------------
   if (obsname eq '201901') then begin
-    torbs=[['12-Jan-2019 '+['16:25:00','17:45:00']],$
-      ['12-Jan-2019 '+['17:45:00','19:25:00']]]
-    timer=['12-Jan-2019 16:00:00',' 12-Jan-2019 20:00:00']
-    nsdir='obs14/'
+    torbs=[['12-Jan-2019 '+['16:35:00','17:30:00']],$
+      ['12-Jan-2019 '+['18:11:00','19:11:00']],$
+      ['12-Jan-2019 '+['19:48:00','20:30:00']],$
+      ['12-Jan-2019 '+['20:45:00','20:47:00']],$
+      ['12-Jan-2019 '+['21:25:00','22:13:00']]]
+    timer=['12-Jan-2019 16:00:00',' 12-Jan-2019 22:45:00']
+    nsdir='ns_20190112/'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
-    gyrl=[0.01,0.5]
+    gyrl=[0.01,0.9]
 
   endif
   
@@ -174,6 +179,26 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   endif
 
   ;-------------------------------------------
+  
+  if (obsname eq '20190425') then begin
+    torbs=[['25-Apr-2019 '+['22:11:00','23:10:00']],$
+      ['25-Apr-2019 23:48:00','26-Apr-2019 00:47:00'],$
+      ['26-Apr-2019 '+['01:25:00','02:24:00']],$
+      ['26-Apr-2019 '+['03:01:00','04:00:00']]]
+    timer=['25-Apr-2019 21:30:00',' 26-Apr-2019 04:30:00']
+    nsdir='ns_20190425/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    ; GOES 15 changed on 18 Apr
+    gyrl=[0.1,0.9]
+
+  endif
+  ;-------------------------------------------
+  
 
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
@@ -265,13 +290,13 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       outplot,[torbs[0,i],torbs[0,i]],gyr,lines=0,color=0,thick=3
       outplot,[torbs[1,i],torbs[1,i]],gyr,lines=0,color=0,thick=3
 
-      gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]))
-      outplot,gtime14[gd1],glow14[gd1],color=4,thick=3
-      outplot,gtime14[gd1],ghigh14[gd1],color=8,thick=3
+      gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),nid1)
+      if (nid1 gt 1) then outplot,gtime14[gd1],glow14[gd1],color=4,thick=3
+      if (nid1 gt 1) then outplot,gtime14[gd1],ghigh14[gd1],color=8,thick=3
 
       gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]))
-      outplot,gtime15[gd1],glow15[gd1],color=1,thick=6
-      outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=6
+      if (nid1 gt 1) then outplot,gtime15[gd1],glow15[gd1],color=1,thick=6
+      if (nid1 gt 1) then outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=6
 
       ;      outplot,torbs[*,i],0.2*gyr[1]*[1,1],lines=0,thick=10
     endfor
@@ -419,9 +444,9 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       outplot,[torbs[0,i],torbs[0,i]],gyr,lines=2,color=0,thick=2
       outplot,[torbs[1,i],torbs[1,i]],gyr,lines=2,color=0,thick=2
 
-      gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]))
-      outplot,gtime15[gd1],glow15[gd1],color=1,thick=4
-      outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=4
+      gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),nid1)
+      if (nid1 gt 1) then outplot,gtime15[gd1],glow15[gd1],color=1,thick=4
+      if (nid1 gt 1) then outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=4
     endfor
 
     for i=0, ngaps-1 do begin
