@@ -27,13 +27,15 @@ pro batch_ltc
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
   ; As no GOES data online just do a single plot of livetime and CHU
-;  plot_ns_sun_lc_rnm_ng,obsname='201901'
-;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/goes
-;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/gesnlog,/chudo
-  
-plot_ns_sun_lc_rnm_ng,obsname='20190425'
-plot_ns_sun_lc_rnm, obsname='20190425',gav=5,/goes
-plot_ns_sun_lc_rnm, obsname='20190425',gav=5,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm_ng,obsname='201901'
+  ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/gesnlog,/chudo
+
+  ;  plot_ns_sun_lc_rnm_ng,obsname='20190425'
+  ;  plot_ns_sun_lc_rnm, obsname='20190425',gav=5,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='20190425',gav=5,/gesnlog,/chudo
+
+  plot_ns_sun_lc_rnm_ng,obsname='20180928'
 
   ;  ; For April 2019 back to a time with some activity and GOES
   ;  plot_ns_sun_lc_rnm, obsname='201904',gav=5,/goes

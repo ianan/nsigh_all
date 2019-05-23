@@ -19,7 +19,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ; 10-May-2019 - IGH   Added in APril 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='20190425'
+  if (n_elements(obsname) ne 1) then obsname='20180928'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
   ; Generate again the livetim and CHU files, even if they already exist
   if (n_elements(genagn) ne 1) then genagn=1
@@ -27,11 +27,11 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;----------------------------------------
   ;-------------------------------------------
-  if (obsname eq '201809_28') then begin
+  if (obsname eq '20180928') then begin
     torbs=[['28-Sep-2018 '+['18:25:00','19:24:00']],$
       ['28-Sep-2018 '+['20:02:00','21:01:00']]]
     timer=['28-Sep-2018 17:45:00','28-Sep-2018 21:30:00']
-    nsdir='obs15/quicklook/'
+    nsdir='NS_20180928/'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
@@ -81,7 +81,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
 
   endif
   ;-------------------------------------------
-  
+
 
   lv_yrange=[0.1,1.1]
   lv_ylog=0
@@ -162,6 +162,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ; Make a plot of NuSTAR livetime and CHUs
   !p.multi=[0,2,1]
   figname='figs/ns_ltc_chu_'+obsname+'.eps'
+
   set_plot,'ps'
   device, /encapsulated, /color, /isolatin1,/inches, $
     bits=8, xsize=5, ysize=5,file=figname
@@ -208,9 +209,14 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
 
   ylab=[' ','1','2','12','3','13','23','123',' ']
   utplot,chutime,newmask,psym=1,yrange=[0,8],ytitle='NuSTAR CHUs',yticks=8,yminor=1,ytickname=ylab,$
-    timer=timer,position=[0.14,0.1,0.95,0.54],symsize=0.5,thick=2
+    timer=timer,position=[0.14,0.1,0.95,0.54],symsize=0.5,thick=2,/nodata
+
+  outplot,chutime,newmask,psym=1,color=150  ,symsize=0.5,thick=2
+
 
   for i=0, norbs-1 do begin
+    gd1=where(anytim(chutime) ge anytim(torbs[0,i]) and anytim(chutime) le anytim(torbs[1,i]))
+    outplot,chutime[gd1],newmask[gd1],psym=1,color=0  ,symsize=0.5,thick=2
     outplot,[torbs[0,i],torbs[0,i]],[0,8],lines=2,color=0,thick=2
     outplot,[torbs[1,i],torbs[1,i]],[0,8],lines=2,color=0,thick=2
   endfor
@@ -219,6 +225,9 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ;    cgd1=where(anytim(chutime) ge anytim(dgtims[0,i]) and anytim(chutime) le anytim(dgtims[1,i]),ncgd1)
   ;    if (ncgd1 gt 1) then outplot,chutime[cgd1],newmask[cgd1],color=200,thick=2,symsize=0.5,psym=1
   ;  endfor
+
+  device,/close
+  set_plot, mydevice
 
 
 
