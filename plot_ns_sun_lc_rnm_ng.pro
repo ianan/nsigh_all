@@ -16,10 +16,11 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
 
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
-  ; 10-May-2019 - IGH   Added in APril 2019 QS data
+  ; 10-May-2019 - IGH   Added in April 2019 QS data
+  ; 16-Jul-2019 - IGH   Added in Jul 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='20180928'
+  if (n_elements(obsname) ne 1) then obsname='201907'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
   ; Generate again the livetim and CHU files, even if they already exist
   if (n_elements(genagn) ne 1) then genagn=1
@@ -80,6 +81,22 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     gyrl=[0.1,0.9]
 
   endif
+  
+  if (obsname eq '201907') then begin
+    torbs=[['02-Jul-2019 '+['04:17:00','05:17:00']],$
+      ['02-Jul-2019 '+['05:53:00','06:53:00']]]
+    timer=['02-Jul-2019 04:00:00','02-Jul-2019 07:00:00']
+    nsdir='ns_20190702/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.02,0.5]
+
+  endif
+  
   ;-------------------------------------------
 
 
