@@ -32,7 +32,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     torbs=[['28-Sep-2018 '+['18:25:00','19:24:00']],$
       ['28-Sep-2018 '+['20:02:00','21:01:00']]]
     timer=['28-Sep-2018 17:45:00','28-Sep-2018 21:30:00']
-    nsdir='NS_20180928/'
+    nsdir='ns_20180928/'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories

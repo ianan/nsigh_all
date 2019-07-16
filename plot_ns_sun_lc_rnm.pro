@@ -38,9 +38,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ; 20-Apr-2019 - IGH   Added in Apr 2019 data
   ; 10-May-2019 - IGH   Added in Apr 2019 QS data
+  ; 16-Jul-2019 - IGH   Added in Jul 2019 QS data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='20190425'
+  if (n_elements(obsname) ne 1) then obsname='201907'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -198,6 +199,22 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   endif
   ;-------------------------------------------
+  
+  
+  if (obsname eq '201907') then begin
+    torbs=[['02-Jul-2019 '+['04:17:00','05:17:00']],$
+      ['02-Jul-2019 '+['05:53:00','06:53:00']]]
+    timer=['02-Jul-2019 04:00:00','02-Jul-2019 07:00:00']
+    nsdir='ns_20190702/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.1,0.9]
+
+  endif
   
 
   norbs=n_elements(torbs[0,*])
