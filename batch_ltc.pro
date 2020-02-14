@@ -24,6 +24,7 @@ pro batch_ltc
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ; 20-Apr-2019 - IGH   Added in Apr 2019 data
   ; 10-May-2019 - IGH   Added in Apr 2019 QS data
+  ; 14-Feb-2020 - IGH   Added in Jan 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
   ; As no GOES data online just do a single plot of livetime and CHU
@@ -31,15 +32,22 @@ pro batch_ltc
   ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/goes
   ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/gesnlog,/chudo
 
-  plot_ns_sun_lc_rnm_ng,obsname='201907'
-  plot_ns_sun_lc_rnm, obsname='201907',gav=5,/goes
-  plot_ns_sun_lc_rnm, obsname='201907',gav=5,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm_ng,obsname='202001'
+  ;  plot_ns_sun_lc_rnm_ng,obsname='202001',/wid
+  ;  plot_ns_sun_lc_rnm, obsname='202001',gav=5,/goes
+  plot_ns_sun_lc_rnm, obsname='202001',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc_rnm, obsname='202001',gav=5,/gesnlog,/chudo,/wid
+
+  ;  plot_ns_sun_lc_rnm_ng,obsname='201907'
+  ;  plot_ns_sun_lc_rnm, obsname='201907',gav=5,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201907',gav=5,/gesnlog,/chudo
+
 
   ;  plot_ns_sun_lc_rnm_ng,obsname='20190425'
   ;  plot_ns_sun_lc_rnm, obsname='20190425',gav=5,/goes
   ;  plot_ns_sun_lc_rnm, obsname='20190425',gav=5,/gesnlog,/chudo
 
-;  plot_ns_sun_lc_rnm_ng,obsname='20180928'
+  ;  plot_ns_sun_lc_rnm_ng,obsname='20180928'
 
   ;  ; For April 2019 back to a time with some activity and GOES
   ;  plot_ns_sun_lc_rnm, obsname='201904',gav=5,/goes

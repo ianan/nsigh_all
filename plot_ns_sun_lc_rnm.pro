@@ -1,5 +1,5 @@
 pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
-  maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo,do_nustar=do_nustar
+  maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo,do_nustar=do_nustar,wid=wid
 
   ; Based on plot_ns_sun_lc.pro but for times with no RHESSI :( which for our case is mostly 2018+
 
@@ -20,6 +20,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; gesnlog       - Plot the GOES light curve with ylog=0 in default NuSTAR, GOES, RHESSI plot
   ; chudo         - Do an extra plot with NuSTAR Livetime, CHU, GOES and RHESSI (default no)
   ; do_nustar     - Process the NuSTAR data (default yes) - useful for just after an obs with no_nustar=0 to get GOES/RHESSI etc
+  ; wid           - Want to make an extra wide version of the plot?
 
   ; example of usage
   ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
@@ -39,6 +40,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 20-Apr-2019 - IGH   Added in Apr 2019 data
   ; 10-May-2019 - IGH   Added in Apr 2019 QS data
   ; 16-Jul-2019 - IGH   Added in Jul 2019 QS data
+  ; 14-Feb-2020 - IGH   Added in Jan 2020 data and option for a wider plot
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='201907'
@@ -133,7 +135,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[0.02,0.5]
 
   endif
-  
+
   ;-------------------------------------------
   ;-------------------------------------------
   if (obsname eq '201901') then begin
@@ -153,7 +155,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[0.01,0.9]
 
   endif
-  
+
   ;-------------------------------------------
   if (obsname eq '201904') then begin
     torbs=[['12-Apr-2019 15:12:00','12-Apr-2019 16:12:00'],$
@@ -180,7 +182,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   endif
 
   ;-------------------------------------------
-  
+
   if (obsname eq '20190425') then begin
     torbs=[['25-Apr-2019 '+['22:11:00','23:10:00']],$
       ['25-Apr-2019 23:48:00','26-Apr-2019 00:47:00'],$
@@ -199,8 +201,8 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   endif
   ;-------------------------------------------
-  
-  
+
+
   if (obsname eq '201907') then begin
     torbs=[['02-Jul-2019 '+['04:17:00','05:17:00']],$
       ['02-Jul-2019 '+['05:53:00','06:53:00']]]
@@ -215,7 +217,41 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[0.1,0.9]
 
   endif
-  
+
+  if (obsname eq '202001') then begin
+    torbs=[['29-Jan-20 08:05:47','29-Jan-20 08:14:22'],$
+      ['29-Jan-20 10:03:21','29-Jan-20 10:36:42'],$
+      ['29-Jan-20 11:12:39','29-Jan-20 11:53:59'],$
+      ['29-Jan-20 16:05:50','29-Jan-20 17:07:49'],$
+      ['29-Jan-20 17:48:36','29-Jan-20 17:56:08'],$
+      ['29-Jan-20 19:18:54','29-Jan-20 20:16:33'],$
+      ['29-Jan-20 20:52:35','29-Jan-20 21:43:50'],$
+      ['29-Jan-20 22:29:17','29-Jan-20 23:25:17'],$
+      ['30-Jan-20 00:05:57','30-Jan-20 01:06:34'],$
+      ['30-Jan-20 01:42:36','30-Jan-20 01:58:03'],$
+      ['30-Jan-20 03:36:35','30-Jan-20 04:19:52'],$
+      ['30-Jan-20 04:55:55','30-Jan-20 05:56:31'],$
+      ['30-Jan-20 06:32:34','30-Jan-20 07:33:10'],$
+      ['30-Jan-20 08:13:41','30-Jan-20 08:38:14'],$
+      ['30-Jan-20 10:02:26','30-Jan-20 10:28:48'],$
+      ['30-Jan-20 11:57:08','30-Jan-20 11:59:12'],$
+      ['30-Jan-20 13:13:51','30-Jan-20 13:59:48'],$
+      ['30-Jan-20 14:35:51','30-Jan-20 15:26:18'],$
+      ['30-Jan-20 16:26:20','30-Jan-20 17:13:05'],$
+      ['30-Jan-20 17:49:12','30-Jan-20 18:49:46'],$
+      ['30-Jan-20 19:25:49','30-Jan-20 20:26:23']]
+    timer=['29-Jan-2020 07:00:00','30-Jan-2020 21:00:00']
+    nsdir='ns_20200129/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,1.5]
+
+  endif
+
 
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
@@ -488,16 +524,31 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; Make a plot of NuSTAR livetime, CHU state and GOES
   if keyword_Set(chudo) then begin
 
+    if keyword_set(wid) then begin
+      px1=0.08
+      px2=0.97
+      labx=2*12.5e3
+      if keyword_set(gesnlog) then figname='figs/ns_ltc_chu_goesnl_nsl_'+obsname+'_wid.eps' else $
+        figname='figs/ns_ltc_chu_goes_nsl_'+obsname+'_wid.eps'
+      set_plot,'ps'
+      device, /encapsulated, /color, /isolatin1,/inches, $
+        bits=8, xsize=10, ysize=5,file=figname
+    endif else begin
+      px1=0.12
+      px2=0.95
+      labx=12.5e3
+      if keyword_set(gesnlog) then figname='figs/ns_ltc_chu_goesnl_nsl_'+obsname+'.eps' else $
+        figname='figs/ns_ltc_chu_goes_nsl_'+obsname+'.eps'
+      set_plot,'ps'
+      device, /encapsulated, /color, /isolatin1,/inches, $
+        bits=8, xsize=5, ysize=5,file=figname
+    endelse
+
     !p.multi=[0,3,1]
-    if keyword_set(gesnlog) then figname='figs/ns_ltc_chu_goesnl_nsl_'+obsname+'.eps' else $
-      figname='figs/ns_ltc_chu_goes_nsl_'+obsname+'.eps'
-    set_plot,'ps'
-    device, /encapsulated, /color, /isolatin1,/inches, $
-      bits=8, xsize=5, ysize=5,file=figname
     !p.charsize=1.5
     !p.thick=4
     utplot,timer,[1,1],/ylog,yrange=[1e-3,2],ytitle='NuSTAR Livetime',ytickf='exp1',$
-      position=[0.12,0.64,0.95,0.95],xtit='',xtickf='(a1)',timer=timer,/nodata
+      position=[px1,0.64,px2,0.95],xtit='',xtickf='(a1)',timer=timer,/nodata
 
     if (nhk gt 0) then outplot,htime,hlive,thick=3,color=3
 
@@ -506,7 +557,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
     endfor
 
-    xyouts, 12.5e3,8.5e3,'FPMA',chars=0.7,/device,orien=90,color=3
+    xyouts, labx,8.5e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
     ; Set up the y labelling
     ;; mask = 1, chu1 only
@@ -537,7 +588,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
     ylab=[' ','1','2','12','3','13','23','123',' ']
     utplot,chutime,newmask,psym=1,yrange=[0,8],ytitle='NuSTAR CHUs',yticks=8,yminor=1,ytickname=ylab,$
-      timer=timer,position=[0.12,0.36,0.95,0.63],symsize=0.5,xtit='',xtickf='(a1)',thick=2
+      timer=timer,position=[px1,0.36,px2,0.63],symsize=0.5,xtit='',xtickf='(a1)',thick=2
 
     for i=0, ngaps-1 do begin
       cgd1=where(anytim(chutime) ge anytim(dgtims[0,i]) and anytim(chutime) le anytim(dgtims[1,i]),ncgd1)
@@ -548,7 +599,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     if Keyword_set(gesnlog) then begin
 
       utplot,gtime15,glow15,ytitle='!3GOES [x10!u-7!N W m!U-2!N]',$
-        /nodata,yrange=gyrl,timer=timer,position=[0.12,0.08,0.95,0.35]
+        /nodata,yrange=gyrl,timer=timer,position=[px1,0.08,px2,0.35]
       outplot,gtime14,glow14*1d7,color=150,thick=2
       outplot,gtime15,glow15*1d7,color=150,thick=4
 
@@ -557,7 +608,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
         gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
         if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
-        
+
         gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
         if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
       endfor
@@ -567,12 +618,12 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
         if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
       endfor
 
-      xyouts, 12.5e3,1.e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
-      xyouts, 12.5e3,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+      xyouts, labx,1.e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+      xyouts, labx,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
 
     endif else begin
       utplot,gtime15,glow15,ytitle='!3GOES [W m!U-2!N]',$
-        /ylog,/nodata,yrange=gyr,timer=timer,position=[0.12,0.08,0.95,0.35]
+        /ylog,/nodata,yrange=gyr,timer=timer,position=[px1,0.08,px2,0.35]
       outplot,gtime15,glow15,color=150,thick=4
       outplot,gtime15,ghigh15,color=150,thick=4
 

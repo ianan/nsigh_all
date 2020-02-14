@@ -12,6 +12,7 @@ pro batch_maps
   ; 20-Apr-2019 IGH - Added in Apr 2019 data
   ; 10-May-2019 IGH - Added in Apr 2019 QS data
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
+  ; 14-Feb-2020 - IGH   Added in Jan 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ;  nf=10
@@ -28,10 +29,10 @@ pro batch_maps
   ;  make_ns_maps_comb_hc,obs_id=i,fpm='B'
   ;  plot_ns_maps_hc,obs_id=i
 
-  i=18
-  make_ns_maps_hc,obs_id=i
-  make_ns_maps_comb_hc,obs_id=i,fpm='A'
-  make_ns_maps_comb_hc,obs_id=i,fpm='B'
+  i=19
+;  make_ns_maps_hc,obs_id=i
+;  make_ns_maps_comb_hc,obs_id=i,fpm='A'
+;  make_ns_maps_comb_hc,obs_id=i,fpm='B'
   plot_ns_maps_hc,obs_id=i
 
   stop

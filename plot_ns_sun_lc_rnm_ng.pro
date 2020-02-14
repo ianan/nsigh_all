@@ -1,4 +1,4 @@
-pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsdir
+pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsdir,wid=wid
 
   ; Based on plot_ns_sun_lc_rnm.pro but when no GOES data available online ;(
   ; So just makes a single plot of NuSTAR livetime and CHU
@@ -14,13 +14,15 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ; timer         - Overal time range to plot (default, specified values per obs below)
   ; maindir       - Main directory of where the NuSTAR data is kept (default for IGH system but only need if no *.dat files)
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
+  ; wid           - Want to make an extra wide version of the plot?
 
   ; 12-Jan-2019 - IGH   Added in Jan 2019 data
   ; 10-May-2019 - IGH   Added in April 2019 QS data
   ; 16-Jul-2019 - IGH   Added in Jul 2019 QS data
+  ; 14-Feb-2020 - IGH   Added in Jan 2020 data and option for a wider plot
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201907'
+  if (n_elements(obsname) ne 1) then obsname='202001'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
   ; Generate again the livetim and CHU files, even if they already exist
   if (n_elements(genagn) ne 1) then genagn=1
@@ -81,7 +83,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     gyrl=[0.1,0.9]
 
   endif
-  
+
   if (obsname eq '201907') then begin
     torbs=[['02-Jul-2019 '+['04:17:00','05:17:00']],$
       ['02-Jul-2019 '+['05:53:00','06:53:00']]]
@@ -96,7 +98,43 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
     gyrl=[0.02,0.5]
 
   endif
-  
+
+  if (obsname eq '202001') then begin
+    torbs=[['29-Jan-20 08:05:47','29-Jan-20 08:14:22'],$
+      ['29-Jan-20 10:03:21','29-Jan-20 10:36:42'],$
+      ['29-Jan-20 11:12:39','29-Jan-20 11:53:59'],$
+      ['29-Jan-20 16:05:50','29-Jan-20 17:07:49'],$
+      ['29-Jan-20 17:48:36','29-Jan-20 17:56:08'],$
+      ['29-Jan-20 19:18:54','29-Jan-20 20:16:33'],$
+      ['29-Jan-20 20:52:35','29-Jan-20 21:43:50'],$
+      ['29-Jan-20 22:29:17','29-Jan-20 23:25:17'],$
+      ['30-Jan-20 00:05:57','30-Jan-20 01:06:34'],$
+      ['30-Jan-20 01:42:36','30-Jan-20 01:58:03'],$
+      ['30-Jan-20 03:36:35','30-Jan-20 04:19:52'],$
+      ['30-Jan-20 04:55:55','30-Jan-20 05:56:31'],$
+      ['30-Jan-20 06:32:34','30-Jan-20 07:33:10'],$
+      ['30-Jan-20 08:13:41','30-Jan-20 08:38:14'],$
+      ['30-Jan-20 10:02:26','30-Jan-20 10:28:48'],$
+      ['30-Jan-20 11:57:08','30-Jan-20 11:59:12'],$
+      ['30-Jan-20 13:13:51','30-Jan-20 13:59:48'],$
+      ['30-Jan-20 14:35:51','30-Jan-20 15:26:18'],$
+      ['30-Jan-20 16:26:20','30-Jan-20 17:13:05'],$
+      ['30-Jan-20 17:49:12','30-Jan-20 18:49:46'],$
+      ['30-Jan-20 19:25:49','30-Jan-20 20:26:23']]
+    timer=['29-Jan-2020 07:00:00','30-Jan-2020 21:00:00']
+    nsdir='ns_20200129/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.02,0.5]
+
+  endif
+
+  ;  stop
+
   ;-------------------------------------------
 
 
@@ -178,15 +216,30 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ;;-------------------------------------------
   ; Make a plot of NuSTAR livetime and CHUs
   !p.multi=[0,2,1]
-  figname='figs/ns_ltc_chu_'+obsname+'.eps'
-
-  set_plot,'ps'
-  device, /encapsulated, /color, /isolatin1,/inches, $
-    bits=8, xsize=5, ysize=5,file=figname
+  
+  if keyword_set(wid) then begin
+    pos1=[0.07,0.55,0.96,0.99]
+    pos2=[0.07,0.1,0.96,0.54]
+    labx=2*12.5e3
+    figname='figs/ns_ltc_chu_'+obsname+'_wid.eps'
+    set_plot,'ps'
+    device, /encapsulated, /color, /isolatin1,/inches, $
+      bits=8, xsize=10, ysize=5,file=figname
+  endif else begin
+    pos1=[0.14,0.55,0.95,0.99]
+    pos2=[0.14,0.1,0.95,0.54]
+    labx=12.5e3
+    figname='figs/ns_ltc_chu_'+obsname+'.eps'
+    set_plot,'ps'
+    device, /encapsulated, /color, /isolatin1,/inches, $
+      bits=8, xsize=5, ysize=5,file=figname
+  endelse
+  
+  
   !p.charsize=1.0
   !p.thick=4
   utplot,timer,[1,1],yrange=lv_yrange,ytitle='NuSTAR Livetime',$;ytickf='exp1',$
-    position=[0.14,0.55,0.95,0.99],xtit='',xtickf='(a1)',timer=timer,/nodata,ylog=lv_ylog
+    position=pos1,xtit='',xtickf='(a1)',timer=timer,/nodata,ylog=lv_ylog
 
   if (nhk gt 0) then begin
     outplot,htime,hlive,thick=3,color=150
@@ -194,7 +247,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
       outplot,[torbs[0,i],torbs[0,i]],[0,8],lines=2,color=0,thick=2
       outplot,[torbs[1,i],torbs[1,i]],[0,8],lines=2,color=0,thick=2
       gd1=where(anytim(htime) ge anytim(torbs[0,i]) and anytim(htime) le anytim(torbs[1,i]))
-      outplot,htime[gd1],hlive[gd1],thick=3,color=3
+      if (gd1[0] ne -1) then outplot,htime[gd1],hlive[gd1],thick=3,color=3
 
     endfor
   endif
@@ -204,7 +257,7 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
   ;    if (nhgd1 gt 1) then outplot,htime[hgd1],hlive[hgd1],color=200,thick=3
   ;  endfor
 
-  xyouts, 12.5e3,7.5e3,'FPMA',chars=0.7,/device,orien=90,color=3
+  xyouts, labx,7.5e3,'FPMA',chars=0.7,/device,orien=90,color=3
 
   ; Change the KKM mask setup into something a bit easier to plot
   ; Make deafult value out of range of real values
@@ -226,16 +279,16 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
 
   ylab=[' ','1','2','12','3','13','23','123',' ']
   utplot,chutime,newmask,psym=1,yrange=[0,8],ytitle='NuSTAR CHUs',yticks=8,yminor=1,ytickname=ylab,$
-    timer=timer,position=[0.14,0.1,0.95,0.54],symsize=0.5,thick=2,/nodata
+    timer=timer,position=pos2,symsize=0.5,thick=2,/nodata
 
   outplot,chutime,newmask,psym=1,color=150  ,symsize=0.5,thick=2
 
 
   for i=0, norbs-1 do begin
     gd1=where(anytim(chutime) ge anytim(torbs[0,i]) and anytim(chutime) le anytim(torbs[1,i]))
-    outplot,chutime[gd1],newmask[gd1],psym=1,color=0  ,symsize=0.5,thick=2
-    outplot,[torbs[0,i],torbs[0,i]],[0,8],lines=2,color=0,thick=2
-    outplot,[torbs[1,i],torbs[1,i]],[0,8],lines=2,color=0,thick=2
+    if (gd1[0] ne -1) then outplot,chutime[gd1],newmask[gd1],psym=1,color=0  ,symsize=0.5,thick=2
+    if (gd1[0] ne -1) then outplot,[torbs[0,i],torbs[0,i]],[0,8],lines=2,color=0,thick=2
+    if (gd1[0] ne -1) then outplot,[torbs[1,i],torbs[1,i]],[0,8],lines=2,color=0,thick=2
   endfor
 
   ;  for i=0, ngaps-1 do begin
@@ -248,6 +301,6 @@ pro plot_ns_sun_lc_rnm_ng, obsname=obsname,timer=timer,maindir=maindir,nsdir=nsd
 
 
 
-;  stop
+  ;  stop
 
 end

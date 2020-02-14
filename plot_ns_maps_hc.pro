@@ -26,6 +26,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ;                     Made sure sr=2 by default (uses bigger value for QS obs)
   ; 10-May-2019 IGH - Updated with Apr 2019 QS data
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
+  ; 14-Feb-2020 IGH - Added in Jan 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
   if (n_elements(obs_id) ne 1) then obs_id=18
@@ -34,7 +35,8 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
-    '20190112','20190412','20190425','20190702']
+    '20190112','20190412','20190425','20190702',$
+    '20200129']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -49,7 +51,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   if (obsname eq '20190412') then nsdir='obs17' ;else nsdir='ns_'+obsname
 
   ; control color scaling on final maps by obsid
-  if (obs_id eq 8 or obs_id eq 13 or obs_id eq 12 or obs_id eq 11 or obs_id eq 10) then begin
+  if (obs_id eq 8 or obs_id eq 13 or obs_id eq 12 or obs_id eq 11 or obs_id eq 10 or obs_id eq 19) then begin
     dnl=1e-4
     dmx=1e1
   endif else begin
