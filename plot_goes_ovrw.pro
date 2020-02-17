@@ -120,9 +120,9 @@ pro plot_goes_ovrw,obs_id=obs_id
 
   ; Plot the data
 
-  gyr=[1e-9,1e-4]
+  gyr=[1e-9,9e-4]
   @post_outset
-  !p.thick=1
+  !p.thick=2
   loadct,0,/silent
   tube_line_colors
 
@@ -148,5 +148,5 @@ pro plot_goes_ovrw,obs_id=obs_id
   device,/close
   set_plot, mydevice
 
-  stop
+;  stop
 end
