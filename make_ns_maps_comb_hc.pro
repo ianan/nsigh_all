@@ -30,16 +30,17 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 20-Apr-2019 IGH - Updated with Apr 2019 data
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
   ; 14-Feb-2020 IGH - Added in Jan 2020 data
+  ; 11-Mar-2020 IGH - Updated for Feb 2020
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=19
+  if (n_elements(obs_id) ne 1) then obs_id=20
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129']
+    '20200129','20200221']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
@@ -218,7 +219,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds ge 4e5 and iidds lt 5e5)]=4
 
   endif
-  
+
   if (obs_id eq 18) then begin
     ; Default of 1 is first mosaic
     ; Default of 1 is first mosaic
@@ -228,15 +229,27 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds ge 2e5 and iidds lt 3e5)]=2
 
   endif
-  
+
   if (obs_id eq 19) then begin
     ; Split per obs target id
     gd_ids=intarr(n_elements(evtaf))+1
-    
+
     iidds=strmid(evtaf,strpos(evtaf[0],'nu205')+4,9)
     gd_ids[where(iidds ge 5.14e8 and iidds lt 5.15e8)]=2
     gd_ids[where(iidds ge 5.15e8 and iidds lt 5.16e8)]=3
-   
+
+  endif
+  
+  
+  if (obs_id eq 20) then begin
+    
+    ; Split per obs target id
+    gd_ids=intarr(n_elements(evtaf))+1
+
+    iidds=strmid(evtaf,strpos(evtaf[0],'nu805')+4,9)
+    gd_ids[where(iidds ge 513201001 and iidds le 513225001)]=2
+    gd_ids[where(iidds ge 514201001 and iidds le 514225001)]=3
+    
   endif
 
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4

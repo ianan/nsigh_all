@@ -5,17 +5,18 @@ pro plot_goes_ovrw,obs_id=obs_id
   ; obs_id       - Which NuSTAR observations (default =19)
 
   ; 17-Feb-2020 - IGH   Started
+  ; 11-Mar-2020 - IGH   Updated for Feb 2020
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=19
+  if (n_elements(obs_id) ne 1) then obs_id=20
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129']
+    '20200129','20200221']
   obsname=dobs[obs_id]
 
   if (obsname eq '20140910') then timer=['10-Sep-2014 21:00','11-Sep-2014 01:00']
@@ -59,6 +60,8 @@ pro plot_goes_ovrw,obs_id=obs_id
   if (obsname eq '20190702') then timer=['02-Jul-2019 04:00:00','02-Jul-2019 07:00:00']
   ;-------------------------------------------
   if (obsname eq '20200129') then timer=['29-Jan-2020 07:00:00','30-Jan-2020 21:00:00']
+  ;-------------------------------------------
+  if (obsname eq '20200221') then timer=['21-Feb-2020 04:00:00','21-Feb-2020 24:00:00']
 
   ; Just extend time-range +/- 12 hours
   timer[0]=anytim(anytim(timer[0])-12*60.*60.,/yoh,/trunc)

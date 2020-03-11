@@ -28,6 +28,7 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 10-May-2019 IGH - Updated with Apr 2019 QS data
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
   ; 14-Feb-2020 IGH - Added in Jan 2020 data
+  ; 11-Mar-2020 IGH - Updated for Feb 2020
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
   if (n_elements(obs_id) ne 1) then obs_id=18
@@ -37,7 +38,7 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129']
+    '20200129','20200221']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'

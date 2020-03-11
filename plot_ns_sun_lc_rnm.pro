@@ -41,9 +41,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 10-May-2019 - IGH   Added in Apr 2019 QS data
   ; 16-Jul-2019 - IGH   Added in Jul 2019 QS data
   ; 14-Feb-2020 - IGH   Added in Jan 2020 data and option for a wider plot
+  ; 11-Mar-2020 - IGH   Added in Feb 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='201907'
+  if (n_elements(obsname) ne 1) then obsname='202002'
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -242,6 +243,30 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
       ['30-Jan-20 19:25:49','30-Jan-20 20:26:23']]
     timer=['29-Jan-2020 07:00:00','30-Jan-2020 21:00:00']
     nsdir='ns_20200129/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,1.5]
+
+  endif
+  
+  if (obsname eq '202002') then begin
+    torbs=[['21-Feb-20 05:16:00','21-Feb-20 06:15:00'],$
+     ['21-Feb-20 06:54:30','21-Feb-20 07:52:00'],$
+     ['21-Feb-20 08:38:30','21-Feb-20 09:29:30'],$
+     ['21-Feb-20 10:06:00','21-Feb-20 11:05:00'],$
+     ['21-Feb-20 11:42:00','21-Feb-20 12:42:00'],$
+     ['21-Feb-20 13:19:00','21-Feb-20 14:19:00'],$
+     ['21-Feb-20 14:56:00','21-Feb-20 15:55:00'],$
+     ['21-Feb-20 16:32:30','21-Feb-20 17:32:30'],$
+     ['21-Feb-20 18:09:30','21-Feb-20 19:09:30'],$
+     ['21-Feb-20 19:46:00','21-Feb-20 20:45:00'],$   
+      ['21-Feb-20 21:22:43','21-Feb-20 22:22:00']]
+    timer=['21-Feb-2020 05:00:00','21-Feb-2020 23:00:00']
+    nsdir='ns_20200221/'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories

@@ -27,16 +27,17 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 10-May-2019 IGH - Updated with Apr 2019 QS data
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
   ; 14-Feb-2020 IGH - Added in Jan 2020 data
+  ; 11-Mar-2020 IGH - Updated for Feb 2020
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=18
+  if (n_elements(obs_id) ne 1) then obs_id=20
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129']
+    '20200129','20200221']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -58,9 +59,9 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     dnl=1e-3
     dmx=1e1
   endelse
-  
+
   ; For the QS Mosaic data
-  if (obs_id eq 14 or obs_id eq 15 or obs_id eq 17 or obs_id eq 18) then begin
+  if (obs_id eq 14 or obs_id eq 15 or obs_id eq 17 or obs_id eq 18 or obs_id eq 20) then begin
     dnl=1e-5
     dmx=1e-2
   endif
@@ -69,58 +70,51 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
 
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
 
+
   nf=n_elements(ffa)
   sr=2
   if (obs_id eq 14) then sr=8
   if (obs_id eq 15) then sr=8
-  
+
+  @post_outset
+  !p.multi=0
+
+  loadct,74,/silent
+  reverse_ct
+  tvlct,r,g,b,/get
+  r[0]=0
+  g[0]=0
+  b[0]=0
+  r[1]=255
+  g[1]=255
+  b[1]=255
+  tvlct,r,g,b
+
+  plim=1500
+  xr=[-1,1]*plim
+  yr=[-1,1]*plim
+
   for i=0, nf-1 do begin
-
-    @post_outset
-    !p.multi=0
-
-    loadct,74,/silent
-    reverse_ct
-    tvlct,r,g,b,/get
-    r[0]=0
-    g[0]=0
-    b[0]=0
-    r[1]=255
-    g[1]=255
-    b[1]=255
-    tvlct,r,g,b
-
-    plim=1500
-    xr=[-1,1]*plim
-    yr=[-1,1]*plim
-
-    ;   ; For obs15 change plotting slightly for the mosaic vs dwell
-    ;    ; ID the mosaic ones
-    ;    if (obs_id eq 15) then begin
-    ;      if (strpos(ffa[i],'nu90401') ne -1) then begin
-    ;
-    ;        dnl=1e-6
-    ;        dmx=1e-3
-    ;        ;        stop
-    ;        ;        sr=8
-    ;      endif else begin
-    ;        dnl=1e-4
-    ;        dmx=3e-3
-    ;      endelse
-    ;    endif
+    ; Load in the map
     fits2map,ffa[i],mm
 
-    mms=mm
-    mms.data=gauss_smooth(mms.data,sr)
-    ;
-    ;    newx=n_elements(mm.data[*,0])/16.
-    ;    newy=n_elements(mm.data[0,*])/16.
-    ;    mms=rebin_map(mm,newx,newy)
+    ;    need to setup things a bit differently for the QS combined mosaics
+    ;    just manually identify they and send to a different plotting option
+    fitsname=(strsplit(ffa[i],'/',/extract))[-1]
+    if (obs_id eq 20 and (fitsname eq 'maps_ns_20200221_1002_FPMA.fits' or fitsname eq 'maps_ns_20200221_1002_FPMB.fits' or $
+      fitsname eq 'maps_ns_20200221_1001_FPMA.fits' or fitsname eq 'maps_ns_20200221_1001_FPMB.fits' )) then begin
+      newx=n_elements(mm.data[*,0])/16.
+      newy=n_elements(mm.data[0,*])/16.
+      dnl=1e-5
+      dmx=1e-2
+      mms=rebin_map(mm,newx,newy)
+    endif else begin
+      mms=mm
+      mms.data=gauss_smooth(mms.data,sr)
+    endelse
 
-    ;    if (ffa[i] eq '/Users/iain/data/heasarc_nustar/ns_20190112/maps_20190112_194841_nu90411102001_FPMA.fits') then stop
     idbp=where(mms.data eq 0,nidbp)
     if (nidbp gt 0) then mms.data[idbp]=1e-12
-
 
     ; modify the scaling on the fly?
     ; if (mean(mms.data) lt 1e-2) then dnl=1e-4 else dnl=1e-3
