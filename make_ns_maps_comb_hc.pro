@@ -31,19 +31,20 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
   ; 14-Feb-2020 IGH - Added in Jan 2020 data
   ; 11-Mar-2020 IGH - Updated for Feb 2020
+  ; 02-Jul-2020 IGH - Updated in Jun 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=20
+  if (n_elements(obs_id) ne 1) then obs_id=21
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129','20200221']
+    '20200129','20200221','20200606']
 
   obsname=dobs[obs_id]
-  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/';
+  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
 
   if (obsname eq '20180529') then nsdir='obs13' else nsdir='ns_'+obsname
   if (obsname eq '20180907') then nsdir='obs14/quicklook' ;else nsdir='ns_'+obsname
@@ -52,9 +53,12 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     nsdir='ns_20190112';'obs16/quicklook'
     maindir='~/data/heasarc_nustar/'
   endif
-  if (obsname eq '20190412') then nsdir='obs17'
-
-  if (n_elements(fpm) ne 1) then fpm='B'
+  if (obsname eq '20190412') then nsdir='obs17' ;else nsdir='ns_'+obsname
+  if (obsname eq '20200606') then begin
+    nsdir='ns_20200606'
+    maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
+  endif
+  if (n_elements(fpm) ne 1) then fpm='A'
 
   ; What is the minimum energy we want for the image?
   min_eng=2.5
@@ -250,6 +254,17 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds ge 513201001 and iidds le 513225001)]=2
     gd_ids[where(iidds ge 514201001 and iidds le 514225001)]=3
     
+  endif
+  
+  if (obs_id eq 21) then begin
+
+    ; Split per obs target id
+    gd_ids=intarr(n_elements(evtaf))+1
+
+    iidds=strmid(evtaf,strpos(evtaf[0],'nu206')+4,9)
+    gd_ids[where(iidds ge 611004001 and iidds le 611006001)]=2
+    gd_ids[where(iidds ge 611007001 and iidds le 611009001)]=3
+    gd_ids[where(iidds ge 611010001)]=4
   endif
 
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4

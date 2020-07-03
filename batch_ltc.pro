@@ -26,11 +26,12 @@ pro batch_ltc
   ; 10-May-2019 - IGH   Added in Apr 2019 QS data
   ; 14-Feb-2020 - IGH   Added in Jan 2020 data
   ; 11-Mar-2020 - IGH   Added in Feb 2020 data
+  ; 02-Jul-2020 - IGH   Added in Jun 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
 
-  plot_ns_sun_lc_rnm, obsname='202002',gav=5,/gesnlog,/chudo
-  plot_ns_sun_lc_rnm, obsname='202002',gav=5,/gesnlog,/chudo,/wid
+  plot_ns_sun_lc_rnm, obsname='202006',gav=5,/gesnlog,/chudo
+  plot_ns_sun_lc_rnm, obsname='202006',gav=5,/gesnlog,/chudo,/wid
   
   ;; Variant that work if no GOES data online just do a single plot of livetime and CHU
   ;  plot_ns_sun_lc_rnm_ng,obsname='201901'

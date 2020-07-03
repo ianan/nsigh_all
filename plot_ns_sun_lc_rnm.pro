@@ -42,10 +42,11 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 16-Jul-2019 - IGH   Added in Jul 2019 QS data
   ; 14-Feb-2020 - IGH   Added in Jan 2020 data and option for a wider plot
   ; 11-Mar-2020 - IGH   Added in Feb 2020 data
+  ; 02-Jul-2020 - IGH   Added in Jun 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='202002'
-  if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
+  if (n_elements(obsname) ne 1) then obsname='202006'
+  if (n_elements(maindir) ne 1) then maindir='/Volumes/Samsung_T5/data/heasarc_nustar/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -252,18 +253,18 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     gyrl=[0.2,1.5]
 
   endif
-  
+
   if (obsname eq '202002') then begin
     torbs=[['21-Feb-20 05:16:00','21-Feb-20 06:15:00'],$
-     ['21-Feb-20 06:54:30','21-Feb-20 07:52:00'],$
-     ['21-Feb-20 08:38:30','21-Feb-20 09:29:30'],$
-     ['21-Feb-20 10:06:00','21-Feb-20 11:05:00'],$
-     ['21-Feb-20 11:42:00','21-Feb-20 12:42:00'],$
-     ['21-Feb-20 13:19:00','21-Feb-20 14:19:00'],$
-     ['21-Feb-20 14:56:00','21-Feb-20 15:55:00'],$
-     ['21-Feb-20 16:32:30','21-Feb-20 17:32:30'],$
-     ['21-Feb-20 18:09:30','21-Feb-20 19:09:30'],$
-     ['21-Feb-20 19:46:00','21-Feb-20 20:45:00'],$   
+      ['21-Feb-20 06:54:30','21-Feb-20 07:52:00'],$
+      ['21-Feb-20 08:38:30','21-Feb-20 09:29:30'],$
+      ['21-Feb-20 10:06:00','21-Feb-20 11:05:00'],$
+      ['21-Feb-20 11:42:00','21-Feb-20 12:42:00'],$
+      ['21-Feb-20 13:19:00','21-Feb-20 14:19:00'],$
+      ['21-Feb-20 14:56:00','21-Feb-20 15:55:00'],$
+      ['21-Feb-20 16:32:30','21-Feb-20 17:32:30'],$
+      ['21-Feb-20 18:09:30','21-Feb-20 19:09:30'],$
+      ['21-Feb-20 19:46:00','21-Feb-20 20:45:00'],$
       ['21-Feb-20 21:22:43','21-Feb-20 22:22:00']]
     timer=['21-Feb-2020 05:00:00','21-Feb-2020 23:00:00']
     nsdir='ns_20200221/'
@@ -277,34 +278,96 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   endif
 
+  if (obsname eq '202006') then begin
+    torbs=[['06-Jun-20 20:05:47','06-Jun-20 21:14:22'],$
+      ['09-Jun-20 01:25:49','09-Jun-20 02:26:23']]
+    timer=['06-Jun-2020 18:00:00','09-Jun-2020 18:00:00']
+    nsdir='ns_20200606/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,2.0]
+
+  endif
+
 
   norbs=n_elements(torbs[0,*])
   ngaps=(size(dgtims))[2];n_elements(dgtims[0,*])
   ;-------------------------------------------
   ;-------------------------------------------
   ; If no GOES *.dat file then make one
-  gfile='dat_files/goes1415_ltc_'+obsname+'.dat'
-  if (file_test(gfile) eq 0) then begin
-    a = ogoes()
-    a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
-    a->set, /goes15
-    glow15=a->getdata(/low)
-    ghigh15=a->getdata(/high)
-    gtim15 = a->getdata(/times)
-    gutbase15 = a->get(/utbase)
-    gtime15=anytim(anytim(gutbase15)+gtim15,/yoh,/trunc)
+  
+  stop
+  
+  gfile='dat_files/goes_ltc_'+obsname+'.dat'
+  a = ogoes()
+  a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
+;  a->set, /goes16
+  glow=a->getdata(/low)
+  ghigh=a->getdata(/high)
+  gtim = a->getdata(/times)
+  gutbase = a->get(/utbase)
+  gtime=anytim(anytim(gutbase1)+gtim,/yoh,/trunc)
+  gname=a->get(/sat)
+  save,file=gfile,gtime,glow,ghigh,gname
+  
+  if (anytim(timer[0]) gt anytim('01-Jun-2020')) then begin
+    gfile='dat_files/goes1617_ltc_'+obsname+'.dat'
 
-    a->set, /goes14
-    glow14=a->getdata(/low)
-    ghigh14=a->getdata(/high)
-    gtim14 = a->getdata(/times)
-    gutbase14 = a->get(/utbase)
-    gtime14=anytim(anytim(gutbase14)+gtim14,/yoh,/trunc)
+    if (file_test(gfile) eq 0) then begin
+      a = ogoes()
+      a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
+      a->set, /goes16
+      glow1=a->getdata(/low)
+      ghigh1=a->getdata(/high)
+      gtim1 = a->getdata(/times)
+      gutbase1 = a->get(/utbase)
+      gtime1=anytim(anytim(gutbase1)+gtim1,/yoh,/trunc)
 
-    save,file=gfile,gtime14,glow14,ghigh14,gtime15,glow15,ghigh15
+      a->set, /goes17
+      glow2=a->getdata(/low)
+      ghigh2=a->getdata(/high)
+      gtim2 = a->getdata(/times)
+      gutbase2 = a->get(/utbase)
+      gtime2=anytim(anytim(gutbase2)+gtim2,/yoh,/trunc)
+      gnames=['GOES16','GOES17']
+      save,file=gfile,gtime1,glow1,ghigh1,gtime2,glow2,ghigh2,gnames
+    endif else begin
+      restore,file=gfile
+    endelse
+
+    stop
+
   endif else begin
-    restore,file=gfile
+    gfile='dat_files/goes1415_ltc_'+obsname+'.dat'
+
+    if (file_test(gfile) eq 0) then begin
+      a = ogoes()
+      a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
+      a->set, /goes15
+      glow15=a->getdata(/low)
+      ghigh15=a->getdata(/high)
+      gtim15 = a->getdata(/times)
+      gutbase15 = a->get(/utbase)
+      gtime15=anytim(anytim(gutbase15)+gtim15,/yoh,/trunc)
+
+      a->set, /goes14
+      glow14=a->getdata(/low)
+      ghigh14=a->getdata(/high)
+      gtim14 = a->getdata(/times)
+      gutbase14 = a->get(/utbase)
+      gtime14=anytim(anytim(gutbase14)+gtim14,/yoh,/trunc)
+
+      save,file=gfile,gtime14,glow14,ghigh14,gtime15,glow15,ghigh15
+    endif else begin
+      restore,file=gfile
+    endelse
   endelse
+
+
 
   ;-------------------------------------------
   ; Need to average the GOES data?
