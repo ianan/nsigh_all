@@ -30,63 +30,65 @@ pro batch_ltc
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
 
-  plot_ns_sun_lc_rnm, obsname='202006',gav=5,/gesnlog,/chudo
-  plot_ns_sun_lc_rnm, obsname='202006',gav=5,/gesnlog,/chudo,/wid
-  
+  plot_ns_sun_lc_rnm, obsname='202006_06',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202006_07',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202006_08',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202006_09',tav=10,/gesnlog,/chudo,/goes
+
   ;; Variant that work if no GOES data online just do a single plot of livetime and CHU
   ;  plot_ns_sun_lc_rnm_ng,obsname='201901'
-  ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='201901',gav=5,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm, obsname='201901',tav=10,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201901',tav=10,/gesnlog,/chudo
 
   ;  plot_ns_sun_lc_rnm_ng,obsname='20190425'
   ; Older versions below - which had some RHESSI
 
   ;  ; Do 10sec average of GOES (2sec *5) and with additional single goes plot
-  ;  plot_ns_sun_lc, obsname='201409',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201411',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201412',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201504',gav=5,/goes
-  ;  ;  plot_ns_sun_lc, obsname='201509',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201509_01',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201509_02',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201602',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201604',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201607',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201703',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201708',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201709_11',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201709_12',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201709_13',gav=5,/goes
-  ;  plot_ns_sun_lc, obsname='201710',gav=5,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='201805',gav=5,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='201809_07',gav=5,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='201809_09',gav=5,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='201809_10',gav=5,/goes
+  ;  plot_ns_sun_lc, obsname='201409',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201411',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201412',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201504',tav=10,/goes
+  ;  ;  plot_ns_sun_lc, obsname='201509',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201509_01',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201509_02',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201602',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201604',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201607',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201703',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201708',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201709_11',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201709_12',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201709_13',tav=10,/goes
+  ;  plot_ns_sun_lc, obsname='201710',tav=10,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201805',tav=10,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201809_07',tav=10,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201809_09',tav=10,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='201809_10',tav=10,/goes
 
 
   ;
   ;
   ;  ; Do 10sec average of GOES (2sec *5) and non-ylog in the GOES panel and with the extra plot with the CHU panel
-  ;  plot_ns_sun_lc, obsname='201409',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201411',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201412',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201504',gav=5,/gesnlog,/chudo
-  ;  ;  plot_ns_sun_lc, obsname='201509',gav=5,/gesnlog
-  ;  plot_ns_sun_lc, obsname='201509_01',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201509_02',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201602',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201604',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201607',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201703',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201708',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201709_11',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201709_12',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201709_13',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc, obsname='201710',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc_rnm, obsname='201805',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc_rnm, obsname='201809_07',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc_rnm, obsname='201809_09',gav=5,/gesnlog,/chudo
-  ;  plot_ns_sun_lc_rnm, obsname='201809_10',gav=5,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201409',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201411',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201412',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201504',tav=10,/gesnlog,/chudo
+  ;  ;  plot_ns_sun_lc, obsname='201509',tav=10,/gesnlog
+  ;  plot_ns_sun_lc, obsname='201509_01',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201509_02',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201602',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201604',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201607',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201703',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201708',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201709_11',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201709_12',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201709_13',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc, obsname='201710',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm, obsname='201805',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm, obsname='201809_07',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm, obsname='201809_09',tav=10,/gesnlog,/chudo
+  ;  plot_ns_sun_lc_rnm, obsname='201809_10',tav=10,/gesnlog,/chudo
 
 
 

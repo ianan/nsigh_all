@@ -1,22 +1,25 @@
 pro plot_goes_ovrw,obs_id=obs_id
 
   ; Broad summary plot of the GOES XRS data about the time of the NuSTAR observations
+  ;
+  ; New approach to deal with the variety of different satellites
   ; Options
-  ; obs_id       - Which NuSTAR observations (default =19)
+  ; obs_id       - Which NuSTAR observations (default =21)
 
   ; 17-Feb-2020 - IGH   Started
   ; 11-Mar-2020 - IGH   Updated for Feb 2020
+  ; 03-Jul-2020 - IGH   UPdated with Jun 2020, NOAA GOES14/15 + GOES 16/17
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=20
+  if (n_elements(obs_id) ne 1) then obs_id=19
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129','20200221']
+    '20200129','20200221','20200606']
   obsname=dobs[obs_id]
 
   if (obsname eq '20140910') then timer=['10-Sep-2014 21:00','11-Sep-2014 01:00']
@@ -62,46 +65,69 @@ pro plot_goes_ovrw,obs_id=obs_id
   if (obsname eq '20200129') then timer=['29-Jan-2020 07:00:00','30-Jan-2020 21:00:00']
   ;-------------------------------------------
   if (obsname eq '20200221') then timer=['21-Feb-2020 04:00:00','21-Feb-2020 24:00:00']
+  ;-------------------------------------------
+  if (obsname eq '20200606') then timer=['06-Jun-2020 18:00:00','09-Jun-2020 18:00:00']
 
-  ; Just extend time-range +/- 12 hours
-  timer[0]=anytim(anytim(timer[0])-12*60.*60.,/yoh,/trunc)
-  timer[1]=anytim(anytim(timer[1])+12*60.*60.,/yoh,/trunc)
+  ; Should be ok after these times
+  ts16='07-Feb-2017' ; Obs 9, March 2017, and after
+  ts17='01-Jun-2018' ; Obs 14, Sep 2018, and after
+  ; And before these times for GOES15
+  te15='04-Mar-2020' ; Obs 21, Feb 2020, and before
 
-  ; Get the data
-  a = ogoes()
-  a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
-  a->set, /goes15
-  glow15=a->getdata(/low)
-  ghigh15=a->getdata(/high)
-  gtim15 = a->getdata(/times)
-  gutbase15 = a->get(/utbase)
-  gtime15=anytim(anytim(gutbase15)+gtim15,/yoh,/trunc)
+  ;  print,ssw_goesn_time2files(timer[0], timer[1], /goes15, /xrs, count=nfile)
 
-  a->set, /goes14
-  glow14=a->getdata(/low)
-  ghigh14=a->getdata(/high)
-  gtim14 = a->getdata(/times)
-  gutbase14 = a->get(/utbase)
-  gtime14=anytim(anytim(gutbase14)+gtim14,/yoh,/trunc)
-  
-  gav=5
-  
-  if (n_elements(gav) ne 0) then begin
-    gtime0=anytim(gtime14)
-    glow0=glow14
-    ghigh0=ghigh14
-    ngs=n_elements(gtime0)
+  ; Just extend time-range +/- 6 hours
+  timer[0]=anytim(anytim(timer[0])-6*60.*60.,/yoh,/trunc)
+  timer[1]=anytim(anytim(timer[1])+6*60.*60.,/yoh,/trunc)
 
-    nngs=ngs/gav
-    gtime14=strarr(nngs)
-    glow14=fltarr(nngs)
-    ghigh14=fltarr(nngs)
+  tav=60
 
-    for ii=0L,nngs-1L do begin
-      gtime14[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
-      glow14[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
-      ghigh14[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
-    endfor
+  if (anytim(timer[0]) lt anytim(te15)) then begin
+;    a = ogoes()
+;    a->set,tstart=timer[0],tend=timer[1]
+;    a->set, /sdac
+;    a->set,/goes14
+;    glow14=a->getdata(/low)
+;    ghigh14=a->getdata(/high)
+;    gtim14 = a->getdata(/times)
+;    gutbase14 = a->get(/utbase)
+;    gtime14=anytim(anytim(gutbase14)+gtim14,/yoh,/trunc)
+;    gname14=a->get(/sat)
+;    obj_destroy,a
+;
+;    dt=gtim14[1]-gtim14[0]
+;    gav=round(tav/dt)
+;
+;    gtime0=anytim(gtime14)
+;    glow0=glow14
+;    ghigh0=ghigh14
+;    ngs=n_elements(gtime0)
+;
+;    nngs=ngs/gav
+;    gtime14=strarr(nngs)
+;    glow14=fltarr(nngs)
+;    ghigh14=fltarr(nngs)
+;
+;    for ii=0L,nngs-1L do begin
+;      gtime14[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
+;      glow14[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
+;      ghigh14[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
+;    endfor
+
+    a = ogoes()
+    a->set,tstart=timer[0],tend=timer[1]
+    a->set, /sdac
+    a->set,/goes15
+    glow15=a->getdata(/low)
+    ghigh15=a->getdata(/high)
+    gtim15 = a->getdata(/times)
+    gutbase15 = a->get(/utbase)
+    gtime15=anytim(anytim(gutbase15)+gtim15,/yoh,/trunc)
+    gname15=a->get(/sat)
+    obj_destroy,a
+
+    dt=gtim15[1]-gtim15[0]
+    gav=round(tav/dt)
 
     gtime0=anytim(gtime15)
     glow0=glow15
@@ -121,35 +147,130 @@ pro plot_goes_ovrw,obs_id=obs_id
 
   endif
 
-  ; Plot the data
+  if (anytim(timer[0]) gt anytim(ts16)) then begin
+    a = ogoes()
+    a->set,tstart=timer[0],tend=timer[1]
+    a->set, /noaa
+    ;    a->set, /one
+    a->set,/goes16
+    glow16=a->getdata(/low)
+    ghigh16=a->getdata(/high)
+    gtim16 = a->getdata(/times)
+    gutbase16 = a->get(/utbase)
+    gtime16=anytim(anytim(gutbase16)+gtim16,/yoh,/trunc)
+    gname16=a->get(/sat)
+    obj_destroy,a
 
-  gyr=[1e-9,9e-4]
+    dt=gtim16[1]-gtim16[0]
+    gav=round(tav/dt)
+
+    gtime0=anytim(gtime16)
+    glow0=glow16
+    ghigh0=ghigh16
+    ngs=n_elements(gtime0)
+
+    nngs=ngs/gav
+    gtime16=strarr(nngs)
+    glow16=fltarr(nngs)
+    ghigh16=fltarr(nngs)
+
+    for ii=0L,nngs-1L do begin
+      gtime16[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
+      glow16[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
+      ghigh16[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
+    endfor
+
+  endif
+
+;  if (anytim(timer[0]) gt anytim(ts17)) then begin
+;    a = ogoes()
+;    a->set,tstart=timer[0],tend=timer[1]
+;    a->set, /noaa
+;    a->set, /one
+;    a->set,/goes17
+;    glow17=a->getdata(/low)
+;    ghigh17=a->getdata(/high)
+;    gtim17 = a->getdata(/times)
+;    gutbase17 = a->get(/utbase)
+;    gtime17=anytim(anytim(gutbase17)+gtim17,/yoh,/trunc)
+;    gname17=a->get(/sat)
+;    obj_destroy,a
+;
+;    dt=gtim17[1]-gtim17[0]
+;    gav=round(tav/dt)
+;
+;    gtime0=anytim(gtime17)
+;    glow0=glow17
+;    ghigh0=ghigh17
+;    ngs=n_elements(gtime0)
+;
+;    nngs=ngs/gav
+;    gtime17=strarr(nngs)
+;    glow17=fltarr(nngs)
+;    ghigh17=fltarr(nngs)
+;
+;    for ii=0L,nngs-1L do begin
+;      gtime17[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
+;      glow17[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
+;      ghigh17[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
+;    endfor
+;
+;  endif
+
+
+  gyr=[9e-10,9e-6]
+
   @post_outset
-  !p.thick=2
+  !p.thick=4
   loadct,0,/silent
   tube_line_colors
+  !p.multi=[0,2,1]
 
   set_plot,'ps'
   device, /encapsulated, /color, /isolatin1,/inches, $
     bits=8, xsize=6, ysize=8,file='figs/ns_ltc_goesovr_'+obsname+'.eps'
 
-  utplot,timer,[1,1],ytitle='!3GOES Flux, '+string(gav,forma='(i2)')+'sec avg [W m!U-2!N]',chars=1.2,$
-    /ylog,/nodata,yrange=gyr,timer=timer
-  outplot,gtime14,ghigh14,color=8
-  outplot,gtime15,ghigh15,color=2
-  outplot,gtime14,glow14,color=4
-  outplot,gtime15,glow15,color=1
-  evt_grid,replicate(timer[0],5),labpos=1.1*[1e-8,1e-7,1e-6,1e-5,1e-4],labels=['A','B','C','M','X'],$
-    /data,labsize=1.1,/labonly,/noarrow,align=0,labcolor=150
-  for i=0, 4 do outplot,timer,10d^(-8+i)*[1,1],color=150,lines=2,thick=4
-  xyouts, 0.42e4,1.96e4,'15: 1-8 '+string(197b),/device,chars=1.25,color=1
-  xyouts, 0.68e4,1.96e4,'0.5-4 '+string(197b),/device,chars=1.25,color=2
+  if (anytim(timer[0]) lt anytim(te15)) then begin
+    utplot,timer,[1,1],ytitle='!3SDAC GOES/XRS, '+strcompress(string(tav),/rem)+'s avg [W m!U-2!N]',chars=1.2,$
+      /ylog,/nodata,yrange=gyr,timer=timer,position=[0.15,0.55,0.95,0.95]
+    evt_grid,replicate(timer[0],3),labpos=1.1*[1e-8,1e-7,1e-6],labels=['A','B','C'],$
+      /data,labsize=1.1,/labonly,/noarrow,align=0,labcolor=150
+    for i=0, 4 do outplot,timer,10d^(-8+i)*[1,1],color=150,lines=2,thick=4
+;    outplot,gtime14,ghigh14,color=8,thick=2
+    outplot,gtime15,ghigh15,color=2
+;    outplot,gtime14,glow14,color=4,thick=2
+    outplot,gtime15,glow15,color=1
+    xyouts, 1.5e4,1.55e4,'G15: 1-8 '+string(197b),/device,chars=0.9,color=1,orien=90
+    xyouts, 1.5e4,1.8e4,'0.5-4 '+string(197b),/device,chars=0.9,color=2,orien=90
+;    xyouts, 1.5e4,1.1e4,'G14: 1-8 '+string(197b),/device,chars=0.9,color=4,orien=90
+;    xyouts, 1.5e4,1.35e4,'0.5-4 '+string(197b),/device,chars=0.9,color=8,orien=90
+  endif
 
-  xyouts, 1.0e4,1.96e4,'14: 1-8 '+string(197b),/device,chars=1.25,color=4
-  xyouts, 1.26e4,1.96e4,'0.5-4 '+string(197b),/device,chars=1.25,color=8
+
+
+  if (anytim(timer[0]) gt anytim(ts16)) then begin
+    utplot,timer,[1,1],ytitle='!3NOAA GOES/XRS, '+strcompress(string(tav),/rem)+'s avg [W m!U-2!N]',chars=1.2,$
+      /ylog,/nodata,yrange=gyr,timer=timer,position=[0.15,0.07,0.95,0.47]
+    evt_grid,replicate(timer[0],3),labpos=1.1*[1e-8,1e-7,1e-6],labels=['A','B','C'],$
+      /data,labsize=1.1,/labonly,/noarrow,align=0,labcolor=150
+    for i=0, 4 do outplot,timer,10d^(-8+i)*[1,1],color=150,lines=2,thick=4
+;    if (anytim(timer[0]) gt anytim(ts17)) then begin
+;      outplot,gtime17,ghigh17,color=8,thick=2
+;      outplot,gtime17,glow17,color=4,thick=2
+;      xyouts, 1.5e4,0.1e4,'G17: 1-8 '+string(197b),/device,chars=0.9,color=4,orien=90
+;      xyouts, 1.5e4,0.35e4,'0.5-4 '+string(197b),/device,chars=0.9,color=8,orien=90
+;    endif
+    outplot,gtime16,ghigh16,color=2
+    outplot,gtime16,glow16,color=1
+    xyouts, 1.5e4,0.55e4,'G16: 1-8 '+string(197b),/device,chars=0.9,color=1,orien=90
+    xyouts, 1.5e4,0.8e4,'0.5-4 '+string(197b),/device,chars=0.9,color=2,orien=90
+
+
+
+  endif
+
 
   device,/close
   set_plot, mydevice
 
-;  stop
 end

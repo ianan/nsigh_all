@@ -1,4 +1,4 @@
-pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
+pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   maindir=maindir,nsdir=nsdir,gesnlog=gesnlog,chudo=chudo,do_nustar=do_nustar,wid=wid
 
   ; Based on plot_ns_sun_lc.pro but for times with no RHESSI :( which for our case is mostly 2018+
@@ -14,7 +14,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; timer         - Overal time range to plot (default, specified values per obs below)
   ; goes          - Plot an additional GOES lightcurve with NuSTAR times highlighted (default no)
   ; gyr           - yrange for the GOES lightcurve (default, specified values per obs below)
-  ; gav           - Average the GOES light curve, multiples of the 2sec binning (default NO, for 10secs do gav=5 etc)
+  ; tav           - Average the GOES light curve, in sec (default NO)
   ; maindir       - Main directory of where the NuSTAR data is kept (default for IGH system but only need if no *.dat files)
   ; nsdir         - Specific directory where this NuSTAR obs is kepts (default for IGH system but only need if no *.dat files)
   ; gesnlog       - Plot the GOES light curve with ylog=0 in default NuSTAR, GOES, RHESSI plot
@@ -43,9 +43,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; 14-Feb-2020 - IGH   Added in Jan 2020 data and option for a wider plot
   ; 11-Mar-2020 - IGH   Added in Feb 2020 data
   ; 02-Jul-2020 - IGH   Added in Jun 2020 data
+  ; 05-Jul-2020 - IGH   Added in GOES16 and changed GOES averaging (tav not gav)
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='202006'
+  if (n_elements(obsname) ne 1) then obsname='202006_06'
   if (n_elements(maindir) ne 1) then maindir='/Volumes/Samsung_T5/data/heasarc_nustar/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -278,10 +279,54 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
 
   endif
 
-  if (obsname eq '202006') then begin
-    torbs=[['06-Jun-20 20:05:47','06-Jun-20 21:14:22'],$
-      ['09-Jun-20 01:25:49','09-Jun-20 02:26:23']]
-    timer=['06-Jun-2020 18:00:00','09-Jun-2020 18:00:00']
+  if (obsname eq '202006_06') then begin
+    torbs=[['06-Jun-20 19:07:22','06-Jun-20 20:07'],$
+      ['06-Jun-20 20:45:00','06-Jun-20 21:37']]
+    timer=['06-Jun-2020 18:30','06-Jun-2020 22:30']
+    nsdir='ns_20200606/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,2.0]
+
+  endif
+
+  if (obsname eq '202006_07') then begin
+    torbs=[['07-Jun-20 19:16','07-Jun-20 20:17'],$
+      ['07-Jun-20 20:53:00','07-Jun-20 21:46']]
+    timer=['07-Jun-2020 18:30','07-Jun-2020 22:30']
+    nsdir='ns_20200606/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,2.0]
+
+  endif
+
+  if (obsname eq '202006_08') then begin
+    torbs=[['08-Jun-20 19:26','08-Jun-20 20:26'],$
+      ['08-Jun-20 21:03:00','08-Jun-20 21:56']]
+    timer=['08-Jun-2020 18:30','08-Jun-2020 22:30']
+    nsdir='ns_20200606/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,2.0]
+
+  endif
+
+  if (obsname eq '202006_09') then begin
+    torbs=[['09-Jun-20 14:46','09-Jun-20 15:46']]
+    timer=['09-Jun-2020 14:00','09-Jun-2020 16:30']
     nsdir='ns_20200606/'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
@@ -299,47 +344,25 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ;-------------------------------------------
   ;-------------------------------------------
   ; If no GOES *.dat file then make one
-  
-  stop
-  
-  gfile='dat_files/goes_ltc_'+obsname+'.dat'
-  a = ogoes()
-  a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
-;  a->set, /goes16
-  glow=a->getdata(/low)
-  ghigh=a->getdata(/high)
-  gtim = a->getdata(/times)
-  gutbase = a->get(/utbase)
-  gtime=anytim(anytim(gutbase1)+gtim,/yoh,/trunc)
-  gname=a->get(/sat)
-  save,file=gfile,gtime,glow,ghigh,gname
-  
+
+
+
   if (anytim(timer[0]) gt anytim('01-Jun-2020')) then begin
-    gfile='dat_files/goes1617_ltc_'+obsname+'.dat'
+    gfile='dat_files/goes16_ltc_'+obsname+'.dat'
 
     if (file_test(gfile) eq 0) then begin
       a = ogoes()
       a->set,tstart=anytim(anytim(timer[0])-30*60.,/yoh),tend=anytim(anytim(timer[1])+30*60.,/yoh)
       a->set, /goes16
-      glow1=a->getdata(/low)
-      ghigh1=a->getdata(/high)
-      gtim1 = a->getdata(/times)
-      gutbase1 = a->get(/utbase)
-      gtime1=anytim(anytim(gutbase1)+gtim1,/yoh,/trunc)
-
-      a->set, /goes17
-      glow2=a->getdata(/low)
-      ghigh2=a->getdata(/high)
-      gtim2 = a->getdata(/times)
-      gutbase2 = a->get(/utbase)
-      gtime2=anytim(anytim(gutbase2)+gtim2,/yoh,/trunc)
-      gnames=['GOES16','GOES17']
-      save,file=gfile,gtime1,glow1,ghigh1,gtime2,glow2,ghigh2,gnames
+      glow16=a->getdata(/low)
+      ghigh16=a->getdata(/high)
+      gtim16 = a->getdata(/times)
+      gutbase16 = a->get(/utbase)
+      gtime16=anytim(anytim(gutbase16)+gtim16,/yoh,/trunc)
+      save,file=gfile,gtime16,glow16,ghigh16
     endif else begin
       restore,file=gfile
     endelse
-
-    stop
 
   endif else begin
     gfile='dat_files/goes1415_ltc_'+obsname+'.dat'
@@ -367,44 +390,80 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     endelse
   endelse
 
-
-
   ;-------------------------------------------
   ; Need to average the GOES data?
-  if (n_elements(gav) ne 0) then begin
-    gtime0=anytim(gtime14)
-    glow0=glow14
-    ghigh0=ghigh14
-    ngs=n_elements(gtime0)
+  dt=0
+  if (n_elements(tav) ne 0) then begin
 
-    nngs=ngs/gav
-    gtime14=strarr(nngs)
-    glow14=fltarr(nngs)
-    ghigh14=fltarr(nngs)
+    if (anytim(timer[0]) gt anytim('01-Jun-2020')) then begin
+      if (n_elements(gtime16) ge 2) then dt=anytim(gtime16[1])-anytim(gtime16[0])
+    endif else begin
+      if (n_elements(gtime15) ge 2) then dt=anytim(gtime15[1])-anytim(gtime15[0])
+    endelse
 
-    for ii=0L,nngs-1L do begin
-      gtime14[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
-      glow14[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
-      ghigh14[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
-    endfor
+    if (anytim(timer[0]) gt anytim('01-Jun-2020')) then begin
+      if (dt gt 0) then begin
 
-    gtime0=anytim(gtime15)
-    glow0=glow15
-    ghigh0=ghigh15
-    ngs=n_elements(gtime0)
+        gav=round(tav/dt)
+        gtime0=anytim(gtime16)
+        glow0=glow16
+        ghigh0=ghigh16
+        ngs=n_elements(gtime0)
 
-    nngs=ngs/gav
-    gtime15=strarr(nngs)
-    glow15=fltarr(nngs)
-    ghigh15=fltarr(nngs)
+        nngs=ngs/gav
+        gtime16=strarr(nngs)
+        glow16=fltarr(nngs)
+        ghigh16=fltarr(nngs)
 
-    for ii=0L,nngs-1L do begin
-      gtime15[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
-      glow15[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
-      ghigh15[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
-    endfor
+        for ii=0L,nngs-1L do begin
+          gtime16[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
+          glow16[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
+          ghigh16[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
+        endfor
+      endif
+    endif else begin
+      if (dt gt 0) then begin
+
+        gav=round(tav/dt)
+        gtime0=anytim(gtime14)
+        glow0=glow14
+        ghigh0=ghigh14
+        ngs=n_elements(gtime0)
+
+        nngs=ngs/gav
+        gtime14=strarr(nngs)
+        glow14=fltarr(nngs)
+        ghigh14=fltarr(nngs)
+
+        for ii=0L,nngs-1L do begin
+          gtime14[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
+          glow14[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
+          ghigh14[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
+        endfor
+
+        gtime0=anytim(gtime15)
+        glow0=glow15
+        ghigh0=ghigh15
+        ngs=n_elements(gtime0)
+
+        nngs=ngs/gav
+        gtime15=strarr(nngs)
+        glow15=fltarr(nngs)
+        ghigh15=fltarr(nngs)
+
+        for ii=0L,nngs-1L do begin
+          gtime15[ii]=anytim(mean(gtime0[gav*ii:gav*ii+gav-1]),/yoh,/trunc)
+          glow15[ii]=mean(glow0[gav*ii:gav*ii+gav-1])
+          ghigh15[ii]=mean(ghigh0[gav*ii:gav*ii+gav-1])
+        endfor
+      endif
+    endelse
+
 
   endif
+
+
+
 
   if (n_elements(gyr) ne 2) then gyr=[2d-9,2d-5]
   @post_outset
@@ -420,46 +479,74 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     device, /encapsulated, /color, /isolatin1,/inches, $
       bits=8, xsize=6, ysize=5,file='figs/ns_ltc_goes_'+obsname+'.eps'
 
-    utplot,gtime15,glow15,ytitle='!3GOES Flux [W m!U-2!N]',chars=1.2,$
+    utplot,timer,[1,1],ytitle='!3GOES Flux [W m!U-2!N]',chars=1.2,$
       /ylog,/nodata,yrange=gyr,timer=timer
-    outplot,gtime14,glow14,color=150,thick=3
-    outplot,gtime14,ghigh14,color=150,thick=3
-    outplot,gtime15,glow15,color=150,thick=6
-    outplot,gtime15,ghigh15,color=150,thick=6
 
-    for i=0, norbs-1 do begin
-      outplot,[torbs[0,i],torbs[0,i]],gyr,lines=0,color=0,thick=3
-      outplot,[torbs[1,i],torbs[1,i]],gyr,lines=0,color=0,thick=3
+    if (anytim(timer[0]) gt anytim('01-Jun-2020') and n_elements(gtime16) ge 2) then begin
+      outplot,gtime16,glow16,color=150,thick=6
+      outplot,gtime16,ghigh16,color=150,thick=6
 
-      gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),nid1)
-      if (nid1 gt 1) then outplot,gtime14[gd1],glow14[gd1],color=4,thick=3
-      if (nid1 gt 1) then outplot,gtime14[gd1],ghigh14[gd1],color=8,thick=3
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyr,lines=0,color=0,thick=3
+        outplot,[torbs[1,i],torbs[1,i]],gyr,lines=0,color=0,thick=3
 
-      gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]))
-      if (nid1 gt 1) then outplot,gtime15[gd1],glow15[gd1],color=1,thick=6
-      if (nid1 gt 1) then outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=6
+        gd1=where(anytim(gtime16) ge anytim(torbs[0,i]) and anytim(gtime16) le anytim(torbs[1,i]),nid1)
+        if (nid1 gt 1) then outplot,gtime16[gd1],glow16[gd1],color=1,thick=6
+        if (nid1 gt 1) then outplot,gtime16[gd1],ghigh16[gd1],color=2,thick=6
 
-      ;      outplot,torbs[*,i],0.2*gyr[1]*[1,1],lines=0,thick=10
-    endfor
 
-    for i=0, ngaps-1 do begin
-      hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
-      if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1],color=200,thick=6
-      if (nhgd1 gt 1) then outplot,gtime15[hgd1],ghigh15[hgd1],color=200,thick=6
-    endfor
+      endfor
 
-    evt_grid,replicate(gtime15[0],5),labpos=1.2*[1e-8,1e-7,1e-6,1e-5,1e-4],labels=['A','B','C','M','X'],$
-      /data,labsize=1.5,/labonly,/noarrow,align=0,labcolor=150
-    for i=0, 4 do outplot,[gtime15[0],gtime15[n_elements(gtime15)-1]],10d^(-8+i)*[1,1],color=150,lines=2,thick=4
-    xyouts, 0.32e4,1.2e4,'15: 1-8 '+string(197b),/device,chars=1.25,color=1
-    xyouts, 0.58e4,1.2e4,'0.5-4 '+string(197b),/device,chars=1.25,color=2
+      evt_grid,replicate(gtime16[0],5),labpos=1.2*[1e-8,1e-7,1e-6,1e-5,1e-4],labels=['A','B','C','M','X'],$
+        /data,labsize=1.5,/labonly,/noarrow,align=0,labcolor=150
+      for i=0, 4 do outplot,[gtime16[0],gtime16[n_elements(gtime15)-1]],10d^(-8+i)*[1,1],color=150,lines=2,thick=4
+      xyouts, 0.32e4,1.2e4,'16: 1-8 '+string(197b),/device,chars=1.25,color=1
+      xyouts, 0.58e4,1.2e4,'0.5-4 '+string(197b),/device,chars=1.25,color=2
 
-    xyouts, 0.9e4,1.2e4,'14: 1-8 '+string(197b),/device,chars=1.25,color=4
-    xyouts, 1.16e4,1.2e4,'0.5-4 '+string(197b),/device,chars=1.25,color=8
+    endif
+    if (n_elements(gtim15) ge 2) then begin
+
+
+      outplot,gtime14,glow14,color=150,thick=3
+      outplot,gtime14,ghigh14,color=150,thick=3
+      outplot,gtime15,glow15,color=150,thick=6
+      outplot,gtime15,ghigh15,color=150,thick=6
+
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyr,lines=0,color=0,thick=3
+        outplot,[torbs[1,i],torbs[1,i]],gyr,lines=0,color=0,thick=3
+
+        gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),nid1)
+        if (nid1 gt 1) then outplot,gtime14[gd1],glow14[gd1],color=4,thick=3
+        if (nid1 gt 1) then outplot,gtime14[gd1],ghigh14[gd1],color=8,thick=3
+
+        gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),nid1)
+        if (nid1 gt 1) then outplot,gtime15[gd1],glow15[gd1],color=1,thick=6
+        if (nid1 gt 1) then outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=6
+
+      endfor
+
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1],color=200,thick=6
+        if (nhgd1 gt 1) then outplot,gtime15[hgd1],ghigh15[hgd1],color=200,thick=6
+      endfor
+
+      evt_grid,replicate(gtime15[0],5),labpos=1.2*[1e-8,1e-7,1e-6,1e-5,1e-4],labels=['A','B','C','M','X'],$
+        /data,labsize=1.5,/labonly,/noarrow,align=0,labcolor=150
+      for i=0, 4 do outplot,[gtime15[0],gtime15[n_elements(gtime15)-1]],10d^(-8+i)*[1,1],color=150,lines=2,thick=4
+      xyouts, 0.32e4,1.2e4,'15: 1-8 '+string(197b),/device,chars=1.25,color=1
+      xyouts, 0.58e4,1.2e4,'0.5-4 '+string(197b),/device,chars=1.25,color=2
+
+      xyouts, 0.9e4,1.2e4,'14: 1-8 '+string(197b),/device,chars=1.25,color=4
+      xyouts, 1.16e4,1.2e4,'0.5-4 '+string(197b),/device,chars=1.25,color=8
+
+    endif
 
     device,/close
     set_plot, mydevice
   endif
+
 
   if keyword_set(do_nustar) then begin
 
@@ -550,58 +637,101 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
   ; Want ylog=0 for the GOES panel?
   if Keyword_set(gesnlog) then begin
 
-    utplot,gtime15,glow15,ytitle='!3GOES Flux [x10!u-7!N W m!U-2!N]',$
+    utplot,timer,[1,1],ytitle='!3GOES Flux [x10!u-7!N W m!U-2!N]',$
       /nodata,yrange=gyrl,timer=timer,position=[0.14,0.1,0.95,0.54]
-    outplot,gtime14,glow14*1d7,color=150,thick=2
-    outplot,gtime15,glow15*1d7,color=150,thick=4
+    ;~~~~~~~~~~~~~~~~~
+    if (anytim(timer[0]) gt anytim('01-Jun-2020') and n_elements(gtime16) ge 2) then begin
+      outplot,gtime16,glow16*1d7,color=150,thick=4
 
-    for i=0, norbs-1 do begin
-      outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
-      outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+        outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
 
-      gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
-      if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
+        gd1=where(anytim(gtime16) ge anytim(torbs[0,i]) and anytim(gtime16) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime16[gd1],glow16[gd1]*1d7,color=1,thick=4
+      endfor
 
-      gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
-      if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
-    endfor
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime16) ge anytim(dgtims[0,i]) and anytim(gtime16) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime16[hgd1],glow15[hgd1]*1d7,color=200,thick=4
+      endfor
 
-    for i=0, ngaps-1 do begin
-      hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
-      if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
-    endfor
+      xyouts, 12.5e3,1.5e3,'16: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
 
-    xyouts, 12.5e3,1.5e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
-    xyouts, 12.5e3,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+    endif
+    if (n_elements(gtime15) ge 2) then begin
+
+      outplot,gtime14,glow14*1d7,color=150,thick=2
+      outplot,gtime15,glow15*1d7,color=150,thick=4
+
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+        outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
+
+        gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
+
+        gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
+      endfor
+
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
+      endfor
+
+      xyouts, 12.5e3,1.5e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+      xyouts, 12.5e3,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+    endif
 
 
   endif else begin
-    utplot,gtime15,glow15,ytitle='!3GOES Flux [W m!U-2!N]',$
+    utplot,timer,[1,1],ytitle='!3GOES Flux [W m!U-2!N]',$
       /ylog,/nodata,yrange=gyr,timer=timer,position=[0.14,0.1,0.95,0.54]
-    outplot,gtime15,glow15,color=150,thick=4
-    outplot,gtime15,ghigh15,color=150,thick=4
+    ;~~~~~~~~~~~~~~~~~
+    if (anytim(timer[0]) gt anytim('01-Jun-2020') and n_elements(gtime16) ge 2) then begin
+      outplot,gtime16,glow16*1d7,color=150,thick=4
 
-    for i=0, norbs-1 do begin
-      outplot,[torbs[0,i],torbs[0,i]],gyr,lines=2,color=0,thick=2
-      outplot,[torbs[1,i],torbs[1,i]],gyr,lines=2,color=0,thick=2
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+        outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
 
-      gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),nid1)
-      if (nid1 gt 1) then outplot,gtime15[gd1],glow15[gd1],color=1,thick=4
-      if (nid1 gt 1) then outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=4
-    endfor
+        gd1=where(anytim(gtime16) ge anytim(torbs[0,i]) and anytim(gtime16) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime16[gd1],glow16[gd1]*1d7,color=1,thick=4
+      endfor
 
-    for i=0, ngaps-1 do begin
-      hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
-      if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1],color=200,thick=4
-      if (nhgd1 gt 1) then outplot,gtime15[hgd1],ghigh15[hgd1],color=200,thick=4
-    endfor
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime16) ge anytim(dgtims[0,i]) and anytim(gtime16) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime16[hgd1],glow15[hgd1]*1d7,color=200,thick=4
+      endfor
 
-    evt_grid,replicate(timer[0],4),labpos=1.2*[1e-8,1e-7,1e-6,1e-5],labels=['A','B','C','M'],$
-      /data,labsize=0.7,/labonly,/noarrow,align=0,labcolor=150
-    for i=0, 4 do outplot,[gtime15[0],gtime15[n_elements(gtime15)-1]],10d^(-8+i)*[1,1],color=150,lines=1,thick=2
+      xyouts, 12.5e3,1.5e3,'16: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
 
-    xyouts, 12.5e3,1.5e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
-    xyouts, 12.5e3,3.0e3,'0.5-4 '+string(197b),chars=0.7,/device,orien=90,color=2
+    endif
+    if (n_elements(gtime15) ge 2) then begin
+
+      outplot,gtime14,glow14*1d7,color=150,thick=2
+      outplot,gtime15,glow15*1d7,color=150,thick=4
+
+      for i=0, norbs-1 do begin
+        outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+        outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
+
+        gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
+
+        gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
+        if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
+      endfor
+
+      for i=0, ngaps-1 do begin
+        hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
+        if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
+      endfor
+
+      xyouts, 12.5e3,1.5e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+      xyouts, 12.5e3,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+    endif
 
   endelse
 
@@ -686,56 +816,95 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,gav=gav,$
     ; Want ylog=0 for the GOES panel?
     if Keyword_set(gesnlog) then begin
 
-      utplot,gtime15,glow15,ytitle='!3GOES [x10!u-7!N W m!U-2!N]',$
+      utplot,timer,[1,1],ytitle='!3GOES [x10!u-7!N W m!U-2!N]',$
         /nodata,yrange=gyrl,timer=timer,position=[px1,0.08,px2,0.35]
-      outplot,gtime14,glow14*1d7,color=150,thick=2
-      outplot,gtime15,glow15*1d7,color=150,thick=4
+      ;~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      if (anytim(timer[0]) gt anytim('01-Jun-2020') and n_elements(gtime16) ge 2) then begin
+        outplot,gtime16,glow16*1d7,color=150,thick=4
 
-      for i=0, norbs-1 do begin
-        outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
-        outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
-        gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
-        if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
+        for i=0, norbs-1 do begin
+          outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+          outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
 
-        gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
-        if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
-      endfor
+          gd1=where(anytim(gtime16) ge anytim(torbs[0,i]) and anytim(gtime16) le anytim(torbs[1,i]),ngd1)
+          if (ngd1 gt 1) then outplot,gtime16[gd1],glow16[gd1]*1d7,color=1,thick=4
+        endfor
 
-      for i=0, ngaps-1 do begin
-        hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
-        if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
-      endfor
+        for i=0, ngaps-1 do begin
+          hgd1=where(anytim(gtime16) ge anytim(dgtims[0,i]) and anytim(gtime16) le anytim(dgtims[1,i]),nhgd1)
+          if (nhgd1 gt 1) then outplot,gtime16[hgd1],glow16[hgd1]*1d7,color=200,thick=4
+        endfor
+        xyouts, labx,1.e3,'16: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+      endif
+      if (n_elements(gtime15) ge 2)  then begin
+        outplot,gtime14,glow14*1d7,color=150,thick=2
+        outplot,gtime15,glow15*1d7,color=150,thick=4
 
-      xyouts, labx,1.e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
-      xyouts, labx,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+        for i=0, norbs-1 do begin
+          outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+          outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
+          gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
+          if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
+
+          gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
+          if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
+        endfor
+
+        for i=0, ngaps-1 do begin
+          hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
+          if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
+        endfor
+
+        xyouts, labx,1.e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+        xyouts, labx,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+      endif
+
+
 
     endif else begin
-      utplot,gtime15,glow15,ytitle='!3GOES [W m!U-2!N]',$
+
+      utplot,timer,[1,1],ytitle='!3GOES [W m!U-2!N]',$
         /ylog,/nodata,yrange=gyr,timer=timer,position=[px1,0.08,px2,0.35]
-      outplot,gtime15,glow15,color=150,thick=4
-      outplot,gtime15,ghigh15,color=150,thick=4
+      ;~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      if (anytim(timer[0]) gt anytim('01-Jun-2020') and n_elements(gtime16) ge 2) then begin
+        outplot,gtime16,glow16*1d7,color=150,thick=4
 
-      for i=0, norbs-1 do begin
-        outplot,[torbs[0,i],torbs[0,i]],gyr,lines=2,color=0,thick=2
-        outplot,[torbs[1,i],torbs[1,i]],gyr,lines=2,color=0,thick=2
+        for i=0, norbs-1 do begin
+          outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+          outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
 
-        gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]))
-        outplot,gtime15[gd1],glow15[gd1],color=1,thick=4
-        outplot,gtime15[gd1],ghigh15[gd1],color=2,thick=4
-      endfor
+          gd1=where(anytim(gtime16) ge anytim(torbs[0,i]) and anytim(gtime16) le anytim(torbs[1,i]),ngd1)
+          if (ngd1 gt 1) then outplot,gtime16[gd1],glow16[gd1]*1d7,color=1,thick=4
+        endfor
 
-      for i=0, ngaps-1 do begin
-        hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
-        if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1],color=200,thick=4
-        if (nhgd1 gt 1) then outplot,gtime15[hgd1],ghigh15[hgd1],color=200,thick=4
-      endfor
+        for i=0, ngaps-1 do begin
+          hgd1=where(anytim(gtime16) ge anytim(dgtims[0,i]) and anytim(gtime16) le anytim(dgtims[1,i]),nhgd1)
+          if (nhgd1 gt 1) then outplot,gtime16[hgd1],glow16[hgd1]*1d7,color=200,thick=4
+        endfor
+        xyouts, labx,1.e3,'16: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+      endif
+      if (n_elements(gtime15) ge 2) then begin
+        outplot,gtime14,glow14*1d7,color=150,thick=2
+        outplot,gtime15,glow15*1d7,color=150,thick=4
 
-      evt_grid,replicate(timer[0],4),labpos=1.2*[1e-8,1e-7,1e-6,1e-5],labels=['A','B','C','M'],$
-        /data,labsize=0.7,/labonly,/noarrow,align=0,labcolor=150
-      for i=0, 4 do outplot,[gtime15[0],gtime15[n_elements(gtime15)-1]],10d^(-8+i)*[1,1],color=150,lines=1,thick=2
+        for i=0, norbs-1 do begin
+          outplot,[torbs[0,i],torbs[0,i]],gyrl,lines=2,color=0,thick=2
+          outplot,[torbs[1,i],torbs[1,i]],gyrl,lines=2,color=0,thick=2
+          gd1=where(anytim(gtime14) ge anytim(torbs[0,i]) and anytim(gtime14) le anytim(torbs[1,i]),ngd1)
+          if (ngd1 gt 1) then outplot,gtime14[gd1],glow14[gd1]*1d7,color=4,thick=2
 
-      xyouts, 12.5e3,1.e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
-      xyouts, 12.5e3,2.5e3,'0.5-4 '+string(197b),chars=0.7,/device,orien=90,color=2
+          gd1=where(anytim(gtime15) ge anytim(torbs[0,i]) and anytim(gtime15) le anytim(torbs[1,i]),ngd1)
+          if (ngd1 gt 1) then outplot,gtime15[gd1],glow15[gd1]*1d7,color=1,thick=4
+        endfor
+
+        for i=0, ngaps-1 do begin
+          hgd1=where(anytim(gtime15) ge anytim(dgtims[0,i]) and anytim(gtime15) le anytim(dgtims[1,i]),nhgd1)
+          if (nhgd1 gt 1) then outplot,gtime15[hgd1],glow15[hgd1]*1d7,color=200,thick=4
+        endfor
+
+        xyouts, labx,1.e3,'15: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=1
+        xyouts, labx,3.0e3,'14: 1-8 '+string(197b),chars=0.7,/device,orien=90,color=4
+      endif
 
     endelse
 
