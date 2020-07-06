@@ -296,7 +296,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
 
   if (obsname eq '202006_07') then begin
     torbs=[['07-Jun-20 19:16','07-Jun-20 20:17'],$
-      ['07-Jun-20 20:53:00','07-Jun-20 21:46']]
+      ['07-Jun-20 20:53:39','07-Jun-20 21:46:52']]
     timer=['07-Jun-2020 18:30','07-Jun-2020 22:30']
     nsdir='ns_20200606/'
 
