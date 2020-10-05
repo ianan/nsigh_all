@@ -29,7 +29,7 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 14-Feb-2020 IGH - Added in Jan 2020 data
   ; 11-Mar-2020 IGH - Updated for Feb 2020
   ; 02-Jul-2020 IGH - Updated for Jun 2020 data
-  ; 05-Oct-2020 IGH - Updated for Oct 2020
+  ; 05-Oct-2020 IGH - Updated for Oct 2020, tweak plotting for QS FD mosaic (via qsmos flag)
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
   if (n_elements(obs_id) ne 1) then obs_id=22
@@ -111,8 +111,16 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     ;    need to setup things a bit differently for the QS combined mosaics
     ;    just manually identify they and send to a different plotting option
     fitsname=(strsplit(ffa[i],'/',/extract))[-1]
+    
+    ; Extra filter to change binning and scale for the proper QS full disk mosaics
+    qsmos=0
+    
     if (obs_id eq 20 and (fitsname eq 'maps_ns_20200221_1002_FPMA.fits' or fitsname eq 'maps_ns_20200221_1002_FPMB.fits' or $
-      fitsname eq 'maps_ns_20200221_1001_FPMA.fits' or fitsname eq 'maps_ns_20200221_1001_FPMB.fits' )) then begin
+      fitsname eq 'maps_ns_20200221_1001_FPMA.fits' or fitsname eq 'maps_ns_20200221_1001_FPMB.fits' )) then qsmos=1
+    
+    if (obs_id eq 22 and (fitsname eq 'maps_ns_20200912_1001_FPMA.fits' or fitsname eq 'maps_ns_20200912_1001_FPMB.fits')) then qsmos=1
+    
+    if (qsmos eq 1) then begin
       newx=n_elements(mm.data[*,0])/16.
       newy=n_elements(mm.data[0,*])/16.
       dnl=1e-5
