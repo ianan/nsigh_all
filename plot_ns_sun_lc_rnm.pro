@@ -44,9 +44,10 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   ; 11-Mar-2020 - IGH   Added in Feb 2020 data
   ; 02-Jul-2020 - IGH   Added in Jun 2020 data
   ; 05-Jul-2020 - IGH   Added in GOES16 and changed GOES averaging (tav not gav)
+  ; 05-Oct-2020 - IGH   Added in Sep 2020 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='202006_06'
+  if (n_elements(obsname) ne 1) then obsname='202009'
   if (n_elements(maindir) ne 1) then maindir='/Volumes/Samsung_T5/data/heasarc_nustar/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -335,6 +336,29 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[0.2,2.0]
+
+  endif
+  
+  if (obsname eq '202009') then begin    
+    torbs=[['12-Sep-2020 09:05:40','12-Sep-2020 10:05:10'],$
+      ['12-Sep-2020 10:42:20','12-Sep-2020 11:41:40'],$
+      ['12-Sep-2020 12:19:00','12-Sep-2020 13:18:20'],$
+      ['12-Sep-2020 13:55:40','12-Sep-2020 14:55:10'],$
+      ['12-Sep-2020 15:32:20','12-Sep-2020 16:31:50'],$
+      ['12-Sep-2020 17:09:00','12-Sep-2020 18:08:20'],$
+      ['12-Sep-2020 18:45:40','12-Sep-2020 19:45:00'],$
+      ['12-Sep-2020 20:22:10','12-Sep-2020 21:07:40'],$
+      ['12-Sep-2020 21:58:50','12-Sep-2020 22:50:10'],$
+      ['12-Sep-2020 23:35:30','13-Sep-2020 00:34:00']]
+    timer=['12-Sep-2020 08:30:00','13-Sep-2020 01:30:00']
+    nsdir='ns_20200912/'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.05,0.4]
 
   endif
 

@@ -14,6 +14,7 @@ pro batch_maps
   ; 16-Jul-2019 IGH - Added in Jul 2019 QS data
   ; 14-Feb-2020 IGH - Added in Jan 2020 data
   ; 11-Mar-2020 IGH - Updated for Feb 2020
+  ; 05-Oct-2020 IGH - Updated for Oct 2020
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ;  nf=10
@@ -24,7 +25,7 @@ pro batch_maps
   ;  for i=0,nf-1 do make_ns_maps_comb_hc,obs_id=i,fpm='B'
   ;  for i=0,nf-1 do plot_ns_maps_hc,obs_id=i
 
-  ;  i=20
+  i=22
   make_ns_maps_hc,obs_id=i
   make_ns_maps_comb_hc,obs_id=i,fpm='A'
   make_ns_maps_comb_hc,obs_id=i,fpm='B'

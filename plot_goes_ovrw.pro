@@ -8,18 +8,19 @@ pro plot_goes_ovrw,obs_id=obs_id
 
   ; 17-Feb-2020 - IGH   Started
   ; 11-Mar-2020 - IGH   Updated for Feb 2020
-  ; 03-Jul-2020 - IGH   UPdated with Jun 2020, NOAA GOES14/15 + GOES 16/17
+  ; 03-Jul-2020 - IGH   Updated with Jun 2020, NOAA GOES14/15 + GOES 16/17
+  ; 05-Oct-2020 - IGH   Updated with Sep 2020
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=21
+  if (n_elements(obs_id) ne 1) then obs_id=22
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129','20200221','20200606']
+    '20200129','20200221','20200606','20200912']
   obsname=dobs[obs_id]
 
   if (obsname eq '20140910') then timer=['10-Sep-2014 21:00','11-Sep-2014 01:00']
@@ -67,6 +68,8 @@ pro plot_goes_ovrw,obs_id=obs_id
   if (obsname eq '20200221') then timer=['21-Feb-2020 04:00:00','21-Feb-2020 24:00:00']
   ;-------------------------------------------
   if (obsname eq '20200606') then timer=['06-Jun-2020 18:00:00','09-Jun-2020 18:00:00']
+  ;-------------------------------------------
+  if (obsname eq '20200912') then timer=['12-Sep-2020 09:00:00','13-Sep-2020 00:30:00']
 
   ; Should be ok after these times
   ts16='07-Feb-2017' ; Obs 9, March 2017, and after
