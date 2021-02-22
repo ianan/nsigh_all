@@ -28,16 +28,21 @@ pro batch_ltc
   ; 11-Mar-2020 - IGH   Added in Feb 2020 data
   ; 02-Jul-2020 - IGH   Added in Jun 2020 data
   ; 05-Oct-2020 - IGH   Added in Sep 2020 data
+  ; 22-Feb-2021 - IGH   Added in Jan 2021 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
-  
-  plot_ns_sun_lc_rnm, obsname='202009',tav=10,/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202009',tav=10,/gesnlog,/chudo,/goes,/wid
 
-;  plot_ns_sun_lc_rnm, obsname='202006_06',tav=10,/gesnlog,/chudo,/goes
-;  plot_ns_sun_lc_rnm, obsname='202006_07',tav=10,/gesnlog,/chudo,/goes
-;  plot_ns_sun_lc_rnm, obsname='202006_08',tav=10,/gesnlog,/chudo,/goes
-;  plot_ns_sun_lc_rnm, obsname='202006_09',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202101_08',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202101_14',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202101_20',tav=10,/gesnlog,/chudo,/goes
+
+  ;  plot_ns_sun_lc_rnm, obsname='202009',tav=10,/gesnlog,/chudo,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='202009',tav=10,/gesnlog,/chudo,/goes,/wid
+
+  ;  plot_ns_sun_lc_rnm, obsname='202006_06',tav=10,/gesnlog,/chudo,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='202006_07',tav=10,/gesnlog,/chudo,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='202006_08',tav=10,/gesnlog,/chudo,/goes
+  ;  plot_ns_sun_lc_rnm, obsname='202006_09',tav=10,/gesnlog,/chudo,/goes
 
   ;; Variant that work if no GOES data online just do a single plot of livetime and CHU
   ;  plot_ns_sun_lc_rnm_ng,obsname='201901'

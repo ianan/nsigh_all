@@ -30,16 +30,18 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 11-Mar-2020 IGH - Updated for Feb 2020
   ; 02-Jul-2020 IGH - Updated for Jun 2020 data
   ; 05-Oct-2020 IGH - Updated for Oct 2020, tweak plotting for QS FD mosaic (via qsmos flag)
+  ; 22-Feb-2021 IGH - Added in Jan 2021 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=22
+  if (n_elements(obs_id) ne 1) then obs_id=23
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129','20200221','20200606','20200912']
+    '20200129','20200221','20200606','20200912',$
+    '20210108']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -60,9 +62,12 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     nsdir='ns_20200912'
     maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
   endif
-
+  if (obsname eq '20210108') then begin
+    nsdir='ns_20210108'
+    maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
+  endif
   ; control color scaling on final maps by obsid
-  if (obs_id eq 8 or obs_id eq 13 or obs_id eq 12 or obs_id eq 11 or obs_id eq 10 or obs_id eq 19) then begin
+  if (obs_id eq 8 or obs_id eq 13 or obs_id eq 12 or obs_id eq 11 or obs_id eq 10 or obs_id eq 19 or obs_id eq 23) then begin
     dnl=1e-4
     dmx=1e1
   endif else begin
@@ -75,13 +80,12 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     dnl=1e-5
     dmx=1e-2
   endif
-
+  
   ;--------------------------------------------
 
   ffa=file_search(maindir+nsdir,'*FPM*.fits')
-
-
   nf=n_elements(ffa)
+  
   sr=2
   if (obs_id eq 14) then sr=8
   if (obs_id eq 15) then sr=8
@@ -105,21 +109,22 @@ pro plot_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   yr=[-1,1]*plim
 
   for i=0, nf-1 do begin
+    
     ; Load in the map
     fits2map,ffa[i],mm
 
     ;    need to setup things a bit differently for the QS combined mosaics
     ;    just manually identify they and send to a different plotting option
     fitsname=(strsplit(ffa[i],'/',/extract))[-1]
-    
+
     ; Extra filter to change binning and scale for the proper QS full disk mosaics
     qsmos=0
-    
+
     if (obs_id eq 20 and (fitsname eq 'maps_ns_20200221_1002_FPMA.fits' or fitsname eq 'maps_ns_20200221_1002_FPMB.fits' or $
       fitsname eq 'maps_ns_20200221_1001_FPMA.fits' or fitsname eq 'maps_ns_20200221_1001_FPMB.fits' )) then qsmos=1
-    
+
     if (obs_id eq 22 and (fitsname eq 'maps_ns_20200912_1001_FPMA.fits' or fitsname eq 'maps_ns_20200912_1001_FPMB.fits')) then qsmos=1
-    
+
     if (qsmos eq 1) then begin
       newx=n_elements(mm.data[*,0])/16.
       newy=n_elements(mm.data[0,*])/16.

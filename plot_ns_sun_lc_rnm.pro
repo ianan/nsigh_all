@@ -45,6 +45,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   ; 02-Jul-2020 - IGH   Added in Jun 2020 data
   ; 05-Jul-2020 - IGH   Added in GOES16 and changed GOES averaging (tav not gav)
   ; 05-Oct-2020 - IGH   Added in Sep 2020 data
+  ; 22-Feb-2021 - IGH   Added in Jan 2021 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='202009'
@@ -361,6 +362,56 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
     gyrl=[0.05,0.4]
 
   endif
+  
+  if (obsname eq '202101_08') then begin
+    torbs=[['08-Jan-21 10:12:00','08-Jan-21 11:13'],$
+      ['08-Jan-21 11:49:00','08-Jan-21 12:50'],$
+      ['08-Jan-21 13:26:00','08-Jan-21 14:27'],$
+      ['08-Jan-21 15:03:00','08-Jan-21 16:03']]
+    timer=['08-Jan-21 09:00','08-Jan-21 17:00']
+    nsdir='ns_20210108'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,1.0]
+  endif
+  
+  if (obsname eq '202101_14') then begin
+    torbs=[['14-Jan-21 09:34:00','14-Jan-21 10:35'],$
+      ['14-Jan-21 11:11:00','14-Jan-21 11:57'],$
+      ['14-Jan-21 11:58:00','14-Jan-21 12:12'],$
+      ['14-Jan-21 12:47:00','14-Jan-21 13:33'],$
+      ['14-Jan-21 14:34:00','14-Jan-21 15:25']]
+    timer=['14-Jan-21 07:00','14-Jan-21 17:00']
+    nsdir='ns_20210108'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,1.0]
+  endif
+  
+  if (obsname eq '202101_20') then begin
+    torbs=[['20-Jan-21 10:32:00','20-Jan-21 11:32'],$
+      ['20-Jan-21 12:08:00','20-Jan-21 13:09'],$
+       ['20-Jan-21 13:45:00','20-Jan-21 14:45']]
+    timer=['20-Jan-21 09:00','20-Jan-21 16:00']
+    nsdir='ns_20210108'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,15.0]
+  endif
+  
+  
 
 
   norbs=n_elements(torbs[0,*])

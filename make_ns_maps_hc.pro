@@ -31,16 +31,18 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 11-Mar-2020 IGH - Updated for Feb 2020
   ; 02-Jul-2020 IGH - Updated for Jun 2020 data
   ; 05-Oct-2020 IGH - Updated for Oct 2020
+  ; 22-Feb-2021 IGH - Added in Jan 2021 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=22
+  if (n_elements(obs_id) ne 1) then obs_id=23
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
     '20170321','20170821','20170911','20171010',$
     '20180529','20180907','20180928',$
     '20190112','20190412','20190425','20190702',$
-    '20200129','20200221','20200606','20200912']
+    '20200129','20200221','20200606','20200912',$
+    '20210108']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -59,6 +61,10 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   endif
   if (obsname eq '20200912') then begin
     nsdir='ns_20200912'
+    maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
+  endif
+  if (obsname eq '20210108') then begin
+    nsdir='ns_20210108'
     maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
   endif
 
