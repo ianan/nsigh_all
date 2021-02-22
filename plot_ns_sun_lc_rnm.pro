@@ -385,7 +385,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
       ['14-Jan-21 11:58:00','14-Jan-21 12:12'],$
       ['14-Jan-21 12:47:00','14-Jan-21 13:33'],$
       ['14-Jan-21 14:34:00','14-Jan-21 15:25']]
-    timer=['14-Jan-21 07:00','14-Jan-21 17:00']
+    timer=['14-Jan-21 09:00','14-Jan-21 16:00']
     nsdir='ns_20210108'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
@@ -400,7 +400,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
     torbs=[['20-Jan-21 10:32:00','20-Jan-21 11:32'],$
       ['20-Jan-21 12:08:00','20-Jan-21 13:09'],$
        ['20-Jan-21 13:45:00','20-Jan-21 14:45']]
-    timer=['20-Jan-21 09:00','20-Jan-21 16:00']
+    timer=['20-Jan-21 09:30','20-Jan-21 15:00']
     nsdir='ns_20210108'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
