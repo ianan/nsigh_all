@@ -29,12 +29,17 @@ pro batch_ltc
   ; 02-Jul-2020 - IGH   Added in Jun 2020 data
   ; 05-Oct-2020 - IGH   Added in Sep 2020 data
   ; 22-Feb-2021 - IGH   Added in Jan 2021 data
+  ; 26-May-2021 - IGH   Added in Apr/May 2021 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
+  
+  plot_ns_sun_lc_rnm, obsname='202104_29',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202105_03',tav=10,/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202105_07',tav=10,/gesnlog,/chudo,/goes
 
-  plot_ns_sun_lc_rnm, obsname='202101_08',tav=10,/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202101_14',tav=10,/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202101_20',tav=10,/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202101_08',tav=10,/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202101_14',tav=10,/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202101_20',tav=10,/gesnlog,/chudo,/goes
 
   ;  plot_ns_sun_lc_rnm, obsname='202009',tav=10,/gesnlog,/chudo,/goes
   ;  plot_ns_sun_lc_rnm, obsname='202009',tav=10,/gesnlog,/chudo,/goes,/wid

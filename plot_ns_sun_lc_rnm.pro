@@ -46,6 +46,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   ; 05-Jul-2020 - IGH   Added in GOES16 and changed GOES averaging (tav not gav)
   ; 05-Oct-2020 - IGH   Added in Sep 2020 data
   ; 22-Feb-2021 - IGH   Added in Jan 2021 data
+  ; 26-May-2021 - IGH   Added in Apr/May 2021 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='202009'
@@ -402,6 +403,57 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
        ['20-Jan-21 13:45:00','20-Jan-21 14:45']]
     timer=['20-Jan-21 09:30','20-Jan-21 15:00']
     nsdir='ns_20210108'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,15.0]
+  endif
+  
+  if (obsname eq '202104_29') then begin
+    torbs=[['29-Apr-21 14:53:47','29-Apr-21 15:54:07'],$
+      ['29-Apr-21 16:30:25','29-Apr-21 17:30:46'],$
+      ['29-Apr-21 19:43:41','29-Apr-21 20:44:02'],$
+      ['29-Apr-21 21:20:19','29-Apr-21 22:16:44']]
+    timer=['29-Apr-21 14:30','29-Apr-21 23:00']
+    nsdir='ns_20210429_only'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,8.0]
+  endif
+  
+  if (obsname eq '202105_03') then begin
+    torbs=[['03-May-21 15:31:50','03-May-21 16:32:14'],$
+      ['03-May-21 17:08:28','03-May-21 18:08:53'],$
+      ['03-May-21 18:45:14','03-May-21 19:45:37'],$
+      ['03-May-21 20:21:52','03-May-21 21:22:15'],$
+      ['03-May-21 21:58:30','03-May-21 22:58:53']]
+    timer=['03-May-21 15:00','03-May-21 23:30']
+    nsdir='ns_20210503'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[0.2,2.0]
+  endif
+  
+  if (obsname eq '202105_07') then begin
+    torbs=[['07-May-21 14:33:15','07-May-21 15:22:18'],$
+      ['07-May-21 16:11:13','07-May-21 17:10:08'],$
+      ['07-May-21 17:46:36','07-May-21 18:46:51'],$
+      ['07-May-21 19:23:14','07-May-21 20:23:29'],$
+      ['07-May-21 20:59:54','07-May-21 22:00:10'],$
+      ['07-May-21 22:36:32','07-May-21 23:36:47']]
+    timer=['07-May-21 14:00','07-May-21 23:30']
+    nsdir='ns_20210507'
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
