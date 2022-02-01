@@ -92,6 +92,11 @@ a {
   text-decoration:none;
 }
 
+a h1 {
+  color:#000;
+  text-decoration:none;
+}
+
 a:hover {
   color:#069;
 }
