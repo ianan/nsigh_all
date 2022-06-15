@@ -1,0 +1,4 @@
+Note that this data will:
+
+* Mostly have the G15 including the old scale factors (so will be lower) , i.e. https://satdat.ngdc.noaa.gov/sem/goes/data/science/xrs/GOES_13-15_XRS_Science-Quality_Data_Readme.pdf
+* G16 was 1sec data which does not have the electron contamination removed (unlike the 1min avg), i.e. https://data.ngdc.noaa.gov/platforms/solar-space-observing-satellites/goes/goes16/l2/docs/GOES-R_XRS_L2_Data_Users_Guide.pdf
