@@ -35,87 +35,91 @@ pro batch_ltc
   ; 30-Jan-2022 - IGH   Added in Nov 2021 data
   ; 31-Jan-2022 - IGH   Reran all data to use better G14/15/16 (NOAA avg1min)
   ; 28-Mar-2022 - IGH   Added in Feb 2022 data
+  ; 16-Jun-2022 - IGH   Added in Jun 2022 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
   
-  plot_ns_sun_lc_rnm, obsname='202202_24',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202202_25',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202202_26',/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202206_03',/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202206_03',/gesnlog,/chudo,/goes,/wid
   
-  ;  plot_ns_sun_lc_rnm, obsname='202111_17',/gesnlog,/chudo,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='202111_19',/gesnlog,/chudo,/goes
-  ;  plot_ns_sun_lc_rnm, obsname='202111_21',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='202107_30',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202107_20',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202107_20',/gesnlog,/chudo,/goes,/wid
-
-  plot_ns_sun_lc_rnm, obsname='202104_29',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202105_03',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202105_07',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='202101_08',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202101_14',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202101_20',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='202009',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202009',/gesnlog,/chudo,/goes,/wid
-
-  plot_ns_sun_lc_rnm, obsname='202006_06',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202006_07',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202006_08',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202006_09',/gesnlog,/chudo,/goes
-
-  ; These ones using G14/15, though 16 available
-  plot_ns_sun_lc_rnm, obsname='202002',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202002',/gesnlog,/chudo,/goes,/wid
-
-  plot_ns_sun_lc_rnm, obsname='202001',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202001',/gesnlog,/chudo,/goes,/wid
-
-  plot_ns_sun_lc_rnm, obsname='201907',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='20190425',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='20190425',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='201904',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='201901',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='201809_28',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='201809_10',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='201809_09',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='201809_07',/gesnlog,/chudo,/goes
-
-  plot_ns_sun_lc_rnm, obsname='201805',/gesnlog,/chudo,/goes
-
-  ; These ones using G15 (and also RHESSI!)
-  plot_ns_sun_lc, obsname='201710',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201709_11',/goes,/gesnlog,/chudo
-  plot_ns_sun_lc, obsname='201709_12',/goes,/gesnlog,/chudo
-  plot_ns_sun_lc, obsname='201709_13',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201708',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201703',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201607',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201604',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201509_01',/goes,/gesnlog,/chudo
-  plot_ns_sun_lc, obsname='201509_02',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201504',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201412',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201411',/goes,/gesnlog,/chudo
-
-  plot_ns_sun_lc, obsname='201409',/goes,/gesnlog,/chudo
+;  plot_ns_sun_lc_rnm, obsname='202202_24',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202202_25',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202202_26',/gesnlog,/chudo,/goes
+;  
+;  ;  plot_ns_sun_lc_rnm, obsname='202111_17',/gesnlog,/chudo,/goes
+;  ;  plot_ns_sun_lc_rnm, obsname='202111_19',/gesnlog,/chudo,/goes
+;  ;  plot_ns_sun_lc_rnm, obsname='202111_21',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='202107_30',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202107_20',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202107_20',/gesnlog,/chudo,/goes,/wid
+;
+;  plot_ns_sun_lc_rnm, obsname='202104_29',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202105_03',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202105_07',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='202101_08',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202101_14',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202101_20',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='202009',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202009',/gesnlog,/chudo,/goes,/wid
+;
+;  plot_ns_sun_lc_rnm, obsname='202006_06',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202006_07',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202006_08',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202006_09',/gesnlog,/chudo,/goes
+;
+;  ; These ones using G14/15, though 16 available
+;  plot_ns_sun_lc_rnm, obsname='202002',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202002',/gesnlog,/chudo,/goes,/wid
+;
+;  plot_ns_sun_lc_rnm, obsname='202001',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202001',/gesnlog,/chudo,/goes,/wid
+;
+;  plot_ns_sun_lc_rnm, obsname='201907',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='20190425',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='20190425',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='201904',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='201901',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='201809_28',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='201809_10',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='201809_09',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='201809_07',/gesnlog,/chudo,/goes
+;
+;  plot_ns_sun_lc_rnm, obsname='201805',/gesnlog,/chudo,/goes
+;
+;  ; These ones using G15 (and also RHESSI!)
+;  plot_ns_sun_lc, obsname='201710',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201709_11',/goes,/gesnlog,/chudo
+;  plot_ns_sun_lc, obsname='201709_12',/goes,/gesnlog,/chudo
+;  plot_ns_sun_lc, obsname='201709_13',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201708',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201703',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201607',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201604',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201509_01',/goes,/gesnlog,/chudo
+;  plot_ns_sun_lc, obsname='201509_02',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201504',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201412',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201411',/goes,/gesnlog,/chudo
+;
+;  plot_ns_sun_lc, obsname='201409',/goes,/gesnlog,/chudo
 
   stop
 end

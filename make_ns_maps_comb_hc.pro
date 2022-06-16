@@ -39,9 +39,10 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 15-Aug-2021 IGH - Added in 30 Jul 2021 data
   ; 30-Jan-2022 IGH - Added in Nov 2021 data
   ; 28-Mar-2022 IGH - Added in Feb 2022 data
+  ; 16-Jun-2022 IGH - Added in Jun 2022 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=28
+  if (n_elements(obs_id) ne 1) then obs_id=29
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
@@ -50,7 +51,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     '20190112','20190412','20190425','20190702',$
     '20200129','20200221','20200606','20200912',$
     '20210108','20210429','20210720','20210730','20211117',$
-    '20220224']
+    '20220224','20220603']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -93,6 +94,10 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   endif
   if (obsname eq '20220224') then begin
     nsdir='ns_20220224'
+    maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
+  endif
+  if (obsname eq '20220603') then begin
+    nsdir='ns_20220603'
     maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
   endif
   if (n_elements(fpm) ne 1) then fpm='A'
@@ -363,6 +368,15 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     iidds=strmid(evtaf,strpos(evtaf[0],'nu206')+4,9)
     gd_ids[where(iidds ge 622001001 and iidds le 622004001)]=2
     gd_ids[where(iidds ge 623001001 and iidds le 623004001)]=3
+  endif
+
+  if (obs_id eq 29) then begin
+    ; Just separate out the mosaics
+    gd_ids=intarr(n_elements(evtaf))+1
+    iidds=strmid(evtaf,strpos(evtaf[0],'nu206')+4,9)
+    gd_ids[where(iidds ge 625005001 and iidds le 625023001)]=2
+    gd_ids[where(iidds ge 626009001 and iidds le 626024001)]=3
+    gd_ids[where(iidds ge 627001001 and iidds le 627025001)]=4
   endif
 
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4

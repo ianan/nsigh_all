@@ -54,6 +54,7 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   ;                     Changed GOES16 to one min average
   ;                     Changed GOES14/15 to one min average from NOAA
   ; 28-Mar-2022 - IGH   Added in Feb 2022 data
+  ; 16-Jun-2022 - IGH   Added in Jun 2022 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (n_elements(obsname) ne 1) then obsname='202107_30'
@@ -599,6 +600,27 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[1.1,8.0]
+  endif
+  
+  if (obsname eq '202206_03') then begin
+    torbs=[['03-Jun-22 13:30:00','03-Jun-22 14:30:47'],$
+      ['03-Jun-22 15:06:00','03-Jun-22 16:01:00'],$
+      ['03-Jun-22 16:52:00','03-Jun-22 17:36:00'],$
+      ['03-Jun-22 18:36:00','03-Jun-22 19:20:00'],$
+      ['03-Jun-22 20:15:29','03-Jun-22 20:53:00'],$
+      ['03-Jun-22 21:32:50','03-Jun-22 22:33:00'],$
+      ['03-Jun-22 23:09:23','04-Jun-22 00:08:31'],$
+      ['04-Jun-22 00:46:00','04-Jun-22 01:46:45'],$
+      ['04-Jun-22 02:49:00','04-Jun-22 03:04:00']]
+    timer=['03-Jun-22 12:30:00','04-Jun-22 03:30:00']
+    nsdir='ns_20220603'
+
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[1.1,6.0]
   endif
 
   norbs=n_elements(torbs[0,*])
