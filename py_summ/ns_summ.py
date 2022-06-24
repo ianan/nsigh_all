@@ -3,6 +3,7 @@
 # Work in progress and missing comments/documentation
 # 
 # 15-Aug-2021 IGH
+# 24-Jun-2022 IGH - Updated to use better avg1m XRS (need to supply filename)
 
 from astropy.io import fits
 import astropy.time as atime
@@ -412,7 +413,7 @@ def plot_ltc_chu_nsid(maindir,nsid,fpm,\
 
 def plot_ltc_chu_ges_nsid(maindir,nsid,fpm,\
                           lvyr=[5e-4,1.1],cryr=[8e3,8e5],crscl='log',\
-                          gsyr=[1e-8,1e-6],gsscl='linear',gsmfs=5,\
+                          gsyr=[1e-8,1e-6],gsscl='linear',gsmfs=5,gsfile='',\
                           outdir='figs/',wide=False,tmaj=10,tmin=2,timer=0):
     """
     Summary lightcurves of a NuSTAR Solar pointing
@@ -506,23 +507,29 @@ def plot_ltc_chu_ges_nsid(maindir,nsid,fpm,\
     
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Get the GOES/XRS stuff
-    ges_res = Fido.search(a.Time(mint,maxt),a.Instrument("XRS"),a.goes.SatelliteNumber(16))
-    file_ges = Fido.fetch(ges_res,progress=False)
-    goesd = ts.TimeSeries(file_ges)
+    if gsfile =='':
+        ges_res = Fido.search(a.Time(mint,maxt),a.Instrument("XRS"),a.goes.SatelliteNumber(16))
+        file_ges = Fido.fetch(ges_res,progress=False)
+    else:
+        file_ges=gsfile
+
+    goesd = ts.TimeSeries(file_ges,concatenate=True)
     
 #   This is loading in a full day file and if covering more than one day then 2 list entry, so
-    if hasattr(goesd, "__len__"):
-        gestims=np.concatenate((goesd[0].index,goesd[1].index))
-        gesb=np.concatenate((goesd[0].quantity("xrsb").value,goesd[1].quantity("xrsb").value))
-        sortid=np.argsort(gestims)
-        gestims=gestims[sortid]
-        gesb=gesb[sortid]
-    else:
-        gestims=goesd.index
-        gesb=goesd.quantity("xrsb").value
+    # if hasattr(goesd, "__len__"):
+    #     gestims=np.concatenate((goesd[0].index,goesd[1].index))
+    #     gesb=np.concatenate((goesd[0].quantity("xrsb").value,goesd[1].quantity("xrsb").value))
+    #     sortid=np.argsort(gestims)
+    #     gestims=gestims[sortid]
+    #     gesb=gesb[sortid]
+    # else:
+    gestims=goesd.index
+    gesb=goesd.quantity("xrsb").value
         
 #   Do a median filter over gsmfs sec on GOES data to remove dodgy spikes (due to instrumental things?)
-    gesb=ndimage.median_filter(gesb, size=gsmfs)
+# Only need with 1s data
+    if gsfile =='':
+        gesb=ndimage.median_filter(gesb, size=gsmfs)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     plt.rcParams.update({'font.size': 16,'font.family':"sans-serif",\
