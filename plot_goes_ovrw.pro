@@ -24,11 +24,12 @@ pro plot_goes_ovrw,obs_id=obs_id
   ; 31-Jan-2022 - IGH   Now G15 and G16 is from NOAA and <1min> 
   ;                     Use G14 not G15 for 20170821 as G15 missing
   ; 28-Mar-2022 - IGH   Updated with Feb 2022     
-  ; 16-Jun-2022 - IGH   Updated with Jun 2022               
+  ; 16-Jun-2022 - IGH   Updated with Jun 2022
+  ; 03-Oct-2022 - IGH   Updated with Oct 2022               
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=29
+  if (n_elements(obs_id) ne 1) then obs_id=30
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
@@ -37,7 +38,7 @@ pro plot_goes_ovrw,obs_id=obs_id
     '20190112','20190412','20190425','20190702',$
     '20200129','20200221','20200606','20200912',$
     '20210108','20210429','20210720','20210730','20211117',$
-    '20220224','20220603']
+    '20220224','20220603','20220906']
   obsname=dobs[obs_id]
 
   if (obsname eq '20140910') then timer=['10-Sep-2014 21:00','11-Sep-2014 01:00']
@@ -101,6 +102,8 @@ pro plot_goes_ovrw,obs_id=obs_id
   if (obsname eq '20220224') then timer=['24-Feb-2022 12:00:00','27-Feb-2022 12:00:00']
   ;-------------------------------------------
   if (obsname eq '20220603') then timer=['03-Jun-2022 12:00:00','04-Jun-2022 04:00:00'] 
+  ;-------------------------------------------
+  if (obsname eq '20220906') then timer=['06-Sep-2022 15:00:00','06-Sep-2022 22:00:00']
   
   ; Should be ok after these times
   ts16='07-Feb-2017' ; Obs 9, March 2017, and after

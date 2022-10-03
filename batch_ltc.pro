@@ -36,11 +36,14 @@ pro batch_ltc
   ; 31-Jan-2022 - IGH   Reran all data to use better G14/15/16 (NOAA avg1min)
   ; 28-Mar-2022 - IGH   Added in Feb 2022 data
   ; 16-Jun-2022 - IGH   Added in Jun 2022 data
+  ; 03-Oct-2022 - IGH   Updated with Oct 2022  
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
   
-  plot_ns_sun_lc_rnm, obsname='202206_03',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202206_03',/gesnlog,/chudo,/goes,/wid
+  plot_ns_sun_lc_rnm, obsname='202209_06',/gesnlog,/chudo,/goes,maindir='~/data/heasarc_nustar/'
+  
+;  plot_ns_sun_lc_rnm, obsname='202206_03',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202206_03',/gesnlog,/chudo,/goes,/wid
   
 ;  plot_ns_sun_lc_rnm, obsname='202202_24',/gesnlog,/chudo,/goes
 ;  plot_ns_sun_lc_rnm, obsname='202202_25',/gesnlog,/chudo,/goes
