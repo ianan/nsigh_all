@@ -55,10 +55,11 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   ;                     Changed GOES14/15 to one min average from NOAA
   ; 28-Mar-2022 - IGH   Added in Feb 2022 data
   ; 16-Jun-2022 - IGH   Added in Jun 2022 data
-  ; 03-Oct-2022 - IGH   Updated with Oct 2022 
+  ; 03-Oct-2022 - IGH   Added in Sep 2022 data
+  ; 02-Jan-2023 - IGH   Added in Dec 2023 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='202107_30'
+  if (n_elements(obsname) ne 1) then obsname='202212_09'
   if (n_elements(maindir) ne 1) then maindir='/Volumes/Samsung_T5/data/heasarc_nustar/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -634,6 +635,33 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
 
     hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     ;    only want those in the hk directories
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[6,40]
+  endif
+  
+  if (obsname eq '202212_09') then begin
+    torbs=[['09-Dec-22 23:38:44','10-Dec-22 00:39:49'],$
+      ['10-Dec-22 01:15:16','10-Dec-22 02:16:21']]
+    timer=['09-Dec-22 23:20:00','10-Dec-22 02:30:00']
+    nsdir='ns_20221209'
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[6,16]
+  endif
+  
+  if (obsname eq '202212_11') then begin
+    torbs=[['11-Dec-22 17:28:38','11-Dec-22 18:29:42'],$
+      ['11-Dec-22 19:05:11','11-Dec-22 20:06:14'],$
+      ['11-Dec-22 20:41:43','11-Dec-22 21:34:26'],$
+      ['11-Dec-22 22:18:12','11-Dec-22 23:15:45'],$
+      ['11-Dec-22 23:54:44','12-Dec-22 00:55:48']]
+    timer=['11-Dec-22 17:00:00','12-Dec-22 01:30:00']
+    nsdir='ns_20221209'
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
     hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]

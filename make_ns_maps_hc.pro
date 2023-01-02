@@ -39,9 +39,10 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   ; 28-Mar-2022 IGH - Added in Feb 2022 data
   ; 16-Jun-2022 IGH - Added in Jun 2022 data
   ; 03-Oct-2022 IGH - Added in Sep 2022 data
+  ; 02-Jan-2023 IGH - Added in Dec 2023 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=30
+  if (n_elements(obs_id) ne 1) then obs_id=31
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
@@ -50,7 +51,8 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
     '20190112','20190412','20190425','20190702',$
     '20200129','20200221','20200606','20200912',$
     '20210108','20210429','20210720','20210730','20211117',$
-    '20220224','20220603','20220906']
+    '20220224','20220603','20220906',$
+    '20221209']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -103,6 +105,10 @@ pro make_ns_maps_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir
   endif
   if (obsname eq '20220906') then begin
     nsdir='ns_20220906'
+  endif
+  if (obsname eq '20221209') then begin
+    nsdir='ns_20221209'
+    maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
   endif
   ; What is the minimum energy we want for the image?
   min_eng=2.5
