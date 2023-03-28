@@ -37,11 +37,15 @@ pro batch_ltc
   ; 28-Mar-2022 - IGH   Added in Feb 2022 data
   ; 16-Jun-2022 - IGH   Added in Jun 2022 data
   ; 03-Oct-2022 - IGH   Added in Sep 2022 data
-  ; 02-Jan-2023 - IGH   Added in Dec 2023 data
+  ; 02-Jan-2023 - IGH   Added in Dec 2022 data
+  ; 28-Mar-2023 - IGH   Added in Mar 2023 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
-  plot_ns_sun_lc_rnm, obsname='202212_09',/gesnlog,/chudo,/goes
-  plot_ns_sun_lc_rnm, obsname='202212_11',/gesnlog,/chudo,/goes
+  
+  plot_ns_sun_lc_rnm, obsname='202303_18',/gesnlog,/chudo,/goes
+  
+;  plot_ns_sun_lc_rnm, obsname='202212_09',/gesnlog,/chudo,/goes
+;  plot_ns_sun_lc_rnm, obsname='202212_11',/gesnlog,/chudo,/goes
   
   
 ;  plot_ns_sun_lc_rnm, obsname='202209_06',/gesnlog,/chudo,/goes,maindir='~/data/heasarc_nustar/'

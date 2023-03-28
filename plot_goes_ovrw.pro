@@ -26,11 +26,12 @@ pro plot_goes_ovrw,obs_id=obs_id
   ; 28-Mar-2022 - IGH   Updated with Feb 2022     
   ; 16-Jun-2022 - IGH   Updated with Jun 2022
   ; 03-Oct-2022 - IGH   Updated with Oct 2022   
-  ; 02-Jan-2023 - IGH   Updated with Dec 2023            
+  ; 02-Jan-2023 - IGH   Updated with Dec 2022   
+  ; 28-Mar-2023 - IGH   Updated with Mar 2023          
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obs_id) ne 1) then obs_id=31
+  if (n_elements(obs_id) ne 1) then obs_id=32
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
@@ -39,8 +40,8 @@ pro plot_goes_ovrw,obs_id=obs_id
     '20190112','20190412','20190425','20190702',$
     '20200129','20200221','20200606','20200912',$
     '20210108','20210429','20210720','20210730','20211117',$
-    '20220224','20220603','20220906',$
-    '20221209']
+    '20220224','20220603','20220906','20221209',$
+    '20230318']
   obsname=dobs[obs_id]
 
   if (obsname eq '20140910') then timer=['10-Sep-2014 21:00','11-Sep-2014 01:00']
@@ -108,6 +109,8 @@ pro plot_goes_ovrw,obs_id=obs_id
   if (obsname eq '20220906') then timer=['06-Sep-2022 15:00:00','06-Sep-2022 22:00:00']
   ;-------------------------------------------
   if (obsname eq '20221209') then timer=['09-Dec-2022 23:00:00','11-Dec-2022 23:00:00']
+  ;-------------------------------------------
+  if (obsname eq '20230318') then timer=['18-Mar-2023 13:00:00','18-Mar-2023 24:00:00']
   
   ; Should be ok after these times
   ts16='07-Feb-2017' ; Obs 9, March 2017, and after
