@@ -41,10 +41,13 @@ pro batch_ltc
   ; 28-Mar-2023 - IGH   Added in Mar 2023 data
   ; 30-Jan-2024 - IGH   Added in Dec 2023 data
   ; 15-May-2024 - IGH   Added in Mar 2024 data
+  ; 12-Jul-2024 - IGH   Added in Jun 2024 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ;
 
-  plot_ns_sun_lc_rnm, obsname='202403_30',/gesnlog,/chudo,/goes
+  plot_ns_sun_lc_rnm, obsname='202406_30',/gesnlog,/chudo,/goes
+
+  ;  plot_ns_sun_lc_rnm, obsname='202403_30',/gesnlog,/chudo,/goes
 
   ;  plot_ns_sun_lc_rnm, obsname='202312_28',/gesnlog,/chudo,/goes
 
