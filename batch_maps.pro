@@ -27,8 +27,9 @@ pro batch_maps
   ; 28-Mar-2023 IGH - Added in Mar 2023 data
   ; 30-Jan-2024 IGH - Added in Dec 2024 data
   ; 15-May-2024 IGH - Added in Mar 2024 data
-  ; 12-Jul-2024 IGH - Added in June 2024 data
+  ; 12-Jul-2024 IGH - Added in Jun 2024 data
   ; 05-Aug-2024 IGH - Added in Jul 2024 data
+  ; 06-Jan-2025 IGH - Added in Dec 2024 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ;  nf=10
@@ -39,7 +40,7 @@ pro batch_maps
   ;  for i=0,nf-1 do make_ns_maps_comb_hc,obs_id=i,fpm='B'
   ;  for i=0,nf-1 do plot_ns_maps_hc,obs_id=i
 
-  i=36
+  i=37
   make_ns_maps_hc,obs_id=i
   make_ns_maps_comb_hc,obs_id=i,fpm='A'
   make_ns_maps_comb_hc,obs_id=i,fpm='B'

@@ -46,9 +46,10 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   ; 15-May-2024 IGH - Added in Mar 2024 data
   ; 12-Jul-2024 IGH - Added in Jun 2024 data
   ; 05-Aug-2024 IGH - Added in Jul 2024 data
+  ; 06-Jan-2025 IGH - Added in Dec 2024 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   clearplot
-  if (n_elements(obs_id) ne 1) then obs_id=36
+  if (n_elements(obs_id) ne 1) then obs_id=37
   dobs=['20140910','20141101','20141211',$
     '20150429','20150901',$
     '20160219','20160422','20160726',$
@@ -59,7 +60,7 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     '20210108','20210429','20210720','20210730','20211117',$
     '20220224','20220603','20220906','20221209',$
     '20230318','20231228',$
-    '20240330','20240630','20240716']
+    '20240330','20240630','20240716','20241224']
 
   obsname=dobs[obs_id]
   if (n_elements(maindir) ne 1) then maindir='~/data/heasarc_nustar/';'~/data/ns_data/'
@@ -133,6 +134,10 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
   endif
   if (obsname eq '20240716') then begin
     nsdir='ns_20240716'
+    maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
+  endif
+  if (obsname eq '20241224') then begin
+    nsdir='ns_20241224'
     maindir='/Volumes/Samsung_T5/data/heasarc_nustar/'
   endif
   if (n_elements(fpm) ne 1) then fpm='A'
@@ -457,6 +462,11 @@ pro make_ns_maps_comb_hc,obs_id=obs_id,maindir=maindir,nsdir=nsdir,fpm=fpm
     gd_ids[where(iidds eq 101200400)]=2
     gd_ids[where(iidds ge 101200500 and iidds le 101200600)]=3
     gd_ids[where(iidds ge 101200700 and iidds le 101200800)]=4
+  endif
+  
+  if (obs_id eq 37) then begin
+    ; Split per obs target id
+    gd_ids=intarr(n_elements(evtaf))+1
   endif
 
   ;$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4

@@ -61,10 +61,11 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
   ; 30-Jan-2024 - IGH   Added in Dec 2023 data
   ; 15-May-2024 - IGH   Added in Mar 2024 data
   ; 12-Jul-2024 - IGH   Added in Jun 2024 data
-  ; 05-Aug-2024 - IGH Added in Jul 2024 data
+  ; 05-Aug-2024 - IGH   Added in Jul 2024 data
+  ; 06-Jan-2025 - IGH   Added in Dec 2024 data
   ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (n_elements(obsname) ne 1) then obsname='202407_16'
+  if (n_elements(obsname) ne 1) then obsname='202412_24'
   if (n_elements(maindir) ne 1) then maindir='/Volumes/Samsung_T5/data/heasarc_nustar/';'~/data/heasarc_nustar/';'~/data/ns_data/'
   if (n_elements(do_nustar) ne 1) then do_nustar=1
 
@@ -753,6 +754,20 @@ pro plot_ns_sun_lc_rnm, obsname=obsname,timer=timer,goes=goes,gyr=gyr,tav=tav,$
     chuf=file_search(maindir+nsdir, '*chu123.fits')
     chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
     gyrl=[20,70]
+  endif
+  
+  if (obsname eq '202412_24') then begin
+    torbs=[['24-Dec-24 10:11:17','24-Dec-24 11:11:02'],$
+      ['24-Dec-24 11:49:35','24-Dec-24 12:46:53'],$
+      ['24-Dec-24 13:23:00','24-Dec-24 14:22:44'],$
+      ['24-Dec-24 14:58:51','24-Dec-24 15:58:36']]
+    timer=['24-Dec-24 09:30:00','24-Dec-24 16:30:00']
+    nsdir='ns_20241224'
+    hkf=file_search(maindir+nsdir,'*A_fpm.hk')
+    hkf=hkf[where(strpos(hkf,'/hk/') ge 0)]
+    chuf=file_search(maindir+nsdir, '*chu123.fits')
+    chuf=chuf[where(strpos(chuf,'/hk/') ge 0)]
+    gyrl=[20,120]
   endif
   
 
